@@ -130,11 +130,124 @@ At different age, altitude, health, and bodily activity the haematocrit value va
 The blood dynamic viscosity $\mu$ decreases hyperbolically with the shear rate $\gamma$.
 At about $\gamma > 100s^{-1}$ the viscosity stays constant for common haematocrit values.
 In larger arteries the average shear rate close to the walls is above this threshold.
-Therefore blood can roughly be considered a Newtonian fluid.
+Therefore the blood's viscosity is constant and it can roughly be considered a Newtonian fluid.
 Blood density $\rho$ is constant within the range of $1050 \pm 10 \text{ kg}\cdot\text{m}^{-3}$.
 
 
 \chapter{1D-Model}
+In this chapter we are going to describe a 1D-model of blood flow, specifically of blood flow in the arteries of the systemic circulation.
+First we will describe the 1D-model for a single artery and then we will describe how to string together such models to simulate larger systems of arteries.
+
+\section{Single Vessel}
+Within a single vessel we consider the blood flow fully determined by the 3D-Navier-Stokes equations.
+These stem from the conservation of mass and momentum 
+
+\begin{align}
+	\frac{\partial \rho}{\partial t} + \nabla \cdot \rho \mathbf{v} &= 0 \\
+	\frac{\partial \mathbf{v}}{\partial t} + \left( \mathbf{v} \cdot \nabla \right) \mathbf{v} &= - \frac{1}{\rho} \nabla P + \frac{\mu}{\rho} \nabla \mathbf{v} + \mathbf{F}
+\end{align}
+
+where in our case $\rho$ and $\mu$ are the blood density and viscosity mentioned in section \ref{b}, $\mathbf{v} = \left[ v_z, v_r, v_\phi \right]$ is the velocity field, $P$ is the pressure, and $\mathbf{F}$ is any force acting on the fluid system.
+We consider a vessel to be an axisymmetric tube along the $z$ axis in a cylindrical coordinate system $\left(z,r,\phi\right)$.
+Under the following assumptions the 3D-Navier-Stokes equations can be reduced to a 1D-model:
+
+\begin{enumerate}
+	\item vessels are narrow, long, and circular
+	\item vessels are straight and have linearly elastic compliant walls
+	\item vessel walls can be displaced slightly in radial direction but not in longitudinal direction
+	\item blood is an incompressible Newtonian fluid.
+\end{enumerate}
+
+The 1D equations under these assumptions read:
+
+\begin{equation}
+		\begin{aligned} 
+			\frac{\partial A}{\partial t} + \frac{\partial Q}{\partial z} &= 0, \\ 
+			\frac{\partial Q}{\partial t} + \frac{\partial}{\partial z}\left(\alpha \frac{Q^2}{A} \right) + \frac{A}{\rho} \frac{\partial P}{\partial z} &= -2 \frac{\mu}{\rho} \left( \gamma_\nu + 2 \right) \frac{Q}{A}
+		\end{aligned} \label{1Deqs1}
+\end{equation}
+
+where $A$ and $Q$ are the cross-sectional area and the volumetric flow rate.
+$\alpha$ and $\gamma_\nu$ are the Coriolis' coefficient and the radial velocity profile parameter.
+The pressure $P$ is given by the external pressure stemming from surrounding tissue as well as the deformation of the vessel:
+
+\begin{equation}
+	P = P_{ext} + \beta \left( \sqrt{\frac{A}{A_0}} - 1 \right), \  \beta = \sqrt{\frac{\pi}{A_0}} \frac{E h_0}{1-\nu^2}
+\end{equation}
+ where $E$, $h_0$, and $\nu$ are the vessel wall Young's modulus, the reference wall thickness, and the Poisson ratio.
+Setting $\alpha = 1$ and $\gamma_\nu = 9$ we can approximate a plug-flow profile.
+Inserting this into equation \ref{1Deqs1} leads to 
+\begin{equation}
+		\begin{aligned} 
+			\frac{\partial A}{\partial t} + \frac{\partial Q}{\partial z} &= 0, \\ 
+			\frac{\partial Q}{\partial t} + \frac{\partial}{\partial z}\left(\frac{Q^2}{A} \right) + \frac{A}{\rho} \frac{\partial P}{\partial z} &= -22 \frac{\mu}{\rho} \frac{Q}{A}.
+		\end{aligned} \label{1Deqs2}
+\end{equation}
+
+We can rewrite equation \ref{1Deqs2} in it's conservative form by defining the following shorthands:
+
+\begin{equation}
+	\mathbf{U} := 
+	\left[ 
+		\begin{aligned}
+			A \\
+			Au
+		\end{aligned}
+	\right]
+\end{equation}
+
+\begin{equation}
+	\mathbf{F} \left( \mathbf{U} \right) := 
+	\left[ 
+		\begin{aligned}
+			Au \\
+			Au^2 + \gamma A^{3/2}
+		\end{aligned}
+	\right]
+\end{equation}
+
+\begin{equation}
+	\mathbf{S} \left( \mathbf{U} \right) := 
+	\left[ 
+		\begin{aligned}
+			0 \\
+			f
+		\end{aligned}
+	\right]
+\end{equation}
+
+\begin{equation}
+	\gamma := \frac{\beta}{3\rho\sqrt{A_0}}
+\end{equation}
+
+\begin{equation}
+	f := -\frac{1}{\rho} \left( \frac{\partial P}{\partial A_0} \frac{\partial A_0}{\partial z} + \frac{\partial P}{\partial \beta} \frac{\partial \beta}{\partial z} + 22\mu\frac{u}{A} \right)
+\end{equation}.
+
+The conservative form then reads:
+\begin{equation}
+	\begin{aligned}
+		\frac{\partial \mathbf{U}}{\partial t} + \frac{\partial \mathbf{F} \left( \mathbf{U} \right)}{\partial z} &= \mathbf{S} \left( \mathbf{U} \right), \ t>0, \ z \in \left[ 0,l \right] \\
+		\mathbf{U} \left( z,0 \right) &= \mathbf{U}_0 \left( z \right), \ z \in \left[ 0,l \right] \\
+		\mathbf{U} \left( 0,t \right) &= U_L \left( t \right), \ t>0\\
+		\mathbf{U} \left( l,t \right) &= U_R \left( t \right), \ t>0
+	\end{aligned} \label{1Deqs3}
+\end{equation}
+
+where we have added initial and boundary conditions so that equation \ref{1Deqs3} now yields a well posed problem.
+This concludes the desription if the 1D-model for a single artery.
+In the next section we will describe how to connect such models in order to describe larger systems of arteries.
+
+
+\section{Initial Conditions and Boundary Values}
+\subsection{Initial Conditions}
+\subsection{Boundary Values}
+\subsection{Junction}
+\subsubsection{Conjunctions}
+\subsubsection{Bifurcations}
+\subsubsection{Anastomosis}
+
+
 
 \chapter{Numerical Methods}
 \chapter{Implementation}
