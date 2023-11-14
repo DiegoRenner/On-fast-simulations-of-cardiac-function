@@ -12,6 +12,7 @@
 \usepackage{comment}
 \usepackage[labelfont=bf,font=small,skip=5pt]{caption}
 \usepackage[outdir=./figures/]{epstopdf}
+\usepackage{hyperref}
 
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -136,11 +137,11 @@ Therefore the blood's viscosity is constant and it can roughly be considered a N
 Blood density $\rho$ is constant within the range of $1050 \pm 10 \text{ kg}\cdot\text{m}^{-3}$.
 
 
-\chapter{1D-Model}
+\chapter{1D-Model} \label{chap:1dm}
 In this chapter we are going to describe a 1D-model of blood flow, specifically of blood flow in the arteries of the systemic circulation.
 First we will describe the 1D-model for a single artery and then we will describe how to string together such models to simulate larger systems of arteries.
 
-\section{Single Vessel}
+\section{Single Vessel} \label{sec:sv}
 Within a single vessel we consider the blood flow fully determined by the 3D-Navier-Stokes equations.
 These stem from the conservation of mass and momentum 
 
@@ -233,10 +234,10 @@ The conservative form then reads:
 		\mathbf{U} \left( z,0 \right) &= \mathbf{U}_0 \left( z \right), \ z \in \left[ 0,l \right] \\
 		\mathbf{U} \left( 0,t \right) &= U_L \left( t \right), \ t>0\\
 		\mathbf{U} \left( l,t \right) &= U_R \left( t \right), \ t>0
-	\end{aligned} \label{1Deqs3}
+	\end{aligned} \label{eq:1deqs3}
 \end{equation}
 
-where we have added initial and boundary conditions so that equation \ref{1Deqs3} now yields a well posed problem.
+where we have added initial and boundary conditions so that equation \ref{eq:1deqs3} now yields a well posed problem.
 This concludes the desription if the 1D-model for a single artery.
 In the next section we will describe how to connect such models in order to describe larger systems of arteries.
 
@@ -557,6 +558,143 @@ The corresponding code can be found in \texttt{src/solver.jl:57-69}.
 
 
 \chapter{Numerical Methods}
+The numerical realization of the 1D-Model within a single vessel described in \autoref{sec:sv} is achieved using a Finite Volume (FV) method to solve the homogenous part of the equation \autoref{eq:1deqs3} while the source term is accounted for by using a forward-euler timestep. 
+The FV method that was applied here is the monotonic upstream-centered scheme for conservation laws (MUSCL).
+A newton solver is applied to solve the linear systems of equations arrising from the junctions or the Windkessel model for outlets.
+In this chapter we will first Introduce the MUSCL scheme and the Gudonov average applied within this scheme.
+We will then apply the MUSCL scheme to the homogenous part of \autoref{eq:1deqs3}.
+Finally we describe the forward-euler timestep used to accomodate the inhomogenous part as well as the newton solver for the outlets and junctions.
+
+\section{MUSCL}
+\section{Gudonov's}
+\section{Time step, homogeneous part}
+Next the following system of differential equations has to be solved for $(A,Au)$ within every vessel:
+
+\begin{equation}
+	\left\{\begin{array}{l}\frac{\partial A}{\partial t} + \frac{\partial(Au)}{\partial z} = 0,\\
+	\frac{\partial (Au)}{\partial t} + \frac{\partial (Au^2)}{\partial z} + \frac{A}{\rho} \frac{\partial P}{\partial z} = -2 \frac{\mu}{\rho}(\gamma_\nu + 2)u \end{array} \right.
+\end{equation}
+
+This system stems from applying conservation laws as demonstrated in \cite{book}.
+It can be reformulated in to a conservative form (with source term) as follows:
+
+\begin{equation}
+	\left\{\begin{array}{l}
+			\frac{\partial \mathbf{U}}{\partial t}+\frac{\partial \mathbf{F}(\mathbf{U})}{\partial z}=\mathbf{S}(\mathbf{U}), \quad z \in[0, \ell], \\
+			\mathbf{U}(z, 0)=\mathbf{U}^{(0)}(z), \quad t>0, \\
+			\mathbf{U}(\mathbf{0}, t)=\mathbf{U}_L(t), \quad \mathbf{U}(\ell, t)=\mathbf{U}_R(t),
+	\end{array}\right.
+\end{equation}
+where the necessary boundary conditions have been added.
+In order to get the conservative formulation the following substitutions have been applied:
+
+\begin{equation}
+	\mathbf{U}=\left\{\begin{array}{c}
+			A \\
+			A u
+	\end{array}\right\}, \\
+\end{equation}
+
+\begin{equation}
+	\mathbf{F}(\mathbf{U})=\left\{\begin{array}{c}
+			A u \\
+			A u^2+\gamma A^{3 / 2}
+	\end{array}\right\}
+\end{equation}
+
+\begin{equation}
+	\mathbf{S}(\mathbf{U})=\left\{\begin{array}{c}
+			0 \\
+
+			f_s
+	\end{array}\right\}, \\
+\end{equation}
+where the vectors $\mathbf{F}(\mathbf{U})$ and $\mathbf{U}$ are called the flux and the source term respectively.
+Further substitutions and simplifications that have been done to get to the conservative formulation are as follows:
+
+\begin{equation}
+	\gamma=\frac{\beta}{3 \rho \sqrt{A_0}}, \\
+\end{equation}
+
+\begin{equation}
+	f_s=-\frac{1}{\rho}\left[\frac{\partial P}{\partial A_0} \frac{\partial A_0}{\partial z}+\frac{\partial P}{\partial \beta} \frac{\partial \beta}{\partial z}+2 \mu\left(\gamma_\nu+2\right) \frac{u}{A}\right]
+\end{equation}
+\begin{equation}
+	\begin{aligned}
+		\tau & =\beta \sqrt{A_0}, \quad P=P_{e x t}+\tau\left(\sqrt{A}-\sqrt{A_0}\right),
+	\end{aligned}
+\end{equation}
+\begin{equation}
+	\frac{\partial P}{\partial A_0}=-\frac{\beta}{2}, \quad \frac{\partial P}{\partial \tau}=\sqrt{A}-\sqrt{A_0}.
+\end{equation}
+\begin{comment}
+	The flux Jacobian reads
+	\begin{equation}
+		\frac{\partial \mathbf{F}}{\partial \mathbf{U}}=\mathbf{H}=\left[\begin{array}{cc}
+				0 & 1 \\
+				\frac{3}{2} \chi \sqrt{A}-u^2 & 2 u
+		\end{array}\right],
+	\end{equation}
+	which, under the assumption $A>0$, has two eigenvalues
+	\begin{equation}
+		\lambda_{1,2}=u \mp c, \quad c=\sqrt{\frac{3}{2} \gamma \sqrt{A}}=\sqrt{\frac{\beta}{2 \rho}} A^{1 / 4}
+	\end{equation}
+\end{comment}
+
+The conservative form is solved numerically in two steps. 
+The first step solves the homogeneous part:
+\begin{equation}
+	\left\{\begin{array}{l}
+			\frac{\partial \mathbf{U}}{\partial t}+\frac{\partial \mathbf{F}(\mathbf{U})}{\partial x}=0 \\
+			\mathbf{U}\left(x, t^n\right)=\mathbf{U}^n
+	\end{array} \quad \rightarrow \overline{\mathbf{U}}^{n+1},\right.
+\end{equation}
+
+This is done using Godunov's and the MUSCL scheme resulting in the following update step:
+
+\begin{equation}
+	\left\{\begin{array}{l}
+			U_i^*=U_i^n+\frac{\Delta t}{\Delta x}\left(F_{i-1 / 2}^n-F_{i+1 / 2}^n\right), \\
+			\overline{U}_i^{n+1}=\frac{1}{2} U_i^n+\frac{1}{2}\left[U_i^*+\frac{\Delta t}{\Delta x}\left(F_{i-1 / 2}^*-F_{i+1 / 2}^*\right)\right] .  \\
+	\end{array} \right.
+\end{equation}
+\begin{comment}
+	\begin{equation}
+		U_i^n \underset{\Delta x \rightarrow 0}{=} \frac{1}{\Delta x} \int_{x_i-\frac{\Delta x}{2}}^{x_i+\frac{\Delta x}{2}} q\left(x, t_n\right) d x
+	\end{equation}
+\end{comment}
+
+The flux used here is the widely used numerical flux Lax-Friedrichs:
+\begin{equation}
+	F_{i+1 / 2}^n=\frac{1}{2}\left(F_L^n+F_R^n\right)-\frac{\Delta x}{\Delta t}\left(U_{i+1}^n-U_i^n\right) .
+\end{equation}
+
+The values for the flux $F_L^n$ and $F_R^n$ are computed using a linear piece wise reconstruction (MUSCL).
+In order to avoid too steep slopes that may lead to unrealistic values for the solution the superbee limiter is applied.
+
+
+\section{Time step, source term}
+Next the inhomogeneous part has to be solved:
+
+\begin{equation}
+	\left\{\begin{array}{l}
+			\frac{d \mathbf{U}}{d t}=\mathbf{S}(\mathbf{U}), \\
+			\overline{\mathbf{U}}^{n+1}
+	\end{array} \quad \rightarrow \quad \mathbf{U}^{n+1},\right.
+\end{equation}
+
+This is done using the forward Euler method
+
+\begin{equation}
+	\mathbf{U}^{n+1}=\mathbf{U}^n + \Delta t \mathbf{S}\left(t^n, \mathbf{U}^n\right)
+\end{equation}
+
+In newer versions of the code a visco-elastic constitutive equation is solved as described in \cite{ALASTRUEY20112250}.
+This is more accurate than the linear-elastic formulation described here.
+The corresponding code can be found in 
+
+\section{Newton Solver}
+
 \chapter{Implementation}
 \chapter{Sensitivity Analysis}
 \chapter{Conclusion/ Future Work}
