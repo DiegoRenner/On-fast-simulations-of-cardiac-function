@@ -87,6 +87,24 @@ ETH Zürich}
 
 % Start writing here
 \chapter{Introduction}
+Among other factors the high number of vessels, the stark differences between these vessels and the resulting different types of flow within them leads to cardiovascular systems being very complex to model.
+Therefore in order to better understand cardiovascular function, numerical methods are often applied.
+Due to the nature of cardiovascular system numerical methods are especially helpful since they are able to simulate processes that are hard to capture in-vivo.
+This also curtails risks to patients and costs that other methods of research might bring along.
+Even with numerical methods the and complexity of the cardiovascular system still poses a significant challenge.
+This leads to one-dimensional (1D) models often being chosen over three-dimensional (3D) models. 
+1D models do have a lower accuracy, especially at junctions within the system.
+Nevertheless the accuracy has been shown to be suficient to simulate haemodynamics in large vascular systems.
+While the increas in simulatino speed gained by choosing 1D models over 3D models is significant an efficient implementation of the solver is still important.
+Next to speed desired attributes of a simulation are differentiability with respect to the model parameters, maintainability of code base, and ease of use.
+Differentiability leads to a model being easily optimized if appropriate data sets are provided while maintainability and ease of use lower the barrier of entry for future work being supported by the written code as well as the code being applied readily by others.
+For the reasons mentioned in this introduction the goal of this thesis is to provide a fast differentiable 1D cardiovascular simulation code.
+This goal is pursued by using a 1D reduction of the 3D Navier Stokes Equations (NSE) implemented numerically using the JAX library in Python.
+In the next section we will provide a basic understanding of the cardiovascular system which will serve as a base for describing the cardiovascular simulation throughout this work.
+
+
+
+
 \chapter{Cardiovascular System}
 This section serves as an overview of the cardiovascular system with a focus on the arteries of the systemic circulation. 
 Section \ref{mbb} will describe the main building blocks of the cardiovascular system and their relation, section \ref{aw} will give the characteristics of the arterial walls, and section \ref{b} the characteristics of blood.
@@ -696,10 +714,11 @@ The corresponding code can be found in
 \section{Newton Solver}
 
 \chapter{Implementation}
-Since differentiability was a priority in the implementation of this model the library jax which is written is available as a package in python was used.
-In order to leverage the full effectiveness of jax some special considerations had to be made when considering the code structure.
-In this chapter we will give an overview of the functionality of jax in the first section and in the second section we will describe the code structure of the simulation.
-\section{Jax}
+Since differentiability was a priority in the implementation of this model the library JAX which is written is available as a package in python was used.
+In order to leverage the full effectiveness of JAX some special considerations had to be made when considering the code structure.
+In this chapter we will give an overview of the functionality of JAX in the first section and in the second section we will describe the code structure of the simulation.
+
+\section{JAX}
 \section{Code Structure}
 \begin{lstlisting}[language=Python, caption=code structure in pseudocode]
 converged = False
