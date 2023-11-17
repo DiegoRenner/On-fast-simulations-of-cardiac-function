@@ -87,6 +87,24 @@ ETH Zürich}
 
 % Start writing here
 \chapter{Introduction}
+Among other factors the high number of vessels, the stark differences between these vessels and the resulting different types of flow within them leads to cardiovascular systems being very complex to model.
+Therefore in order to better understand cardiovascular function, numerical methods are often applied.
+Due to the nature of cardiovascular system numerical methods are especially helpful since they are able to simulate processes that are hard to capture in-vivo.
+This also curtails risks to patients and costs that other methods of research might bring along.
+Even with numerical methods the and complexity of the cardiovascular system still poses a significant challenge.
+This leads to one-dimensional (1D) models often being chosen over three-dimensional (3D) models. 
+1D models do have a lower accuracy, especially at junctions within the system.
+Nevertheless the accuracy has been shown to be suficient to simulate haemodynamics in large vascular systems.
+While the increas in simulatino speed gained by choosing 1D models over 3D models is significant an efficient implementation of the solver is still important.
+Next to speed desired attributes of a simulation are differentiability with respect to the model parameters, maintainability of code base, and ease of use.
+Differentiability leads to a model being easily optimized if appropriate data sets are provided while maintainability and ease of use lower the barrier of entry for future work being supported by the written code as well as the code being applied readily by others.
+For the reasons mentioned in this introduction the goal of this thesis is to provide a fast differentiable 1D cardiovascular simulation code.
+This goal is pursued by using a 1D reduction of the 3D Navier Stokes Equations (NSE) implemented numerically using the JAX library in Python.
+In the next section we will provide a basic understanding of the cardiovascular system which will serve as a base for describing the cardiovascular simulation throughout this work.
+
+
+
+
 \chapter{Cardiovascular System}
 This section serves as an overview of the cardiovascular system with a focus on the arteries of the systemic circulation. 
 Section \ref{mbb} will describe the main building blocks of the cardiovascular system and their relation, section \ref{aw} will give the characteristics of the arterial walls, and section \ref{b} the characteristics of blood.
@@ -565,7 +583,7 @@ In this chapter we will first Introduce the MUSCL scheme and the Gudonov average
 We will then apply the MUSCL scheme to the homogenous part of \autoref{eq:1deqs3}.
 Finally we describe the forward-euler timestep used to accomodate the inhomogenous part as well as the newton solver for the outlets and junctions.
 
-\section{MUSCL}
+\section{MUSCL} \label{sec:muscl}
 \section{Gudonov's}
 \section{Time step, homogeneous part}
 Next the following system of differential equations has to be solved for $(A,Au)$ within every vessel:
@@ -696,10 +714,76 @@ The corresponding code can be found in
 \section{Newton Solver}
 
 \chapter{Implementation}
-Since differentiability was a priority in the implementation of this model the library jax which is written is available as a package in python was used.
-In order to leverage the full effectiveness of jax some special considerations had to be made when considering the code structure.
-In this chapter we will give an overview of the functionality of jax in the first section and in the second section we will describe the code structure of the simulation.
-\section{Jax}
+Since differentiability was a priority in the implementation of this model the library JAX which is written is available as a package in python was used.
+In order to leverage the full effectiveness of JAX some special considerations had to be made when considering the code structure.
+In this chapter we will give an overview of the functionality of JAX in the first section and in the second section we will describe the code structure of the simulation.
+
+\section{JAX}
+JAX used to stand for "Just After eXecution" which refers to the manner in which JAX used to optimize during compilation.
+Jax achieves optimization during compilation along other things through tracing.
+In the tracing the code is optimized with the help of a computational graph.
+Essentially the code is parsed without executing it in order to detect inefficiencies in data movement and computation.
+While JAX still uses tracing to speed up code execution it is not done in a "Just After eXecution"-manner.
+Later on JAX was thought of as a recursive acronym "JAX is Autograd and XLA" in the spirit of the well known scronym GNU ("GNU is Not Unix"),
+Autograd is a now deprecated Python library that can automatically differentiate native Python and NumPy code.
+XLA stands for "Accelerated Linear Algebra" and it is an open-source compiler that optimizes models from commonly used frameworks such as PyTorch, Tensor Flow, and also JAX.
+XLA optimizes these models across different hardware platoforms (CPUs, GPUs, TPUs, etc.).
+Often these optimizations done by XLA are directly intograted back into the projects the origianl models stem from.
+XLA is also a part of JAX but while JAX used to be based on Autograd this is not the case anymore and JAX achives automatic differentiation through it's own implementation thereof.
+Therefore JAX is not considered an acronym nowadays and JAX is just considered a library that implements the features of Autograd in it's own way while including XLA optimization.
+This results in the potential fast differentiable code as the result of using the JAX library.
+However the automatic differentiation as well as the XLA optimization can't be applied to any Python code hence there are some caveats that had to be taken into account when writing this numrical code using JAX.
+We will be adressing these caveats in the next five subsections starting with the functional purity required when programming using JAX.
+
+\subsection{Functional Purity}
+All Jax code has to be written in a functionally pure manner.
+This means that all inputs to a function need to be passed explicitly through the function's arguments while all outputs need to be returned explicitly through the return variables.
+Hence any kind of global variables should be avoided at all costs.
+The reason for this is that otherwise unwanted side effects might occur.
+This would mean that a global variable that has a certain value at compile time and changes it's value during code execution will in the eyes of JAX always keep the value it had assigned at compile time.
+The described behaviour midht lead to unexpected results as a side effect of the compilation JAX performs.
+Furthermore this behaviour is not guaranteed leading to the only way to write code in JAX that provides fully reproducible results is to code in a fully functionally pure manner.
+
+\subsection{Vectorization}
+JAX's optimization is geared towards leveraging the capabilities of GPUs.
+This means vectorization is key in making full use of JAX's optimization.
+The equations of the MUSCL solver are clearly very suitable for this.
+Vectorization can even be applied more widely applying a technique called padding.
+
+\subsection{Padding}
+The MUSCL solver in \autoref{sec:muscl} is described for a single vesel.
+However all of the MUSCL solvers applied to the individual vessels could be performed simulataneously and even in a vectorized mannner.
+In order to do so the values to be computed on by the MUSCL solver of each vessel are all written into one single array and one MUSCL solve is performed on the entire array.
+To avoid errors at the ends of a vessel, where the values stored from another vessel would influence the computed values for the initial vessel, one can apply padding.
+In this case this means to add entries in the array between each array that are solely there to acoid two neighboring vessels from influencing oneanother.
+The errors that occur from collectiong all data in one array then only effect the padded entries which are ignored when reading out the final results.
+After each MUSCL solve, when computing boundary conditions for each vessel, the padded areas are set to equal the values of the edges of the adjacent vessels.
+Finally the technique of padding doesn't just allow for efficiently applying the MUSCL solver to all vessels at once but also allows to use an inhomogenous mesh on the vessels of the simulation.
+That means every vessel can be meshed according to it's need which is very useful in this kind of simulation since the vessel can be severely different in size.
+The reason for why padding allows for the inhomogenous mesh is described in the next section.
+
+\subsection{Static Array Sizes and Voiding Loops}
+The sizes of arrays computed on in JAX codes need to all be known atthe time of tracing, i.e. JAX needs to be able to infer all array sizes at compile time in order to be able to apply it's optimization.
+Furthermore it is recommended to avoid loops when writing code with JAX.
+This is because these loops need to be unrolled completely during JAX's compilation.
+This can be avoided by using JAX builtin loop construcions.
+However these have restrictions and one needs to satisfy a very strict signature when writing loops with them.
+Moreover the arrays operated on in each iteration of the loop need to be the same size.
+So if it were not for padding the MUSCL solver would have to be applied to each vessel seperately by looping over all vessels.
+This could be done with a common Python for loop resulting in long compilation times when simulating cardiovascular systems consisting of many vessels due to having to having to fully unroll the loop.
+Another option would be to us one of the JAX loop constructions, the so-called JAX fori\_loop.
+This would avoid the large overhead at compile time.
+However the restriction of having to have the same-sized arrays in every loop iteration would make the simulation either inherently inefficent or inherently in-accurate since very small vessels would have to simulated withe fine meshes or vice versa large vessels with coarse meshes.
+Therefore padding doesn't only allow for increased vectorization but also provides the ability to use an inhomogenous mesh with relatively short compile times.
+
+\subsection{Masking}
+At certain points within the MUSCL solver ghost cells need to be inserted at the edges of the vessels.
+In order to avoid having to loop over the array and introducing the usual issues that come along with using loops in JAX one can apply these values using a technique called masking.
+In order to apply the wanted value to the ghost cells one need to store five arrays.
+Once the origianl array that needs to have ghost cells inserted padded with a zero on either end, two times the origianl array with two zeros at the beginning or the end respectively, and two times a boolean array containing the locations of either the ghost cells at the inlet or the outlet.
+The padded original array, the forward shifted array and the boolean array with the locations of the ghost cells at the outlets can ve combined with the JAX equivalent of the NumPy where function to insert the outlet ghost cells.
+Equivalenty fot the original array, the shifted back array, the boolean array with the locations of the ghost cells at the inlets, and the inlet ghost cells.
+
 \section{Code Structure}
 \begin{lstlisting}[language=Python, caption=code structure in pseudocode]
 converged = False
