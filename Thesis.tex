@@ -701,6 +701,15 @@ In order to leverage the full effectiveness of jax some special considerations h
 In this chapter we will give an overview of the functionality of jax in the first section and in the second section we will describe the code structure of the simulation.
 \section{Jax}
 \section{Code Structure}
+\begin{lstlisting}[language=Python, caption=code structure in pseudocode]
+converged = False
+simulation_data = set_initial_conditions()
+while not conv:
+	simulation_data_new = set_boundary_conditions(simulation_data)
+	simulation_data_new = muscl_solver(simulation_data_new)
+	converged = chech_convergence(simulation_data, simulation_data_new)
+	simulation_data = simulation_data_new
+\end{lstlisting}
 \chapter{Sensitivity Analysis}
 \chapter{Conclusion/ Future Work}
 
