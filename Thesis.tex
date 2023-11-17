@@ -715,7 +715,18 @@ The corresponding code can be found in
 \chapter{Implementation}
 Since differentiability was a priority in the implementation of this model the library JAX which is written is available as a package in python was used.
 In order to leverage the full effectiveness of JAX some special considerations had to be made when considering the code structure.
-In this chapter we will give an overview of the functionality of JAX in the first section and in the second section we will describe the code structure of the simulation.
+In this chapter we will describe the code structure of the simulation in the first section and in the second section we will give an overview of the functionality of JAX relating to this thesis.
+
+\section{Code Structure}
+\begin{lstlisting}[language=Python, caption=code structure in pseudocode]
+converged = False
+simulation_data = set_initial_conditions()
+while not conv:
+	simulation_data_new = set_boundary_conditions(simulation_data)
+	simulation_data_new = muscl_solver(simulation_data_new)
+	converged = chech_convergence(simulation_data, simulation_data_new)
+	simulation_data = simulation_data_new
+\end{lstlisting}
 
 \section{JAX}
 JAX used to stand for "Just After eXecution" which refers to the manner in which JAX used to optimize during compilation.
@@ -782,17 +793,6 @@ In order to apply the wanted value to the ghost cells one need to store five arr
 Once the origianl array that needs to have ghost cells inserted padded with a zero on either end, two times the origianl array with two zeros at the beginning or the end respectively, and two times a boolean array containing the locations of either the ghost cells at the inlet or the outlet.
 The padded original array, the forward shifted array and the boolean array with the locations of the ghost cells at the outlets can ve combined with the JAX equivalent of the NumPy where function to insert the outlet ghost cells.
 Equivalenty fot the original array, the shifted back array, the boolean array with the locations of the ghost cells at the inlets, and the inlet ghost cells.
-
-\section{Code Structure}
-\begin{lstlisting}[language=Python, caption=code structure in pseudocode]
-converged = False
-simulation_data = set_initial_conditions()
-while not conv:
-	simulation_data_new = set_boundary_conditions(simulation_data)
-	simulation_data_new = muscl_solver(simulation_data_new)
-	converged = chech_convergence(simulation_data, simulation_data_new)
-	simulation_data = simulation_data_new
-\end{lstlisting}
 \chapter{Sensitivity Analysis}
 \chapter{Conclusion/ Future Work}
 
