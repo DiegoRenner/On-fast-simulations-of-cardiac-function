@@ -1,0 +1,1 @@
+@book{pedley_1980, place={Cambridge}, series={Cambridge Monographs on Mechanics}, title={The Fluid Mechanics of Large Blood Vessels}, DOI={10.1017/CBO9780511896996}, publisher={Cambridge University Press}, author={Pedley, T. J.}, year={1980}, collection={Cambridge Monographs on Mechanics}}
