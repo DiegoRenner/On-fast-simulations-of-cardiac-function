@@ -142,7 +142,7 @@ In these devices water would be pumped by hand from the reservoir causing pressu
 This would push water into an air chamber.
 Here the air would get compressed which is analogous to the deforming of the artery.
 The natural decompressing of the air would then push the water out through the hose in a steady manner, just like the contracting of the artery would push out the blood.
-We call the radius of an artery in it's undeformed state the lumen radius $R_0$.
+We call the radius of an artery in it's undeformed state the lumen radius $r_0$ and refer to the reference vessel wall thickness by $h_0$ from here on out.
 
 \section{Blood} \label{b}
 
@@ -158,10 +158,10 @@ Shear stress on a cross section of a material is defined as
 where $F$ is the force applied coplaner to the cross-section and $A$ is the surface of the cross-section.
 The cross-section affected by the shear stress is deformed at a certain angle. 
 This angle can be assigned an angular velocity and is referred to as the shear rate.
-We denote the shear rate by $\nu$. \cite{köppl2023dimension}
+We denote the shear rate by $D$. \cite{köppl2023dimension}
 
-The blood dynamic viscosity $\mu$ decreases hyperbolically with the shear rate $\nu$.
-At about $\nu > 100s^{-1}$ the viscosity stays constant for common haematocrit values.
+The blood dynamic viscosity $\mu$ decreases hyperbolically with the shear rate $D$.
+At about $D > 100s^{-1}$ the viscosity stays constant for common haematocrit values.
 In larger arteries the average shear rate close to the walls is above this threshold. \cite{MCDbook}
 
 Therefore the blood's viscosity is often considered constant and it can roughly be viewed as Newtonian fluid for the sake of simplicity \cite{fung1996biomechanics} \cite{guyton2006textbook} \cite{MCDbook} \cite{pedley_1980} \cite{zamir2000physics} \cite{zamir2006physics}.
@@ -210,31 +210,66 @@ The linearized 1D NSE for quantities averaged along the radial component under t
 			\frac{\partial Q(z;t)}{\partial t} + \frac{\partial}{\partial z}\left(\alpha \frac{Q(z;t)^2}{A(z;t)} \right) + \frac{A(z;t)}{\rho(z;t)} \frac{\partial P(z;t)}{\partial z} &= \\
 			-2 \frac{\mu}{\rho(z;t)} ( \gamma &+ 2 ) \frac{Q(z;t)}{A(z;t)}, \\
 			z \in \mathbb{R},\ & t \in \mathbb{R}_{\geq 0}, 
-		\end{aligned} \label{1Deqs1}
+		\end{aligned} \label{eq:1Deqs1}
 \end{equation}
 
 where $A$ and $Q$ are the cross-sectional area of the vessel and the volumetric flow rate $Au$ respectively, where $u$ is the fluid velocity along $z$.
-$\alpha$ is the Coriolis' coefficient which is the correction parameter stemming from the fact that our new momentum equation no longer expresses the conservation of momentum but actually the conservation of the momentum averaged over the radial component \cite{article10002407}.
+$\alpha$ is the Coriolis' coefficient which is the correction parameter stemming from the fact that our new momentum equation no longer expresses the conservation of momentum but actually the conservation of the momentum averaged over the radial component.
+The Coriolis' coefficient is computed by 
+\begin{equation}
+	\alpha = \frac{2}{u(z;t)^2R(z;t)^2} \int_0^R v_z(z, r; t) rdr 
+\end{equation}
+where $v_z$ is the velocity profile.\cite{article10002407}
 $\gamma$ is the velocity profile parameter that determines the velocity profile by a common parametric approximation 
 \begin{equation}
-	v_z(z,r;t) = \frac{\gamma + 2}{\gamma} u \left[ 1 - \left( \frac{r}{R_0} \right) \right].
+	v_z(z,r;t) = \frac{\gamma + 2}{\gamma} u(z;t) \left[ 1 - \left( \frac{r}{r_0(z;t)} \right) \right].
 \end{equation}
-For $\gamma=2$ this gives a plug flow, a rather flat velocity profile that decays rapidly at the arterie walls.
-For $\gamma=9$ we get a hyperbolic velocity profile and hence a Poisseuille-like flow. (plot?) \cite{köppl2023dimension}
-The pressure $P$ is given by the external pressure stemming from surrounding tissue as well as the deformation of the vessel:
-\begin{equation} 
-	P = P_{ext} + \beta \left( \sqrt{\frac{A}{A_0}} - 1 \right), \  \beta = \sqrt{\frac{\pi}{A_0}} \frac{E h_0}{1-\nu^2}
+For this velocity profile the Coriolis coefficient is
+\begin{equation}
+	\alpha = \frac{\gamma + 2}{\gamma + 1}
 \end{equation}
- where $E$, $h_0$, and $\nu$ are the vessel wall Young's modulus, the reference wall thickness, and the Poisson ratio. \cite{ottesen2004applied}
-Setting $\alpha = 1$ and $\gamma_\nu = 9$ we can approximate a plug-flow profile.
-Inserting this into equation \ref{1Deqs1} leads to 
+For $\gamma=2, \alpha = \frac{4}{3}$ this gives a plug flow, a rather flat velocity profile that decays rapidly at the arterie walls.
+For $\gamma=9, \alpha = \frac{11}{10} $ we get a hyperbolic velocity profile and hence a Poisseuille-like flow. (plot?)\cite{köppl2023dimension}
+We want to determine the variables $Q, A,$ and $P$.
+Until now we've considered the two equations of mass and momentum conservation determining $Q$ and $A$.
+In order to determine $P$ we therefore need another equation, a so called tube law.
+There are many different ways to model the pressure $P$ whithin a deforming tube and there is no way that is considered the defacto right way.
+For a full comparison of a wide range of such models we refer to \cite{gomez2017analysis}.
+In the model used in this work the pressure $P$ is given by the external pressure $P_{ext}$ stemming from surrounding tissue as well as the pressure from the deformation of the vessel:
+\begin{equation}
+	P_{def}(z;t) = \frac{h_0(z;t) \sigma(z;t)}{\pi r(z;t)}. \label{eq:pdef}
+\end{equation}
+given by the Young-Laplace law \cite{laplace1805traité} \cite{young1804essay}.
+Here $\sigma$ is the stress which describes the internal forces that neighbouring particles of the continuouse material exert on eachother.
+Assuming linear elasticity and using Hooke's law \cite{hooke1678lectures} we arrive at:
+\begin{equation}
+	\sigma(z;t) = \epsilon(z;t) E \label{eq:stress}
+\end{equation}
+where $E$ describes the stiffness of the elastic material and is called Young's modulus.
+$\epsilon$ is the stress and gives the deformation of the material.
+Assuming an isotropic, homogeneous, and incompressible arterial wall, an axisymmetric deformation, and circular cross-sections that are independent of eachother it $\epsilon$ is given by:
+\begin{equation}
+	\epsilon(z;t) = \frac{r(z;t)-r_0(z;t)}{ (1-\nu^2) r_0(z;t)}. \label{eq:strain}
+\end{equation}
+$\nu$ is the elasticity parameter or the Poisson's ratio.
+It is the ratio of transverse contraction to longitudinal extension strain in the direction of the stretching force.
+Combining \autoref{eq:pdef}-\autoref{eq:strain} with a term for the external pressure $P_{ext}$ we get \cite{sherwin2003one} \cite{sherwin2003computational}: 
+\begin{align} 
+	P(z;t) &= P_{ext}(z;t) + \beta \left( \sqrt{\frac{A(z;t)}{A_0(z;t)}} - 1 \right), \\
+	\beta(z;t) &= \sqrt{\frac{\pi}{A_0(z;t)}} \frac{E h_0(z;t)}{1-\nu^2}.
+\end{align}
+Comparison with experimental data shows that a plug-flow is a reasonable approximation of the velocity profile \cite{hunter1972numerical} \cite{smith2000generation} \cite{smith2002anatomically}.
+Therefore it is reasonable to set $\gamma = 9, \alpha = \frac{11}{10}$.
+Since the plug-flow velocity profile is relatively flat the average of $Q$ doesn't differ from the actual value anywhere along $r$.
+Therefore we can also set the Coriolis' coefficient $\alpha$ (correction parameter) to $\alpha = 1$. (justification?)
+Inserting these fixed values for $\gamma$ and $\alpha$ into  \autoref{eq:1Deqs1} leads to 
 \begin{equation}
 		\begin{aligned} 
 			\frac{\partial A}{\partial t} + \frac{\partial Q}{\partial z} &= 0, \\ 
 			\frac{\partial Q}{\partial t} + \frac{\partial}{\partial z}\left(\frac{Q^2}{A} \right) + \frac{A}{\rho} \frac{\partial P}{\partial z} &= -22 \frac{\mu}{\rho} \frac{Q}{A}.
 		\end{aligned} \label{1Deqs2}
 \end{equation}
-
+where from here on out we have dropped the space and time dependence.
 We can rewrite equation \ref{1Deqs2} in it's conservative form by defining the following shorthands:
 
 \begin{equation}
