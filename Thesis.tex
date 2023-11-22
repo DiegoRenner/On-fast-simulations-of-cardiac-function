@@ -209,11 +209,11 @@ The linearized 1D NSE for quantities averaged along the radial component under t
 			\frac{\partial A(z;t)}{\partial t} + \frac{\partial Q(z;t)}{\partial z} &= 0, \\ 
 			\frac{\partial Q(z;t)}{\partial t} + \frac{\partial}{\partial z}\left(\alpha \frac{Q(z;t)^2}{A(z;t)} \right) + \frac{A(z;t)}{\rho(z;t)} \frac{\partial P(z;t)}{\partial z} &= \\
 			-2 \frac{\mu}{\rho(z;t)} ( \gamma &+ 2 ) \frac{Q(z;t)}{A(z;t)}, \\
-			z \in \mathbb{R},\ & t \in \mathbb{R}_{\geq 0}, 
+			z \in [0,l],\ & t \in \mathbb{R}_{\geq 0}, 
 		\end{aligned} \label{eq:1Deqs1}
 \end{equation}
 
-where $A$ and $Q$ are the cross-sectional area of the vessel and the volumetric flow rate $Au$ respectively, where $u$ is the fluid velocity along $z$.
+where $A$ and $Q$ are the cross-sectional area of the vessel and the volumetric flow rate $Au$ respectively, with $u$ being the fluid velocity along $z$. $l$ is the length of the vessel
 $\alpha$ is the Coriolis' coefficient which is the correction parameter stemming from the fact that our new momentum equation no longer expresses the conservation of momentum but actually the conservation of the momentum averaged over the radial component.
 The Coriolis' coefficient is computed by 
 \begin{equation}
@@ -261,7 +261,7 @@ Combining \autoref{eq:pdef}-\autoref{eq:strain} with a term for the external pre
 Comparison with experimental data shows that a plug-flow is a reasonable approximation of the velocity profile \cite{hunter1972numerical} \cite{smith2000generation} \cite{smith2002anatomically}.
 Therefore it is reasonable to set $\gamma = 9, \alpha = \frac{11}{10}$.
 Since the plug-flow velocity profile is relatively flat the average of $Q$ doesn't differ from the actual value anywhere along $r$.
-Therefore we can also set the Coriolis' coefficient $\alpha$ (correction parameter) to $\alpha = 1$. (justification?)
+Therefore we can also set the Coriolis' coefficient $\alpha$ (correction parameter) to $\alpha = 1$. \cite{formaggia2010cardiovascular}
 Inserting these fixed values for $\gamma$ and $\alpha$ into  \autoref{eq:1Deqs1} leads to 
 \begin{equation}
 		\begin{aligned} 
@@ -274,53 +274,44 @@ We can rewrite equation \ref{1Deqs2} in it's conservative form by defining the f
 
 \begin{equation}
 	\mathbf{U} := 
-	\left[ 
-		\begin{aligned}
+		\begin{bmatrix}
 			A \\
-			Au
-		\end{aligned}
-	\right]
+			Q
+		\end{bmatrix}
 \end{equation}
 
 \begin{equation}
 	\mathbf{F} \left( \mathbf{U} \right) := 
-	\left[ 
-		\begin{aligned}
-			Au \\
-			Au^2 + \gamma A^{3/2}
-		\end{aligned}
-	\right]
+		\begin{bmatrix}
+			Q \\
+			\alpha \frac{Q^2}{A} + \int_{A_0}^{A} \frac{a}{\rho}\frac{\partial P}{\partial a} da
+		\end{bmatrix}
 \end{equation}
 
 \begin{equation}
 	\mathbf{S} \left( \mathbf{U} \right) := 
-	\left[ 
-		\begin{aligned}
+		\begin{bmatrix}
 			0 \\
-			f
-		\end{aligned}
-	\right]
+			-\frac{1}{\rho} \left( \frac{\partial P}{\partial A_0} \frac{\partial A_0}{\partial z} + \frac{\partial P}{\partial \beta} \frac{\partial \beta}{\partial z} + 22\mu\frac{u}{A} \right)
+		\end{bmatrix}
 \end{equation}
 
 \begin{equation}
-	\gamma := \frac{\beta}{3\rho\sqrt{A_0}}
+	\gamma := \frac{\beta}{3\rho\sqrt{A_0}}.
 \end{equation}
 
-\begin{equation}
-	f := -\frac{1}{\rho} \left( \frac{\partial P}{\partial A_0} \frac{\partial A_0}{\partial z} + \frac{\partial P}{\partial \beta} \frac{\partial \beta}{\partial z} + 22\mu\frac{u}{A} \right)
-\end{equation}.
 
 The conservative form then reads:
 \begin{equation}
 	\begin{aligned}
 		\frac{\partial \mathbf{U}}{\partial t} + \frac{\partial \mathbf{F} \left( \mathbf{U} \right)}{\partial z} &= \mathbf{S} \left( \mathbf{U} \right), \ t>0, \ z \in \left[ 0,l \right] \\
 		\mathbf{U} \left( z,0 \right) &= \mathbf{U}_0 \left( z \right), \ z \in \left[ 0,l \right] \\
-		\mathbf{U} \left( 0,t \right) &= U_L \left( t \right), \ t>0\\
-		\mathbf{U} \left( l,t \right) &= U_R \left( t \right), \ t>0
+	\mathbf{U} \left( 0,t \right) &= \mathbf{U}_L \left( t \right), \ t>0\\
+\mathbf{U} \left( l,t \right) &= \mathbf{U}_R \left( t \right), \ t>0
 	\end{aligned} \label{eq:1deqs3}
 \end{equation}
 
-where we have added initial and boundary conditions so that equation \ref{eq:1deqs3} now yields a well posed problem.
+where we have added initial values $\mathbf{U}_0$ and boundary conditions $\mathbf{U}_L$ and $\mathbf{U}_R$ so that equation \ref{eq:1deqs3} now yields a well posed problem.\cite{formaggia2010cardiovascular}
 This concludes the desription if the 1D-model for a single artery.
 In the next section we will describe how to connect such models in order to describe larger systems of arteries.
 
