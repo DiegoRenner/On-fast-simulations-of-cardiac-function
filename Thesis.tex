@@ -12,6 +12,9 @@
 \usepackage{comment}
 \usepackage[labelfont=bf,font=small,skip=5pt]{caption}
 \usepackage[outdir=./figures/]{epstopdf}
+\usepackage{titlesec}
+
+\setcounter{secnumdepth}{3}
 \usepackage{hyperref}
 
 
@@ -143,6 +146,7 @@ This would push water into an air chamber.
 Here the air would get compressed which is analogous to the deforming of the artery.
 The natural decompressing of the air would then push the water out through the hose in a steady manner, just like the contracting of the artery would push out the blood.
 We call the radius of an artery in it's undeformed state the lumen radius $r_0$ and refer to the reference vessel wall thickness by $h_0$ from here on out.
+Furthermore we denote the reference cross-section by $A_0 = \pi r_0^2$.
 
 \section{Blood} \label{b}
 
@@ -177,14 +181,14 @@ First we will describe the 1D-model for a single artery and then we will describ
 Within a vessel we consider the the conservation of mass and momentum in cylindrical coordinates, that hold for any fluid, to be satisfied.
 In cylindrical coordinates these conservation laws read
 \begin{align}
-	\frac{\partial \rho (z,r,\phi; t)}{\partial t} + \nabla \cdot \rho (z,r,\phi; t)\mathbf{v}(z,r,\phi; t) &= 0, \label{eq:cont}\\
-	\frac{\partial \mathbf{v}(z,r,\phi; t)}{\partial t} + \left( \mathbf{v}(z,r,\phi; t) \cdot \nabla \right) \mathbf{v}(z,r,\phi; t) &= \\
-	- \frac{1}{\rho (z,r,\phi; t)} (\nabla P(z,r,\phi; t) + &\mu \nabla \mathbf{v}(z,r,\phi; t)) + \mathbf{F}(z,r,\phi; t), \label{eq:mass} \\
-	z \in \mathbb{R}, \ r \in \mathbb{R}_{\geq 0}, \ \phi \in [0, 2\pi), \ \nabla &= \left[\frac{\partial}{\partial z}, \frac{1}{r}\frac{\partial}{\partial r}r, \frac{1}{r}\frac{\partial}{\partial \phi}  \right].
+	\frac{\partial \rho (z,r,\phi; t)}{\partial t} &+ \nabla \cdot \rho (z,r,\phi; t)\mathbf{u}(z,r,\phi; t) = 0, \label{eq:cont}\\
+	\frac{\partial \mathbf{u}(z,r,\phi; t)}{\partial t} &+ \left( \mathbf{u}(z,r,\phi; t) \cdot \nabla \right) \mathbf{u}(z,r,\phi; t) - \frac{\mu}{\rho(z,r,\phi; t)} \nabla^2 \mathbf{u}(z,r,\phi; t) = \\
+														&- \frac{1}{\rho (z,r,\phi; t)} \nabla P(z,r,\phi; t) + \mathbf{F}(z,r,\phi; t), \label{eq:mass} \\
+														&z \in \mathbb{R}, \ r \in \mathbb{R}_{\geq 0}, \ \phi \in [0, 2\pi), \ \nabla = \left[\frac{\partial}{\partial z}, \frac{1}{r}\frac{\partial}{\partial r}r, \frac{1}{r}\frac{\partial}{\partial \phi}  \right].
 \end{align}
 Here $\rho$ and $\mu$ are the blood density and viscosity mentioned in section \ref{b}, 
 \begin{equation}
-	\mathbf{v}(z,r,\phi; t) = \left[ v_z(z,r,\phi; t), v_r(z,r,\phi; t), v_\phi (z,r,\phi; t) \right]^T
+	\mathbf{u}(z,r,\phi; t) = \left[ u_z(z,r,\phi; t), u_r(z,r,\phi; t), u_\phi (z,r,\phi; t) \right]^T
 \end{equation}
 	is the velocity field, $P$ is the pressure, and $\mathbf{F}$ is any force acting on the fluid system.
 \autoref{eq:cont} is also referred to as the continuity equation \cite{anderson2011ebook}.
@@ -207,7 +211,7 @@ The linearized 1D NSE for quantities averaged along the radial component under t
 \begin{equation}
 		\begin{aligned} 
 			\frac{\partial A(z;t)}{\partial t} + \frac{\partial Q(z;t)}{\partial z} &= 0, \\ 
-			\frac{\partial Q(z;t)}{\partial t} + \frac{\partial}{\partial z}\left(\alpha \frac{Q(z;t)^2}{A(z;t)} \right) + \frac{A(z;t)}{\rho(z;t)} \frac{\partial P(z;t)}{\partial z} &= \\
+			\frac{\partial Q(z;t)}{\partial t} + \frac{\partial}{\partial z}\left(\alpha(z;t) \frac{Q(z;t)^2}{A(z;t)} \right) + \frac{A(z;t)}{\rho(z;t)} \frac{\partial P(z;t)}{\partial z} &= \\
 			-2 \frac{\mu}{\rho(z;t)} ( \gamma &+ 2 ) \frac{Q(z;t)}{A(z;t)}, \\
 			z \in [0,l],\ & t \in \mathbb{R}_{\geq 0}, 
 		\end{aligned} \label{eq:1Deqs1}
@@ -217,7 +221,7 @@ where $A$ and $Q$ are the cross-sectional area of the vessel and the volumetric 
 $\alpha$ is the Coriolis' coefficient which is the correction parameter stemming from the fact that our new momentum equation no longer expresses the conservation of momentum but actually the conservation of the momentum averaged over the radial component.
 The Coriolis' coefficient is computed by 
 \begin{equation}
-	\alpha = \frac{2}{u(z;t)^2R(z;t)^2} \int_0^R v_z(z, r; t) rdr 
+	\alpha(z;t) = \frac{2}{u(z;t)^2r(z;t)^2} \int_0^{r(z;t)} v_z(z, s; t) sds 
 \end{equation}
 where $v_z$ is the velocity profile.\cite{article10002407}
 $\gamma$ is the velocity profile parameter that determines the velocity profile by a common parametric approximation 
@@ -237,7 +241,7 @@ There are many different ways to model the pressure $P$ whithin a deforming tube
 For a full comparison of a wide range of such models we refer to \cite{gomez2017analysis}.
 In the model used in this work the pressure $P$ is given by the external pressure $P_{ext}$ stemming from surrounding tissue as well as the pressure from the deformation of the vessel:
 \begin{equation}
-	P_{def}(z;t) = \frac{h_0(z;t) \sigma(z;t)}{\pi r(z;t)}. \label{eq:pdef}
+	P_{def}(z;t) = \frac{h_0(z) \sigma(z;t)}{\pi r(z;t)}. \label{eq:pdef}
 \end{equation}
 given by the Young-Laplace law \cite{laplace1805traité} \cite{young1804essay}.
 Here $\sigma$ is the stress which describes the internal forces that neighbouring particles of the continuouse material exert on eachother.
@@ -255,8 +259,8 @@ $\nu$ is the elasticity parameter or the Poisson's ratio.
 It is the ratio of transverse contraction to longitudinal extension strain in the direction of the stretching force.
 Combining \autoref{eq:pdef}-\autoref{eq:strain} with a term for the external pressure $P_{ext}$ we get \cite{sherwin2003one} \cite{sherwin2003computational}: 
 \begin{align} 
-	P(z;t) &= P_{ext}(z;t) + \beta \left( \sqrt{\frac{A(z;t)}{A_0(z;t)}} - 1 \right), \\
-	\beta(z;t) &= \sqrt{\frac{\pi}{A_0(z;t)}} \frac{E h_0(z;t)}{1-\nu^2}.
+	P(z;t) &= P_{ext}(z;t) + \beta \left( \sqrt{A(z;t)} - \sqrt{A_0(z)} \right),  \label{eq:p_tot}\\
+	\beta(z;t) &=  \frac{\sqrt{\pi} E h_0(z)}{1-\nu^2}.
 \end{align}
 Comparison with experimental data shows that a plug-flow is a reasonable approximation of the velocity profile \cite{hunter1972numerical} \cite{smith2000generation} \cite{smith2002anatomically}.
 Therefore it is reasonable to set $\gamma = 9, \alpha = \frac{11}{10}$.
@@ -317,9 +321,42 @@ In the next section we will describe how to connect such models in order to desc
 
 
 \section{Initial Conditions and Boundary Values}
-\subsection{Initial Conditions}
-\subsection{Boundary Values}
-\subsubsection{Inlets}
+We need to consider initial conditions for each vessel in our system which we will adress in \autoref{ssec:initial_conditions}.
+Furthermore each vessel also needs to have boundary values set as described in \autoref{ssec:boundary_values}.
+For vessels at the edge of the network that get fed by the heart we set the input values through data.
+For vessels within the network the boundary values are set in correspondence with the neighbouring vessels.
+For vessels at the edge at the network that provide blood to get capillary bed the output values are set through either a reflection or a windkessel model
+These three cases of boundary values that need to be set are descried in \autoref{sssec:inlets} - \autoref{sssec:junctions}.
+\subsection{Initial Conditions} \label{ssec:initial_conditions}
+It is difficult to determine useful initial conditions for a haemodynamics computation.
+What is usually done therefore is to simply set
+\begin{align}
+	u(z;0) &\equiv 0, &z \in [0,l]\\
+	A(z;0) &= A_0(z), &z \in [0,l] \\
+	Q(z;0) &= u(z;0)A(z;0) = 0, &z \in [0,l].
+\end{align}
+The pressure $P$ is then computed by \autoref{eq:p_tot}.
+This can lead to false values propagating from the initial conditions.
+However this effect usually persists for only about 2-3 heartbeats as long as correct boundary values are set.\cite{formaggia2010cardiovascular}
+In the next subsection we discuss how to set these boundary values. 
+
+\subsection{Boundary Values} \label{ssec:boundary_values}
+Setting boundary values depends on where in the network a vessel is positioned.
+Vessels at the edges are set from data (inputs) or given by a reflective or a Windkessel model (outputs).
+Vessels within the network have their boundary values set by computing inlet/outlet compatibility with the neighbouring vessels.
+We will treat all these cases in the next three subsubsections.
+
+\subsubsection{Inlets}\label{sssec:inlets}
+Usually vessels that are at the edge of the network and that have an inlet that is not ocnnected to another vessel are considered to be fed by the heart.
+Here the inlet is set through precomputed data.
+This data either represents the pressure $P_L(t)$ or the volumetric flow $Q_L(t)$ being put out by the heart
+\begin{align}
+	P(0,t) &= P_L(t), &t \in [0,\infty) \\
+	Q(0,t) &= Q_L(t), &t \in [0,\infty).
+\end{align}
+
+	
+
 The inlet boundary conditions are set from data (either through P or Q) and then the ambiguities in the remaining quantities are determined through extrapolations of characteristics.
 First off the Riemann invariants need to be computed at the first and second point of the space discretization for the current time step.
 At the first point the two Riemann invariants read as
@@ -347,7 +384,7 @@ If Q is given the Riemann invariants at the next time step are computed via the 
 	W_{2,0}^{n+1} &= \frac{2Q^{n+1}_0}{A^n_0} - W^{n+1}_{1,0} \label{update2a}
 \end{align}
 where $Q^{n+1}_0$ is given through input data.
-The time step size is defined as described in section \ref{CFL},
+The time step size is defined as described in section \ref{sec:cfl_condition},
 The space step size is defined by $\Delta x \coloneqq \frac{L}{M}$.
 The missing input quantities are then computed from the new Riemann invariants as follows:
 
@@ -374,7 +411,7 @@ The missing input quantities are then computed from the new Riemann invariants a
 	Q_0^{n+1} &= A_0^{n+1} u_0^{n+1}
 \end{align}
 where $P^{n+1}_0$ is given through input data.
-\subsubsection{Outlets}
+\subsubsection{Outlets} \label{sssec:oulets}
 
 Reflection
 
@@ -498,10 +535,10 @@ Finally we can simplify \ref{wk_newton} by writing out $(P_{M})_{RCLR}$ and once
 \end{equation}
 
 
-\subsection{Junctions}
+\subsubsection{Junctions} \label{sssec:junctions}
 Three types of junctions are considered.
 Conjunctions: joining two vessels, bifurcations: splitting one vessel into two, and anastomosis: joining two vessels into one.
-\subsubsection{Conjunctions}
+\paragraph{Conjunctions} \label{par:conjunctions}
 For all types of junctions three types of equations are taken into account. 
 Extrapolation of characteristics, conservation of mass and total pressure conservation.
 For the conjunctions this leads to
@@ -551,7 +588,7 @@ Where $\mathbf{J}_c$ is the Jacobian
 $$\mathbf{J}_{c}=\left[\begin{array}{c c c c}{{{1}}}&{{0}}&{{{4}k_{1}}}&{{0}}\\ {{0}}&{{{1}}}&{{0}}&{{-4k_{2}}}\\ {{q_{c3}^{4}}}&{{-q_{c4}^{4}}}&{{4q_{c3}q_{3}^{3}}}&{{-4q_{c4}q_{c}^{3}}}\\ {{q_{c1}^{4}}}&{{-\rho q_{c2}}}&{{2\beta_{1}\frac{q_{c}}{A_{01}^{1/2}}}}&{{-2\beta_{2}\frac{q_{4}}{A_{02}^{42}}}}\end{array}\right].$$
 
 The Jacobian depends on $\mathbf{q}_c^n$ and would have to be updated at every iteration of the Newton method but in this code a modified Newton method also known as frozen Newton is applied wherein the Jacobian is initialized with the initial value of $\mathbf{q}_c$ and then not updated anymore throughout further computations.
-\subsubsection{Bifurcations}
+\paragraph{Bifurcations} \label{par:bifurcations}
 For bifurcations the same conservation laws are applied.
 This lead to the following system of equations:
 $$
@@ -588,7 +625,7 @@ $$
 
 In \ref{syseq_bif} the kinetic energy terms $\frac{1}{2} \rho u^2$ are neglected.
 	According to \cite{Formaggia2003OnedimensionalMF} this can be done since it's contribution to total pressure is small compared to the other terms.
-\subsubsection{Anastomosis}
+\paragraph{Anastomosis} \label{par:anastomosis}
 For the Anastomosis applying the extrapolation of characteristics, conservation of mass, and pressure conservation leads to the system of equations
 $$
 \mathbf{f}_c=\left\{f_{c_i}\right\}=\left\{\begin{array}{l}
@@ -616,7 +653,7 @@ $$
 
 As in the case of Bifurcations the kinetic energy terms in the pressure conservation equations are neglected.
 
-\section{CFL Condition} \label{CFL}
+\section{CFL Condition} \label{sec:cfl_condition}
 
 The CFL condition is set so that the information traveling along a characteristic curve is only affect neighboring cells. 
 Since the numerical scheme only takes neighboring cells into account doing otherwise would result in numerical error stacking up.
