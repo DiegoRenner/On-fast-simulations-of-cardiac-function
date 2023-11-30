@@ -97,8 +97,8 @@ This also curtails risks to patients and costs that other methods of research mi
 Even with numerical methods the complexity of the cardiovascular system still poses a significant challenge.
 This leads to one-dimensional (1D) models often being chosen over three-dimensional (3D) models. 
 1D models do have a lower accuracy, especially at junctions within the system.
-Nevertheless the accuracy has been shown to be suficient to simulate haemodynamics in large vascular systems.
-While the increas in simulation speed gained by choosing 1D models over 3D models is significant, an efficient implementation of the solver is still important.
+Nevertheless the accuracy has been shown to be sufficient to simulate haemodynamics in large vascular systems.
+While the increase in simulation speed gained by choosing 1D models over 3D models is significant, an efficient implementation of the solver is still important.
 Next to speed, desired attributes of a simulation are differentiability with respect to the model parameters, maintainability of code base, and ease of use.
 Differentiability leads to a model being easily optimized through parameter inference if appropriate data sets are provided while maintainability and ease of use lower the barrier of entry for future work being supported by the written code as well as the code being applied readily by others.
 For the reasons mentioned in this introduction the goal of this thesis is to provide a fast differentiable 1D cardiovascular simulation code.
@@ -109,6 +109,55 @@ In the next section we will provide a basic understanding of the cardiovascular 
 
 
 
+% 1) Introduction
+% why cardiovascular simulation important
+% description of the current ways to simulate
+% description of the problems/limitations of these methods
+% how our approach works
+% and _why_ it solves issues of previous methods
+% list specific contributions:
+    % a 1D solver which is
+    % - written for GPU on JAX
+    % - highly scalable (multi-GPU / device agnostic)
+    % - differentiable
+    % - open source
+    % - easy to understand (written in python)
+% future work / impact it will have in the future
+    % path towards complex, real-world simulation
+    % digital twin, data assimilation, etc ..
+
+% 2) Cardiovascular system
+% why cardiovascular simulation important
+
+% 3) 1D Model
+% mathematical model
+
+% 4) Existing numerical models
+% description of the current ways to simulate
+% description of the problems/limitations of these methods
+
+% 5) Our implementation
+% how our approach works
+% and _why_ it solves issues of previous methods
+% nice overview diagram showing workflow
+
+% 6) Results & benchmarks
+% timing tests / accuracy compared to Julia model
+% GPU vs CPU time
+% scaling tests:
+    % computational time vs number of vessels
+    % vmap multiple simulations
+% time to compute gradients / linear approximation of function
+
+% 7) Discussion
+% future work / impact it will have in the future
+    % multi-GPU
+    % sensitivity tests
+    % open-sourcing
+% maybe including proof-of-principle inverse test
+
+% 8) Conclusions 
+% (repeat contribution / impact)
 
 \chapter{Cardiovascular System}
 This section serves as an overview of the cardiovascular system with a focus on the arteries of the systemic circulation. 
@@ -128,13 +177,13 @@ In the next two subsections we will describe the main characteristics of the art
 \section{Arterial Wall} \label{aw}
 An arterial wall consists of three layers or tunicae: an inner, middle, and outer layer also referred to as intima, media, and adventita respectively.
 The tunica intima lines the inside of the artery. It is made up of a single layer of endothelial cells encased in a thin layer of elastin and collagen fibres (connective tissue). 
-On the outside of the artery the tunica adventita is made up of connective tissue as well which attaches the artery to surounding connective tissue.
-Inbetween these two layers lies the thickest layer, the tunica media, which consists of elastic fibres and muscle cells. 
+On the outside of the artery the tunica adventita is made up of connective tissue as well which attaches the artery to surrounding connective tissue.
+In-between these two layers lies the thickest layer, the tunica media, which consists of elastic fibres and muscle cells. 
 The tunica media is responsible for the elasticity of the artery.
-Arteries close to the heart have a tunica media that is mainly made up of elastic fibres and are referred to as elastic arteries while the tunica media of arteries farther away from the heart and of small arteries consist predominently of muscle cells and are called muscular arteris.
+Arteries close to the heart have a tunica media that is mainly made up of elastic fibres and are referred to as elastic arteries while the tunica media of arteries farther away from the heart and of small arteries consist predominantly of muscle cells and are called muscular arteries.
 The elastic arteries also have a higher compliance.
-This means that that they are able to distened and increase their volume as a response to pressure applied to the inside of the arterial wall.
-Hence elastic arteries have will deform more under the than the muscular arteries that are stiffer when blood is pumped into them by the heart.
+This means that that they are able to distended and increase their volume as a response to pressure applied to the inside of the arterial wall.
+Hence elastic arteries deform more under the than the muscular arteries that are stiffer when blood is pumped into them by the heart.
 At the same time usually the elastic arteries are larger than the muscular arteries and the size of arteries generally descends as the distance to the heart increases.
 The compliance of the larger elastic arteries is responsible for transforming the pulsatile flow at the heart into a constant flow at the capillaries.
 The pulse-like pressure change coming from the heart leads to the elastic arteries close to the heart expanding.
@@ -178,7 +227,7 @@ In this chapter we are going to describe a 1D-model of blood flow, specifically 
 First we will describe the 1D-model for a single artery and then we will describe how to string together such models to simulate larger systems of arteries.
 
 \section{Single Vessel} \label{sec:sv}
-Within a vessel we consider the the conservation of mass and momentum in cylindrical coordinates, that hold for any fluid, to be satisfied.
+Within a vessel we consider the conservation of mass and momentum in cylindrical coordinates, that hold for any fluid, to be satisfied.
 In cylindrical coordinates these conservation laws read
 \begin{align}
 	\frac{\partial \rho (z,r,\phi; t)}{\partial t} &+ \nabla \cdot \rho (z,r,\phi; t)\mathbf{u}(z,r,\phi; t) = 0, \label{eq:cont}\\
@@ -193,9 +242,9 @@ Here $\rho$ and $\mu$ are the blood density and viscosity mentioned in section \
 	is the velocity field, $P$ is the pressure, and $\mathbf{F}$ is any force acting on the fluid system.
 \autoref{eq:cont} is also referred to as the continuity equation \cite{anderson2011ebook}.
 Usually the NSE are considered to be made up of \autoref{eq:cont} and \autoref{eq:mass} as well as the energy equation.
-In our case this equation can be omitted due to us considering an incompressible Newtonian fluid and therefore there not being any temperature gradients in the fluid and there being no heat flux by conduction.
+In our case the energy equation can be omitted due to us considering an incompressible Newtonian fluid and therefore there not being any temperature gradients in the fluid and there being no heat flux by conduction.
 Furthermore we also assume that heat generated by friction is negligible and that there are no heat sources.
-Finally wall diplacement should be small enough for the work to be done by it on the fluid to be negligible. (reference?)
+Finally wall displacement should be small enough for the work to be done by it on the fluid to be negligible. (reference?)
 We consider a vessel to be an axisymmetric tube along the $z$ axis in a cylindrical coordinate system $\left(z,r,\phi\right)$.
 Under the following assumptions the 3D-Navier-Stokes equations can be reduced to a 1D-model:
 
