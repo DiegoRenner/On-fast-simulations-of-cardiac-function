@@ -368,18 +368,197 @@ The conservative form then reads:
 \begin{equation}
 	\begin{aligned}
 		\frac{\partial \mathbf{U}}{\partial t} + \frac{\partial \mathbf{F} \left( \mathbf{U} \right)}{\partial z} &= \mathbf{S} \left( \mathbf{U} \right), \ t>0, \ z \in \left[ 0,l \right] \\
-		\mathbf{U} \left( z,0 \right) &= \mathbf{U}_0 \left( z \right), \ z \in \left[ 0,l \right] \\
-	\mathbf{U} \left( 0,t \right) &= \mathbf{U}_L \left( t \right), \ t>0\\
-\mathbf{U} \left( l,t \right) &= \mathbf{U}_R \left( t \right), \ t>0
+		\mathbf{U} \left( z;0 \right) &= \mathbf{U}_0 \left( z \right), \ z \in \left[ 0,l \right] \\
+	\mathbf{U} \left( 0;t \right) &= \mathbf{U}_L \left( t \right), \ t>0\\
+\mathbf{U} \left( l;t \right) &= \mathbf{U}_R \left( t \right), \ t>0
 	\end{aligned} \label{eq:1deqs3}
 \end{equation}
 
 where we have added initial values $\mathbf{U}_0$ and boundary conditions $\mathbf{U}_L$ and $\mathbf{U}_R$ so that equation \ref{eq:1deqs3} now yields a well posed problem.\cite{formaggia2010cardiovascular}
-This concludes the desription if the 1D-model for a single artery.
-In the next section we will describe how to connect such models in order to describe larger systems of arteries.
+This concludes the description of the 1D-model for a single artery.
+The explicit setting of the aforementioned initial conditions and boundary values will be described in \autoref{sec:icbc} after introducing our numerical methods and the used notation in the next chapter.
 
 
-\section{Initial Conditions and Boundary Values}
+
+
+
+\chapter{Numerical Methods} \label{chap:nm}
+The numerical realization of the 1D-Model within a single vessel described in \autoref{sec:sv} is achieved using a Finite Volume (FV) method to solve the homogenous part of the equation \autoref{eq:1deqs3} while the source term is accounted for by using a forward-euler timestep. 
+The FV method that was applied here is the monotonic upstream-centered scheme for conservation laws (MUSCL).
+A newton solver is applied to solve the linear systems of equations arrising from the junctions or the Windkessel model for outlets.
+In this chapter we will first Introduce the MUSCL scheme and the Gudonov average applied within this scheme.
+We will then apply the MUSCL scheme to the homogenous part of \autoref{eq:1deqs3}.
+Finally we describe the forward-euler timestep used to accomodate the inhomogenous part as well as the newton solver for the outlets and junctions.
+
+\section{Finite Volume (FV)} 
+In order to describe the finite volume solver that was applied to solve \autoref{eq:1deqs3} we will first introduce a space and time discretization.
+The space discretisation is defined as follows:
+\begin{align}
+	&0 = z_0 < z_1 < z_2 < ... < z_N = l, \\
+	&z_i :=  i \Delta z,\ i \in \{0,1,...,N\} , \\
+	&\Delta z := \frac{l}{N}.
+\end{align}
+For the time discretisation a timestep series is defined
+\begin{align}
+	0 < t^1 < t^2 < t^3 < ...
+\end{align}
+where the explicit computation of the values of $t^n$, $n \in \mathbb{N}$  will be given in \autoref{sec:cfl}.
+The balance equation on the infinitesimal control volume 
+\begin{align}
+	&[\tilde{z}, \tilde{z} + \delta z] \times [\tilde{t}, \tilde{t} + \delta t], \\
+	&\tilde{z} \in (0,l), \\
+	&\tilde{t} > 0,
+\end{align}
+for a hyperbolic law in it's conservation form (e.g. \autoref{eq:1deqs3}) is given by
+\begin{align}
+	\int_{\tilde{z}}^{\tilde{z} + \delta z} \mathbf{U} (z; \tilde{t} + \delta t) - \mathbf{U} (z;\tilde{t}) dz &= \int_{\tilde{t}}^{\tilde{t}+\delta t} \mathbf{F}(\tilde{z};t) - \mathbf{F}(\tilde{z} + \delta z; t) dt\\
+																											   &+ \int_{\tilde{t}}^{\tilde{t} + \delta t} \int_{\tilde{z}}^{\tilde{z} + \delta z}  \mathbf{S}(z;t) dzdt.
+\end{align}
+For the specific control volume, also referred to as cell $i$,
+\begin{align}
+	&[z_{i-\frac{1}{2}},z_{i+\frac{1}{2}}] \times [t^n, t^{n+1}], \\
+	&\Delta t := t^{n+1}-t^n,
+\end{align}
+where $z_{i \pm \frac{1}{2}}$ are the spatial points exactly inbetween $z_{i}$, $z_{i+1}$ and $z_{i-1}$, $z_{i}$ respectively, the balance equation yields
+\begin{equation}
+	(\mathbf{U} _i^{n+1}-\mathbf{U} _i^n) \Delta z = (\mathbf{F}_{i-\frac{1}{2}}^{n+\frac{1}{2}} - \mathbf{F}_{i+\frac{1}{2}}^{n+\frac{1}{2}}) \Delta t + \mathbf{S}_i^{n+\frac{1}{2}} \Delta z \Delta t.
+\end{equation}
+Here $\mathbf{U}_i^n$, $i \in \{0,1,...,N\}$ is the average of $\mathbf{U}$ over the spatial component of the cell $i$ at timestep $n$,
+$\mathbf{F}_{i \pm \frac{1}{2}}^{n + \frac{1}{2}}$ is the average of the flux $\mathbf{F}$ where the cells $i$ and $i+1$, or  $i-1$ and $i$  meet exactly inbetween the timesteps $n$ and $n + 1$, and $\mathbf{S}_i^{n+\frac{1}{2}}$ is the average of the source term $\mathbf{S}$ over the spatial component of the cell, again at the timestep right inbetween $n$ and $n+1$.
+Dividing by $\Delta z$ and rearranging the terms gives
+\begin{equation}
+	\mathbf{U} _i^{n+1} = \mathbf{U}_i^n + \frac{\Delta t}{\Delta z} (\mathbf{F}_{i-\frac{1}{2}}^{n+\frac{1}{2}} - \mathbf{F}_{i+\frac{1}{2}}^{n+\frac{1}{2}}) + \mathbf{S}_i^{n+\frac{1}{2}} \Delta t.
+\end{equation}
+Therefore the value of $\mathbf{U}$ at the next timestep $n+1$ can be determined from the value at the current timestep $n$ and the values of the flux $\mathbf{F}$ and the source term $\mathbf{S}$ at the intermediate timestep $n + \frac{1}{2}$.
+In the following section we will discuss how to commpute the flux terms.
+\section{MUSCL} \label{sec:muscl}
+\section{Gudonov's}
+\section{Time step, homogeneous part}
+Next the following system of differential equations has to be solved for $(A,Au)$ within every vessel:
+
+\begin{equation}
+	\left\{\begin{array}{l}\frac{\partial A}{\partial t} + \frac{\partial(Au)}{\partial z} = 0,\\
+	\frac{\partial (Au)}{\partial t} + \frac{\partial (Au^2)}{\partial z} + \frac{A}{\rho} \frac{\partial P}{\partial z} = -2 \frac{\mu}{\rho}(\gamma_\nu + 2)u \end{array} \right.
+\end{equation}
+
+This system stems from applying conservation laws as demonstrated in \cite{book}.
+It can be reformulated in to a conservative form (with source term) as follows:
+
+\begin{equation}
+	\left\{\begin{array}{l}
+			\frac{\partial \mathbf{U}}{\partial t}+\frac{\partial \mathbf{F}(\mathbf{U})}{\partial z}=\mathbf{S}(\mathbf{U}), \quad z \in[0, \ell], \\
+			\mathbf{U}(z, 0)=\mathbf{U}^{(0)}(z), \quad t>0, \\
+			\mathbf{U}(\mathbf{0}, t)=\mathbf{U}_L(t), \quad \mathbf{U}(\ell, t)=\mathbf{U}_R(t),
+	\end{array}\right.
+\end{equation}
+where the necessary boundary conditions have been added.
+In order to get the conservative formulation the following substitutions have been applied:
+
+\begin{equation}
+	\mathbf{U}=\left\{\begin{array}{c}
+			A \\
+			A u
+	\end{array}\right\}, \\
+\end{equation}
+
+\begin{equation}
+	\mathbf{F}(\mathbf{U})=\left\{\begin{array}{c}
+			A u \\
+			A u^2+\gamma A^{3 / 2}
+	\end{array}\right\}
+\end{equation}
+\begin{equation}
+	\mathbf{S}(\mathbf{U})=\left\{\begin{array}{c}
+			0 \\
+
+			f_s
+	\end{array}\right\}, \\
+\end{equation}
+where the vectors $\mathbf{F}(\mathbf{U})$ and $\mathbf{U}$ are called the flux and the source term respectively.
+Further substitutions and simplifications that have been done to get to the conservative formulation are as follows:
+
+\begin{equation}
+	\gamma=\frac{\beta}{3 \rho \sqrt{A_0}}, \\
+\end{equation}
+
+\begin{equation}
+	f_s=-\frac{1}{\rho}\left[\frac{\partial P}{\partial A_0} \frac{\partial A_0}{\partial z}+\frac{\partial P}{\partial \beta} \frac{\partial \beta}{\partial z}+2 \mu\left(\gamma_\nu+2\right) \frac{u}{A}\right]
+\end{equation}
+\begin{equation}
+	\begin{aligned}
+		\tau & =\beta \sqrt{A_0}, \quad P=P_{e x t}+\tau\left(\sqrt{A}-\sqrt{A_0}\right),
+	\end{aligned}
+\end{equation}
+\begin{equation}
+	\frac{\partial P}{\partial A_0}=-\frac{\beta}{2}, \quad \frac{\partial P}{\partial \tau}=\sqrt{A}-\sqrt{A_0}.
+\end{equation}
+\begin{comment}
+	The flux Jacobian reads
+	\begin{equation}
+		\frac{\partial \mathbf{F}}{\partial \mathbf{U}}=\mathbf{H}=\left[\begin{array}{cc}
+				0 & 1 \\
+				\frac{3}{2} \chi \sqrt{A}-u^2 & 2 u
+		\end{array}\right],
+	\end{equation}
+	which, under the assumption $A>0$, has two eigenvalues
+	\begin{equation}
+		\lambda_{1,2}=u \mp c, \quad c=\sqrt{\frac{3}{2} \gamma \sqrt{A}}=\sqrt{\frac{\beta}{2 \rho}} A^{1 / 4}
+	\end{equation}
+\end{comment}
+
+The conservative form is solved numerically in two steps. 
+The first step solves the homogeneous part:
+\begin{equation}
+	\left\{\begin{array}{l}
+			\frac{\partial \mathbf{U}}{\partial t}+\frac{\partial \mathbf{F}(\mathbf{U})}{\partial x}=0 \\
+			\mathbf{U}\left(x, t^n\right)=\mathbf{U}^n
+	\end{array} \quad \rightarrow \overline{\mathbf{U}}^{n+1},\right.
+\end{equation}
+
+This is done using Godunov's and the MUSCL scheme resulting in the following update step:
+
+\begin{equation}
+	\left\{\begin{array}{l}
+			U_i^*=U_i^n+\frac{\Delta t}{\Delta x}\left(F_{i-1 / 2}^n-F_{i+1 / 2}^n\right), \\
+			\overline{U}_i^{n+1}=\frac{1}{2} U_i^n+\frac{1}{2}\left[U_i^*+\frac{\Delta t}{\Delta x}\left(F_{i-1 / 2}^*-F_{i+1 / 2}^*\right)\right] .  \\
+	\end{array} \right.
+\end{equation}
+\begin{comment}
+	\begin{equation}
+		U_i^n \underset{\Delta x \rightarrow 0}{=} \frac{1}{\Delta x} \int_{x_i-\frac{\Delta x}{2}}^{x_i+\frac{\Delta x}{2}} q\left(x, t_n\right) d x
+	\end{equation}
+\end{comment}
+
+The flux used here is the widely used numerical flux Lax-Friedrichs:
+\begin{equation}
+	F_{i+1 / 2}^n=\frac{1}{2}\left(F_L^n+F_R^n\right)-\frac{\Delta x}{\Delta t}\left(U_{i+1}^n-U_i^n\right) .
+\end{equation}
+
+The values for the flux $F_L^n$ and $F_R^n$ are computed using a linear piece wise reconstruction (MUSCL).
+In order to avoid too steep slopes that may lead to unrealistic values for the solution the superbee limiter is applied.
+
+
+\section{Time step, source term}
+Next the inhomogeneous part has to be solved:
+
+\begin{equation}
+	\left\{\begin{array}{l}
+			\frac{d \mathbf{U}}{d t}=\mathbf{S}(\mathbf{U}), \\
+			\overline{\mathbf{U}}^{n+1}
+	\end{array} \quad \rightarrow \quad \mathbf{U}^{n+1},\right.
+\end{equation}
+
+This is done using the forward Euler method
+
+\begin{equation}
+	\mathbf{U}^{n+1}=\mathbf{U}^n + \Delta t \mathbf{S}\left(t^n, \mathbf{U}^n\right)
+\end{equation}
+
+In newer versions of the code a visco-elastic constitutive equation is solved as described in \cite{ALASTRUEY20112250}.
+This is more accurate than the linear-elastic formulation described here.
+The corresponding code can be found in 
+
+\section{Initial Conditions and Boundary Values} \label{sec:icbc}
 We need to consider initial conditions for each vessel in our system which we will adress in \autoref{ssec:initial_conditions}.
 Furthermore each vessel also needs to have boundary values set as described in \autoref{ssec:boundary_values}.
 For vessels at the edge of the network that get fed by the heart we set the input values through data.
@@ -406,13 +585,14 @@ Vessels within the network have their boundary values set by computing inlet/out
 We will treat all these cases in the next three subsubsections.
 
 \subsubsection{Inlets}\label{sssec:inlets}
-Usually vessels that are at the edge of the network and that have an inlet that is not ocnnected to another vessel are considered to be fed by the heart.
+Usually vessels that are at the edge of the network and that have an inlet that is not connected to another vessel are considered to be fed by the heart.
 Here the inlet is set through precomputed data.
-This data either represents the pressure $P_L(t)$ or the volumetric flow $Q_L(t)$ being put out by the heart
+This data either represents the pressure $P_L(t)$ or the volumetric flow $Q_L(t)$ being put out by the heart and is assigned in one of the following two ways
 \begin{align}
 	P(0,t) &= P_L(t), &t \in [0,\infty) \\
 	Q(0,t) &= Q_L(t), &t \in [0,\infty).
 \end{align}
+If one of these quantities is given at a time $t_2$ and the other $u, A, c$, and $P$ can be computed using 
 
 	
 
@@ -443,7 +623,7 @@ If Q is given the Riemann invariants at the next time step are computed via the 
 	W_{2,0}^{n+1} &= \frac{2Q^{n+1}_0}{A^n_0} - W^{n+1}_{1,0} \label{update2a}
 \end{align}
 where $Q^{n+1}_0$ is given through input data.
-The time step size is defined as described in section \ref{sec:cfl_condition},
+The time step size is defined as described in section \ref{sec:cfl},
 The space step size is defined by $\Delta x \coloneqq \frac{L}{M}$.
 The missing input quantities are then computed from the new Riemann invariants as follows:
 
@@ -712,7 +892,7 @@ $$
 
 As in the case of Bifurcations the kinetic energy terms in the pressure conservation equations are neglected.
 
-\section{CFL Condition} \label{sec:cfl_condition}
+\section{CFL Condition} \label{sec:cfl}
 
 The CFL condition is set so that the information traveling along a characteristic curve is only affect neighboring cells. 
 Since the numerical scheme only takes neighboring cells into account doing otherwise would result in numerical error stacking up.
@@ -724,143 +904,6 @@ Taking into account the aforementioned condition of preventing the characteristi
 where $S_{max} = \max_{x \in [0,L], v \in V} | u_v(x) + c_v(x) |$ and V is the set of all vessels in the simulation.  
 For Melis' thesis the value $0.9$ was chosen for $C_{CFL}$ since this offered a good compromise between numerical stability and computational time.
 The corresponding code can be found in \texttt{src/solver.jl:57-69}.
-
-
-
-\chapter{Numerical Methods} \label{chap:nm}
-The numerical realization of the 1D-Model within a single vessel described in \autoref{sec:sv} is achieved using a Finite Volume (FV) method to solve the homogenous part of the equation \autoref{eq:1deqs3} while the source term is accounted for by using a forward-euler timestep. 
-The FV method that was applied here is the monotonic upstream-centered scheme for conservation laws (MUSCL).
-A newton solver is applied to solve the linear systems of equations arrising from the junctions or the Windkessel model for outlets.
-In this chapter we will first Introduce the MUSCL scheme and the Gudonov average applied within this scheme.
-We will then apply the MUSCL scheme to the homogenous part of \autoref{eq:1deqs3}.
-Finally we describe the forward-euler timestep used to accomodate the inhomogenous part as well as the newton solver for the outlets and junctions.
-
-\section{MUSCL} \label{sec:muscl}
-\section{Gudonov's}
-\section{Time step, homogeneous part}
-Next the following system of differential equations has to be solved for $(A,Au)$ within every vessel:
-
-\begin{equation}
-	\left\{\begin{array}{l}\frac{\partial A}{\partial t} + \frac{\partial(Au)}{\partial z} = 0,\\
-	\frac{\partial (Au)}{\partial t} + \frac{\partial (Au^2)}{\partial z} + \frac{A}{\rho} \frac{\partial P}{\partial z} = -2 \frac{\mu}{\rho}(\gamma_\nu + 2)u \end{array} \right.
-\end{equation}
-
-This system stems from applying conservation laws as demonstrated in \cite{book}.
-It can be reformulated in to a conservative form (with source term) as follows:
-
-\begin{equation}
-	\left\{\begin{array}{l}
-			\frac{\partial \mathbf{U}}{\partial t}+\frac{\partial \mathbf{F}(\mathbf{U})}{\partial z}=\mathbf{S}(\mathbf{U}), \quad z \in[0, \ell], \\
-			\mathbf{U}(z, 0)=\mathbf{U}^{(0)}(z), \quad t>0, \\
-			\mathbf{U}(\mathbf{0}, t)=\mathbf{U}_L(t), \quad \mathbf{U}(\ell, t)=\mathbf{U}_R(t),
-	\end{array}\right.
-\end{equation}
-where the necessary boundary conditions have been added.
-In order to get the conservative formulation the following substitutions have been applied:
-
-\begin{equation}
-	\mathbf{U}=\left\{\begin{array}{c}
-			A \\
-			A u
-	\end{array}\right\}, \\
-\end{equation}
-
-\begin{equation}
-	\mathbf{F}(\mathbf{U})=\left\{\begin{array}{c}
-			A u \\
-			A u^2+\gamma A^{3 / 2}
-	\end{array}\right\}
-\end{equation}
-\begin{equation}
-	\mathbf{S}(\mathbf{U})=\left\{\begin{array}{c}
-			0 \\
-
-			f_s
-	\end{array}\right\}, \\
-\end{equation}
-where the vectors $\mathbf{F}(\mathbf{U})$ and $\mathbf{U}$ are called the flux and the source term respectively.
-Further substitutions and simplifications that have been done to get to the conservative formulation are as follows:
-
-\begin{equation}
-	\gamma=\frac{\beta}{3 \rho \sqrt{A_0}}, \\
-\end{equation}
-
-\begin{equation}
-	f_s=-\frac{1}{\rho}\left[\frac{\partial P}{\partial A_0} \frac{\partial A_0}{\partial z}+\frac{\partial P}{\partial \beta} \frac{\partial \beta}{\partial z}+2 \mu\left(\gamma_\nu+2\right) \frac{u}{A}\right]
-\end{equation}
-\begin{equation}
-	\begin{aligned}
-		\tau & =\beta \sqrt{A_0}, \quad P=P_{e x t}+\tau\left(\sqrt{A}-\sqrt{A_0}\right),
-	\end{aligned}
-\end{equation}
-\begin{equation}
-	\frac{\partial P}{\partial A_0}=-\frac{\beta}{2}, \quad \frac{\partial P}{\partial \tau}=\sqrt{A}-\sqrt{A_0}.
-\end{equation}
-\begin{comment}
-	The flux Jacobian reads
-	\begin{equation}
-		\frac{\partial \mathbf{F}}{\partial \mathbf{U}}=\mathbf{H}=\left[\begin{array}{cc}
-				0 & 1 \\
-				\frac{3}{2} \chi \sqrt{A}-u^2 & 2 u
-		\end{array}\right],
-	\end{equation}
-	which, under the assumption $A>0$, has two eigenvalues
-	\begin{equation}
-		\lambda_{1,2}=u \mp c, \quad c=\sqrt{\frac{3}{2} \gamma \sqrt{A}}=\sqrt{\frac{\beta}{2 \rho}} A^{1 / 4}
-	\end{equation}
-\end{comment}
-
-The conservative form is solved numerically in two steps. 
-The first step solves the homogeneous part:
-\begin{equation}
-	\left\{\begin{array}{l}
-			\frac{\partial \mathbf{U}}{\partial t}+\frac{\partial \mathbf{F}(\mathbf{U})}{\partial x}=0 \\
-			\mathbf{U}\left(x, t^n\right)=\mathbf{U}^n
-	\end{array} \quad \rightarrow \overline{\mathbf{U}}^{n+1},\right.
-\end{equation}
-
-This is done using Godunov's and the MUSCL scheme resulting in the following update step:
-
-\begin{equation}
-	\left\{\begin{array}{l}
-			U_i^*=U_i^n+\frac{\Delta t}{\Delta x}\left(F_{i-1 / 2}^n-F_{i+1 / 2}^n\right), \\
-			\overline{U}_i^{n+1}=\frac{1}{2} U_i^n+\frac{1}{2}\left[U_i^*+\frac{\Delta t}{\Delta x}\left(F_{i-1 / 2}^*-F_{i+1 / 2}^*\right)\right] .  \\
-	\end{array} \right.
-\end{equation}
-\begin{comment}
-	\begin{equation}
-		U_i^n \underset{\Delta x \rightarrow 0}{=} \frac{1}{\Delta x} \int_{x_i-\frac{\Delta x}{2}}^{x_i+\frac{\Delta x}{2}} q\left(x, t_n\right) d x
-	\end{equation}
-\end{comment}
-
-The flux used here is the widely used numerical flux Lax-Friedrichs:
-\begin{equation}
-	F_{i+1 / 2}^n=\frac{1}{2}\left(F_L^n+F_R^n\right)-\frac{\Delta x}{\Delta t}\left(U_{i+1}^n-U_i^n\right) .
-\end{equation}
-
-The values for the flux $F_L^n$ and $F_R^n$ are computed using a linear piece wise reconstruction (MUSCL).
-In order to avoid too steep slopes that may lead to unrealistic values for the solution the superbee limiter is applied.
-
-
-\section{Time step, source term}
-Next the inhomogeneous part has to be solved:
-
-\begin{equation}
-	\left\{\begin{array}{l}
-			\frac{d \mathbf{U}}{d t}=\mathbf{S}(\mathbf{U}), \\
-			\overline{\mathbf{U}}^{n+1}
-	\end{array} \quad \rightarrow \quad \mathbf{U}^{n+1},\right.
-\end{equation}
-
-This is done using the forward Euler method
-
-\begin{equation}
-	\mathbf{U}^{n+1}=\mathbf{U}^n + \Delta t \mathbf{S}\left(t^n, \mathbf{U}^n\right)
-\end{equation}
-
-In newer versions of the code a visco-elastic constitutive equation is solved as described in \cite{ALASTRUEY20112250}.
-This is more accurate than the linear-elastic formulation described here.
-The corresponding code can be found in 
 
 \section{Newton Solver}
 
