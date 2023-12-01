@@ -14,6 +14,16 @@
 \usepackage[outdir=./figures/]{epstopdf}
 \usepackage{titlesec}
 
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{cprotect}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{dirtree}
+\usepackage[labelfont=bf,font=small,skip=5pt]{caption}
+
 \setcounter{secnumdepth}{3}
 \usepackage{hyperref}
 
@@ -717,7 +727,7 @@ The corresponding code can be found in \texttt{src/solver.jl:57-69}.
 
 
 
-\chapter{Numerical Methods}
+\chapter{Numerical Methods} \label{chap:nm}
 The numerical realization of the 1D-Model within a single vessel described in \autoref{sec:sv} is achieved using a Finite Volume (FV) method to solve the homogenous part of the equation \autoref{eq:1deqs3} while the source term is accounted for by using a forward-euler timestep. 
 The FV method that was applied here is the monotonic upstream-centered scheme for conservation laws (MUSCL).
 A newton solver is applied to solve the linear systems of equations arrising from the junctions or the Windkessel model for outlets.
@@ -870,7 +880,7 @@ while not conv:
 	simulation_data = simulation_data_new
 \end{lstlisting}
 
-\section{JAX}
+\section{JAX} \label{sec:jax}
 JAX used to stand for "Just After eXecution" which refers to the manner in which JAX used to optimize during compilation.
 Jax achieves optimization during compilation along other things through tracing.
 In the tracing the code is optimized with the help of a computational graph.
@@ -914,11 +924,11 @@ Finally the technique of padding doesn't just allow for efficiently applying the
 That means every vessel can be meshed according to it's need which is very useful in this kind of simulation since the vessel can be severely different in size.
 The reason for why padding allows for the inhomogenous mesh is described in the next section.
 
-\subsection{Static Array Sizes and Voiding Loops}
-The sizes of arrays computed on in JAX codes need to all be known atthe time of tracing, i.e. JAX needs to be able to infer all array sizes at compile time in order to be able to apply it's optimization.
+\subsection{Static Array Sizes and Avoiding Loops} \label{ssec:al}
+The sizes of arrays computed on in JAX codes need to all be known at the time of tracing, i.e. JAX needs to be able to infer all array sizes at compile time in order to be able to apply it's optimization.
 Furthermore it is recommended to avoid loops when writing code with JAX.
 This is because these loops need to be unrolled completely during JAX's compilation.
-This can be avoided by using JAX builtin loop construcions.
+This can be avoided by using JAX builtin loop constructions.
 However these have restrictions and one needs to satisfy a very strict signature when writing loops with them.
 Moreover the arrays operated on in each iteration of the loop need to be the same size.
 So if it were not for padding the MUSCL solver would have to be applied to each vessel seperately by looping over all vessels.
@@ -935,7 +945,96 @@ In order to apply the wanted value to the ghost cells one need to store five arr
 Once the origianl array that needs to have ghost cells inserted padded with a zero on either end, two times the origianl array with two zeros at the beginning or the end respectively, and two times a boolean array containing the locations of either the ghost cells at the inlet or the outlet.
 The padded original array, the forward shifted array and the boolean array with the locations of the ghost cells at the outlets can ve combined with the JAX equivalent of the NumPy where function to insert the outlet ghost cells.
 Equivalenty fot the original array, the shifted back array, the boolean array with the locations of the ghost cells at the inlets, and the inlet ghost cells.
-\chapter{Sensitivity Analysis}
+
+\chapter{Results}
+In this chapter we will present the results produced with our jax implementation of the haemodynamics solver described in \autoref{chap:1dm} and \autoref{chap:nm}. 
+In \autoref{sec:da} we will show some examples of simulations that were run on different anatomies.
+In \autoref{sec:sc} we will talk about scaling with respect to compile time and run time of our code.
+Finally in \autoref{sec:sc} we describe an example of the code performing parameter inference.
+\section{Different Anatomies} \label{sec:da}
+We present here the pressure waves simulated by our code on four different models.
+All models represent anatomies from healthy individuals.
+The vessel wall thickness was computed using the empirical expression
+\begin{equation}
+	h_0 = r_0 \left(a \exp(b r_0) + c \exp(d r_0)\right)
+\end{equation}
+taken from \cite{blanco2014anatomically} with the parameters
+\begin{equation}
+a = 0.2802, \ b = -5.053 \text{cm}^{-1}, \ c = 0.1324,\  d = -0.1114 \text{cm}^{-1}.
+\end{equation}
+Three of the models are taken from the \emph{vascularmodel.com} \cite{vascularmodel} website.
+These three models represent arteries around the aorta, abdominal arteries and arteries of the cerebral circulation respectively.
+The input data provided by \emph{vascularmode.com} was used.
+The Young's modulus for these models was calculated using the parametrization:
+\begin{equation}
+	E = \frac{r_0}{h} k_1 \exp(k_2 r_0) + k_3
+\end{equation}
+given in \cite{ottesen2004applied} with the values
+\begin{align}
+	k_1 &= 2.00 \times 10^7 \frac{\text{g}}{\text{s}^2\text{cm}}, \\
+	k_2 &= -22.53 \frac{1}{\ \text{cm}}, \\
+	k_3 &= 8.65 \times 10^5 \frac{\text{g}}{\text{s}^2\text{cm}}.
+\end{align}
+The fourth model is the so called "anatomically-detailed arterial network" or "ADAN" model and it is made up of the largest arteris of the human circulation.
+The model was developed by Blanco et al. \cite{blanco2014anatomically,blanco2014blood} and this specific variant of it contains 56 vessels.
+Therefore it is commonly referred to as "ADAN56.
+The 56 vessels are split into 61 arterial segments which are in turn split into 77 segments for simulation purposes 
+The results from first model from \emph{vascularmodel.com}, the aorta model, can be seen in \autoref{fig:aorta}.
+The model represents the ascending, the descending and the arch of the aorta as well as the brachiocephalic and the right and left subclavian and common carotid arteries.
+
+\begin{figure} [!ht]
+	\centering
+	\includegraphics[width=0.8\columnwidth]{figures/0007_annotated.png}
+	\caption{The haemodynamics solver produces qualitatively accurate results for the 8 vessel aorta model.}
+	\label{fig:aorta}
+\end{figure}
+
+The second \emph{vascularmodel.com} model, the abdominal model, consists of the following arteries: 
+The right and left common, external, and internal iliac arteries, the right and left femoral arteries, as well as the right and left renal arteries, the celiac trunc and the superior mesentric artery.
+The results from our simulation of the abdominal model can be seen in \autoref{fig:abdominal}.
+\begin{figure} [!ht]
+	\centering
+	\includegraphics[width=0.8\columnwidth]{figures/0029_annotated.png}
+	\caption{The abdominal model consists of 12 models and is therefore slightly larger than the aorta model but can still be simulated accurately.}
+	\label{fig:abdominal}
+\end{figure}
+Our final model from the \emph{vascularmodel.com} database models cerebral arteries.
+It includes among others the right and left anterior inferior cerebellar arteries, vertebral arteries, and the second posterior cerebral artery.
+The results from simulating the cerebral model are shown in \autoref{fig:cerebral}
+\begin{figure} [!ht]
+	\centering
+	\includegraphics[width=0.8\columnwidth]{figures/0053_annotated.png}
+	\caption{The 10 vessel cerebral model provides reasonable results as well when simulated with our haemodynamics solver.}
+	\label{fig:cerebral}
+\end{figure}
+Finally we turn to the "ADAN56" model.
+With 56 vessels this is by far the biggest model presented here.
+The input data here was inspired by \cite{murgo1980aortic}.
+The results are visualized in \autoref{fig:adan56}.
+\begin{figure} [!ht]
+	\centering
+	\includegraphics[width=0.8\columnwidth]{figures/adan56_annotated.png}
+	\caption{The simulation results from the ADAN56 artery network show that larger systems can be simulated by our jax code as well.}
+	\label{fig:adan56}
+\end{figure}
+\section{Scaling} \label{sec:sc}
+As mentioned in \autoref{sec:jax} on JAX there is a significant overhead to the compilation JAX performs in order to optimize.
+This begs the question if the compilation dominates the total computation time and how the compilation time scales for growing numbers of vessel segments in a simulated network.
+If the compilation time doesn't increase much even for larger models this would mean that for big enough systems the compilation overhead would pay off.
+The compilation and total computation time have been plotted for simulations with different numbers of vessel segments in \autoref{fig:timing}
+\begin{figure} [!ht]
+	\centering
+	\includegraphics[width=0.8\columnwidth]{figures/timing.eps}
+	\caption{The compile time doesn't grow significantly with increasing numbers of vessel segments due to builtin Python loops being avoided which would be costly to compile.}
+	\label{fig:timing}
+\end{figure}
+The compile time remains almost constant around 3s even as when the number of vessel segments increases over two magnitudes of order.
+This is due to the methods described in \autoref{ssec:al}.
+Due to avoiding builtin python loops in favor of JAX loop constructions the compile time is kept more or less static since these kind of loops don't have to be unrolled during compilation.
+In general the compile time is only a fraction of the total compute time amd becomes insignificant with growing model sizes.
+
+\section{Parameter Inference} \label{sec:pi}
+
 \chapter{Conclusion/ Future Work}
 
 
