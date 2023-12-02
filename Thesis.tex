@@ -427,116 +427,84 @@ Here $\mathbf{U}_i^n$, $i \in \{0,1,...,N\}$ is the average of $\mathbf{U}$ over
 $\mathbf{F}_{i \pm \frac{1}{2}}^{n + \frac{1}{2}}$ is the average of the flux $\mathbf{F}$ where the cells $i$ and $i+1$, or  $i-1$ and $i$  meet exactly inbetween the timesteps $n$ and $n + 1$, and $\mathbf{S}_i^{n+\frac{1}{2}}$ is the average of the source term $\mathbf{S}$ over the spatial component of the cell, again at the timestep right inbetween $n$ and $n+1$.
 Dividing by $\Delta z$ and rearranging the terms gives
 \begin{equation}
-	\mathbf{U} _i^{n+1} = \mathbf{U}_i^n + \frac{\Delta t}{\Delta z} (\mathbf{F}_{i-\frac{1}{2}}^{n+\frac{1}{2}} - \mathbf{F}_{i+\frac{1}{2}}^{n+\frac{1}{2}}) + \mathbf{S}_i^{n+\frac{1}{2}} \Delta t.
+	\mathbf{U} _i^{n+1} = \mathbf{U}_i^n + \frac{\Delta t}{\Delta z} (\mathbf{F}_{i-\frac{1}{2}}^{n+\frac{1}{2}} - \mathbf{F}_{i+\frac{1}{2}}^{n+\frac{1}{2}}) + \mathbf{S}_i^{n+\frac{1}{2}} \Delta t. \label{eq:fv}
 \end{equation}
 Therefore the value of $\mathbf{U}$ at the next timestep $n+1$ can be determined from the value at the current timestep $n$ and the values of the flux $\mathbf{F}$ and the source term $\mathbf{S}$ at the intermediate timestep $n + \frac{1}{2}$.
-In the following section we will discuss how to commpute the flux terms.
+In the following section we will discuss how to commpute the flux terms \cite{guinot2012wave}.
 \section{MUSCL} \label{sec:muscl}
-\section{Gudonov's}
-\section{Time step, homogeneous part}
-Next the following system of differential equations has to be solved for $(A,Au)$ within every vessel:
-
+The MUSCL scheme was developed by Van Leer towards the end of the 1970s \cite{van1977towards} \cite{van1979towards}.
+The version represented here is the most commonly used one.
+This MUSCL solver consists of 4 steps
+\begin{enumerate}
+	\item reconstructing a plausible $\mathbf{\hat{U}}(z;t^n)$ for $z \in [z_{i-\frac{1}{2}}, z_{i+\frac{1}{2}}]$ from $\mathbf{U}_i^n$,
+	\item limiting the profile of said reconstruction, as to be "Total Variation Diminishing" (TVD), this is often also referred to as slope limiting,
+	\item solving a generalized Riemann problem,
+	\item using the solution of this Riemann problem to compute $\mathbf{U}_i^{n+1}$, also referred to as balancing over the cells.
+\end{enumerate}
+We will describe these steps more closely in \autoref{ssec:reco} - \autoref{ssec:grp}.
+\subsection{Reconstruction} \label{ssec:reco}
+When reconstructing a solution within a cell $\mathbf{\hat{U}}(z;t^n), z \in [z_{i-\frac{1}{2}}, z_{i+\frac{1}{2}}]$ with respect to the computed average of that cell $\mathbf{U}_i^n$ conservation has to be taken into account.
+This means that the average of the reconstruction over the cell needs to be the same as the average it was reconstructed from 
 \begin{equation}
-	\left\{\begin{array}{l}\frac{\partial A}{\partial t} + \frac{\partial(Au)}{\partial z} = 0,\\
-	\frac{\partial (Au)}{\partial t} + \frac{\partial (Au^2)}{\partial z} + \frac{A}{\rho} \frac{\partial P}{\partial z} = -2 \frac{\mu}{\rho}(\gamma_\nu + 2)u \end{array} \right.
+	\frac{1}{\Delta z} \int_{z_{i-\frac{1}{2}}}^{z_{i+\frac{1}{2}}} \mathbf{\hat{U}}_i^n(z;t^n) dz = \mathbf{U}_i^n.
+\end{equation}
+The reconstruction in this MUSCL scheme is chosen to be the followinng linear expression
+\begin{align}
+	\mathbf{\hat{U}}(z;t^n) &= \mathbf{U}_i^n + (z-z_i)a_i^n \\
+	a_i^n &= \frac{\mathbf{U}_{i+1}^n - \mathbf{U}_{i-1}}{z_{i+1} - z_{i-1}}
+\end{align}
+\subsection{Profile Limiting} \label{ssec:pl}
+We define the total variation of the numerical solution $\mathbf{U}_i^n$ at timestep $n$ to be 
+\begin{equation}
+	TV(\mathbf{U})^n = \sum_{i=0}^{N-1} | \mathbf{U}_{i+1}^n - \mathbf{U}_{i}^n|.
+\end{equation}
+A numerical scheme is "Total Variation Diminishing" (TVD) if the following holds
+\begin{equation}
+	TV(\mathbf{U})^{n+1} \leq TV(\mathbf{U})^n.
+\end{equation}
+According to \cite{van1977towards} and \cite{colella1984piecewise} the MUSCL scheme is TVD if it satisfies
+\begin{align}
+	\min (\mathbf{U}_{i-1}^n, \mathbf{U}_i^n) &\leq \mathbf{\hat{U}}_i^n(z_{i-\frac{1}{2}}) \leq \max (\mathbf{U}_{i-1}^n, \mathbf{U}_i^n), \label{eq:tvd1}\\
+	\min (\mathbf{U}_{i}^n, \mathbf{U}_{i+1}^n) &\leq \mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) \leq \max (\mathbf{U}_{i}^n, \mathbf{U}_{i+1}^n).\label{eq:tvd2}
+\end{align}
+This can be achieved by running the following checks:
+\begin{enumerate}
+	\item Cell $i$ is not a local extremum, i.e. $(\mathbf{U}_i^n - \mathbf{U}_{i-1}^n)(\mathbf{U}_{i+1}^n-\mathbf{U}_i^n) > 0$. \label{chk1}
+	\item \autoref{eq:tvd1} is satisfied. \label{chk2}
+	\item \autoref{eq:tvd2} is satisfied. \label{chk3}
+\end{enumerate}
+If \autoref{chk1} is not satisfied, $a_i^n$ is set to zero.
+Thereafter \autoref{chk2} and \autoref{chk3} don't need to be checked.
+If \autoref{chk1} is satisfied but \autoref{chk2} is not, $a_i^n$ is set to the biggest value allowed by \autoref{eq:tvd1}
+\begin{equation}
+	a_i^n = 2 \frac{\mathbf{U}_i^n - \mathbf{U}_{i-1}^n}{\Delta z}.
+\end{equation}
+If \autoref{chk3} is not satisfied, $a_i^n$ is set to the biggest value allowed by \autoref{eq:tvd2}
+\begin{equation}
+	a_i^n = 2 \frac{\mathbf{U}_{i+1}^n - \mathbf{U}_{i}^n}{\Delta z}.
 \end{equation}
 
-This system stems from applying conservation laws as demonstrated in \cite{book}.
-It can be reformulated in to a conservative form (with source term) as follows:
-
-\begin{equation}
-	\left\{\begin{array}{l}
-			\frac{\partial \mathbf{U}}{\partial t}+\frac{\partial \mathbf{F}(\mathbf{U})}{\partial z}=\mathbf{S}(\mathbf{U}), \quad z \in[0, \ell], \\
-			\mathbf{U}(z, 0)=\mathbf{U}^{(0)}(z), \quad t>0, \\
-			\mathbf{U}(\mathbf{0}, t)=\mathbf{U}_L(t), \quad \mathbf{U}(\ell, t)=\mathbf{U}_R(t),
-	\end{array}\right.
-\end{equation}
-where the necessary boundary conditions have been added.
-In order to get the conservative formulation the following substitutions have been applied:
-
-\begin{equation}
-	\mathbf{U}=\left\{\begin{array}{c}
-			A \\
-			A u
-	\end{array}\right\}, \\
-\end{equation}
-
-\begin{equation}
-	\mathbf{F}(\mathbf{U})=\left\{\begin{array}{c}
-			A u \\
-			A u^2+\gamma A^{3 / 2}
-	\end{array}\right\}
-\end{equation}
-\begin{equation}
-	\mathbf{S}(\mathbf{U})=\left\{\begin{array}{c}
-			0 \\
-
-			f_s
-	\end{array}\right\}, \\
-\end{equation}
-where the vectors $\mathbf{F}(\mathbf{U})$ and $\mathbf{U}$ are called the flux and the source term respectively.
-Further substitutions and simplifications that have been done to get to the conservative formulation are as follows:
-
-\begin{equation}
-	\gamma=\frac{\beta}{3 \rho \sqrt{A_0}}, \\
-\end{equation}
-
-\begin{equation}
-	f_s=-\frac{1}{\rho}\left[\frac{\partial P}{\partial A_0} \frac{\partial A_0}{\partial z}+\frac{\partial P}{\partial \beta} \frac{\partial \beta}{\partial z}+2 \mu\left(\gamma_\nu+2\right) \frac{u}{A}\right]
-\end{equation}
-\begin{equation}
-	\begin{aligned}
-		\tau & =\beta \sqrt{A_0}, \quad P=P_{e x t}+\tau\left(\sqrt{A}-\sqrt{A_0}\right),
-	\end{aligned}
-\end{equation}
-\begin{equation}
-	\frac{\partial P}{\partial A_0}=-\frac{\beta}{2}, \quad \frac{\partial P}{\partial \tau}=\sqrt{A}-\sqrt{A_0}.
-\end{equation}
-\begin{comment}
-	The flux Jacobian reads
-	\begin{equation}
-		\frac{\partial \mathbf{F}}{\partial \mathbf{U}}=\mathbf{H}=\left[\begin{array}{cc}
-				0 & 1 \\
-				\frac{3}{2} \chi \sqrt{A}-u^2 & 2 u
-		\end{array}\right],
-	\end{equation}
-	which, under the assumption $A>0$, has two eigenvalues
-	\begin{equation}
-		\lambda_{1,2}=u \mp c, \quad c=\sqrt{\frac{3}{2} \gamma \sqrt{A}}=\sqrt{\frac{\beta}{2 \rho}} A^{1 / 4}
-	\end{equation}
-\end{comment}
-
-The conservative form is solved numerically in two steps. 
-The first step solves the homogeneous part:
-\begin{equation}
-	\left\{\begin{array}{l}
-			\frac{\partial \mathbf{U}}{\partial t}+\frac{\partial \mathbf{F}(\mathbf{U})}{\partial x}=0 \\
-			\mathbf{U}\left(x, t^n\right)=\mathbf{U}^n
-	\end{array} \quad \rightarrow \overline{\mathbf{U}}^{n+1},\right.
-\end{equation}
-
-This is done using Godunov's and the MUSCL scheme resulting in the following update step:
-
-\begin{equation}
-	\left\{\begin{array}{l}
-			U_i^*=U_i^n+\frac{\Delta t}{\Delta x}\left(F_{i-1 / 2}^n-F_{i+1 / 2}^n\right), \\
-			\overline{U}_i^{n+1}=\frac{1}{2} U_i^n+\frac{1}{2}\left[U_i^*+\frac{\Delta t}{\Delta x}\left(F_{i-1 / 2}^*-F_{i+1 / 2}^*\right)\right] .  \\
-	\end{array} \right.
-\end{equation}
-\begin{comment}
-	\begin{equation}
-		U_i^n \underset{\Delta x \rightarrow 0}{=} \frac{1}{\Delta x} \int_{x_i-\frac{\Delta x}{2}}^{x_i+\frac{\Delta x}{2}} q\left(x, t_n\right) d x
-	\end{equation}
-\end{comment}
-
-The flux used here is the widely used numerical flux Lax-Friedrichs:
-\begin{equation}
-	F_{i+1 / 2}^n=\frac{1}{2}\left(F_L^n+F_R^n\right)-\frac{\Delta x}{\Delta t}\left(U_{i+1}^n-U_i^n\right) .
-\end{equation}
-
-The values for the flux $F_L^n$ and $F_R^n$ are computed using a linear piece wise reconstruction (MUSCL).
-In order to avoid too steep slopes that may lead to unrealistic values for the solution the superbee limiter is applied.
-
+\subsection{Generalized Riemann Problem and Balancing} \label{ssec:grp}
+In order to get a first approximation for the flux that needs to be computed the Riemann problem
+\begin{align}
+	\frac{\partial \mathbf{U}}{\partial t} + \frac{\partial \mathbf{F}}{\partial z} &= 0 \\
+	\mathbf{U}(z,t^n) &= \left\{
+		\begin{array}{c}
+			\mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) \text{, for } z < z_{i+\frac{1}{2}}, \\
+			\mathbf{\hat{U}}_{i+1}^n(z_{i+\frac{1}{2}}) \text{, for } z > z_{i+\frac{1}{2}},
+	\end{array} \right.  
+\end{align}
+has to solved.
+This yields a flux $\mathbf{F^*}$ with which we compute compute our averaged quantities at the next half-timestep using \autoref{eq:fv}
+\begin{align}
+	\mathbf{U}_{i+\frac{1}{2},L}^{n+\frac{1}{2}} &= \mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) + \frac{\Delta t}{2 \Delta x} \left( \mathbf{F}(\mathbf{\hat{U}}_i^n( z_{i-\frac{1}{2}})) - \mathbf{F}(\mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) \right)\\
+	\mathbf{U}_{i+\frac{1}{2},R}^{n+\frac{1}{2}} &= \mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) + \frac{\Delta t}{2 \Delta x} \left( \mathbf{F}(\mathbf{\hat{U}}_{i+1}^n( z_{i+\frac{1}{2}})) - \mathbf{F}(\mathbf{\hat{U}}_i^n(z_{i+\frac{3}{2}}) \right),
+\end{align}
+where we have ignored the source term $\mathbf{S}$ for the moment.
+The resulting $\mathbf{U}_{i+\frac{1}{2},L}^{n+\frac{1}{2}}$ and $\mathbf{U}_{i+\frac{1}{2},R}^{n+\frac{1}{2}}$ are then used as left and right states of a new Riemann problem.
+The flux from this Riemann problem is again inserted into \autoref{eq:fv} giving the final value for $\mathbf{U}_i^{n+1}$.
+The flux is not for solved analytically but numerically using the numerical scheme resulting in the Lax-Friedrichs flux.
+In the section we will be adressing how to handle the source term.
 
 \section{Time step, source term}
 Next the inhomogeneous part has to be solved:
