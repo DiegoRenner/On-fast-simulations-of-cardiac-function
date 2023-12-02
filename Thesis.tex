@@ -973,9 +973,9 @@ taken from \cite{blanco2014anatomically} with the parameters
 \begin{equation}
 a = 0.2802, \ b = -5.053 \text{cm}^{-1}, \ c = 0.1324,\  d = -0.1114 \text{cm}^{-1}.
 \end{equation}
-Three of the models are taken from the \emph{vascularmodel.com} \cite{vascularmodel} website.
+Three of the models are taken from the \emph{vascularmodel.com} website \cite{vascularmodel}.
 These three models represent arteries around the aorta, abdominal arteries and arteries of the cerebral circulation respectively.
-The input data provided by \emph{vascularmode.com} was used.
+The input data provided by \emph{vascularmode.com} was used to set the inlet boundary conditions.
 The Young's modulus for these models was calculated using the parametrization:
 \begin{equation}
 	E = \frac{r_0}{h} k_1 \exp(k_2 r_0) + k_3
@@ -989,7 +989,7 @@ given in \cite{ottesen2004applied} with the values
 The fourth model is the so called "anatomically-detailed arterial network" or "ADAN" model and it is made up of the largest arteris of the human circulation.
 The model was developed by Blanco et al. \cite{blanco2014anatomically,blanco2014blood} and this specific variant of it contains 56 vessels.
 Therefore it is commonly referred to as "ADAN56.
-The 56 vessels are split into 61 arterial segments which are in turn split into 77 segments for simulation purposes 
+The 56 vessels are split into 61 arterial segments which are in turn split into a total of 77 segments for simulation purposes 
 The results from first model from \emph{vascularmodel.com}, the aorta model, can be seen in \autoref{fig:aorta}.
 The model represents the ascending, the descending and the arch of the aorta as well as the brachiocephalic and the right and left subclavian and common carotid arteries.
 
@@ -1028,21 +1028,63 @@ The results are visualized in \autoref{fig:adan56}.
 	\caption{The simulation results from the ADAN56 artery network show that larger systems can be simulated by our jax code as well.}
 	\label{fig:adan56}
 \end{figure}
+A stark difference between the models from \emph{vascularmodel.com} and the ADAN56 model is how much variety there is in the different pulse waves generateed for different arteriees in the ADAN56 model as opposed to the ones generated for the other models.
+This is most likely a result of the way the RCR parameters were set for these different models.
+For the ADAN56 model the resistances and the compliance were carefully analized and calibrated in \cite{blanco2014anatomically,blanco2014blood} to provide a physiologically realistic result.
+Due to the parameters not always being provided in the \emph{vascularmodel.com} models, here they were computed using a fairly simple approximation.
+The total resistance of the system is computed as:
+\begin{equation}
+R_{tot} = \frac{P_{mean}}{Q_{car}}
+\end{equation}
+where the mean pressure $P_{mean}$ and the cardiac output $Q_{car}$ are set to the nominal values:
+\begin{align}
+	P_{mean} &= \frac{120 \text{mmHg}}{80 \frac{\text{ml}}{\text{s}}} \approx 2 \times 10^8 \frac{\text{kg}}{\text{m}^4\text{s}} \\
+	Q_{car} &= 80 \frac{\text{ml}}{\text{s}} = 8 \times 10^{-5} \frac{\text{m}^3}{\text{s}}. \\
+\end{align}
+The total compliance is set to a reasonable value as well
+\begin{align}
+	C_{tot} &= 10^{-3} \frac{\text{cm}^5}{\text{dyne}} = 10^{-8} \frac{\text{m}^3}{\text{Pa}}.
+\end{align}
+The individual resistances and the compliances are then set using the rules for a parallel circuit.
+Let $I$ be an index set containing all vessels with a windkessel outlet and $A_{o,i}, i \in I$ the reference cross-section at the outlet of the $i$-th vessel.
+The resistance and the compliance at vessel $i$ are then computed by
+\begin{align}
+	\xi_i &= \frac{\sum_{j \in I} A_{0,j}}{A_{0,i}} \\
+	R_{tot,i} &= \xi_i R_{tot} \\
+	C_{tot,i} &= \frac{1}{\xi_i} R_{tot}. 
+\end{align}
+Finally the proximal and the distal resistance $R_{1,i}, R_{2,i}$ have to be set for each vessel $i$.
+This is done by invoking an approximate ratio of about 1:10 between the two
+\begin{align}
+	R_{1,i} &= \frac{9}{100} R_{tot,i} \\
+	R_{2,i} &= \frac{91}{100} R_{tot,i}.
+\end{align}
+This recipe was taken from the \emph{simvascular} documentation. \cite{simvascular}
+Some of the resistances were manually fitted to better fit the specific model.
+The different behaviour in the simulation for the meticoulously asigned parameters in the ADAN56 model as opposed to the approximated parameters assigned when simulating the \emph{vascularmodel.com} models demonstrates that there is no simple answer to calibrating the RCR prameters for the windkessel model.
+Here the code written in this work can be seen as a step towards easier and more accurate procedures to determine such parameters.
+Given data the differentiability of the code could be leveraged to perform parameter inference on precisely these parameters.
 \section{Scaling} \label{sec:sc}
 As mentioned in \autoref{sec:jax} on JAX there is a significant overhead to the compilation JAX performs in order to optimize.
 This begs the question if the compilation dominates the total computation time and how the compilation time scales for growing numbers of vessel segments in a simulated network.
-If the compilation time doesn't increase much even for larger models this would mean that for big enough systems the compilation overhead would pay off.
+If the compilation time doesn't increase much even for larger models this would mean that for big enough systems the compilation overhead could pay off.
 The compilation and total computation time have been plotted for simulations with different numbers of vessel segments in \autoref{fig:timing}
+These timings were prduced on a Xeon E3-1505 v6 with 4 cores and 8 threads, a base frequency of 3.0GHz and a maximum turbo frequency of 4.0GHz, 8MB of cache, and 16GB of DDR4 memory clocked at 2400MT.
 \begin{figure} [!ht]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{figures/timing.eps}
-	\caption{The compile time doesn't grow significantly with increasing numbers of vessel segments due to builtin Python loops being avoided which would be costly to compile.}
+	\caption{The compile time doesn't grow significantly with increasing numbers of vessel segments due to builtin Python loops being avoided which would be costly to compile. Total compute times seem to scale linearly w.r.t. the number of vessel segments with the exception of the 20 vessel segment simulation.}
 	\label{fig:timing}
 \end{figure}
-The compile time remains almost constant around 3s even as when the number of vessel segments increases over two magnitudes of order.
+The compile time remains almost constant around 3s even as the number of vessel segments increases over two magnitudes of order.
 This is due to the methods described in \autoref{ssec:al}.
 Due to avoiding builtin python loops in favor of JAX loop constructions the compile time is kept more or less static since these kind of loops don't have to be unrolled during compilation.
-In general the compile time is only a fraction of the total compute time amd becomes insignificant with growing model sizes.
+Hence there is barely any additional effort involved with compiling for larger network simulations.
+In general the compile time is only a fraction of the total compute time once a certain amount of vessels is considered in the simulation and becomes and it becomes insignificant with growing model sizes.
+It can also be observed that total compute time shows linear scaling as a function of the number of vessel segments when considering the 20 vessel segment data point to be an outlier.
+Convergence within a simulation is heavily dependent on the specific network that is being simulated.
+Therefore it is reasonable to assume that there will be outliers when comparing the compute time between simulations with different underlying networks.
+
 
 \section{Parameter Inference} \label{sec:pi}
 
