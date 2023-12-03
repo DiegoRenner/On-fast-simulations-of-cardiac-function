@@ -243,11 +243,30 @@ Therefore the blood's viscosity is often considered constant and it can roughly 
 The blood density $\rho$ is considered constant within the range of $1050 \pm 10 \text{ kg}\cdot\text{m}^{-3}$, i.e. blood can be considered an incompressible fluid \cite{PMID:2658951,kenner1977continuous,helmig1997multiphase}.
 We will take the assumption of blood being an incompressible Newtonian fluid into account when constructing the underlying model for our cardiovascular solver in \autoref{sec:sv}.
 
-\chapter{1D-Model} \label{chap:1dm}
+\chapter{Modelling approach} \label{chap:1dm}
 In this chapter we are going to describe a 1D-model of blood flow, specifically of blood flow in the arteries of the systemic circulation.
 First we will describe the 1D-model for a single artery and then we will describe how to string together such models to simulate larger systems of arteries.
 
-\section{Single Vessel} \label{sec:sv}
+\section{Modelling in different dimensions}
+In this thesis we focus on simulating macrocirculation in arteries, i.e. cardiovascular networks consisting of the largest arteries of the human circulation.
+The length and diameters of these vessels are on the scale of meters.
+According with which an accuracy with which the system is supposed to be represented different dimensions of models can be chosen.
+3D models for instance can represent such quantities as turbulence or wall shear stresses.
+1D models cannot represent these 3D quantities but can still compute pressure and flow along an arterie at reasonable accuracy while requiring significantly less computation than a 3D model.
+Finally 0D models such as the Windkessel model can represent the approximate behaviour of omitted vessels.
+On one end of this spectrum (3D models) there is high accuracy but also high computational effort.
+On the other end (0D models) only very specific phenomenon can be represented but at a considerably lower cost.
+In practice it is therefore very common to couple such models, choosing the more demanding models for locations in the vascular network that require more attention to be simulated accurately or that simply are of special interest.
+This leads to 3D-1D-0D models where the junctions in the network are represented by 3D models, 1D models are used to simulate the flow within vessels, and the 0D models are used to compute the data at the outlets of the network.
+In the setting of this thesis the outlets are omitted vessels that are not included in the model due to not being of interest for these simulations and wanting to reduce computational effort.
+Another important distinction between types of models are open and closed models.
+In closed models the Windkessel models at the outlets are connected back to the inlet of the system.
+In open models the inlet is fed by some sort of input data and the Windkessel models only serve to compute boundary conditions at the outlets.
+The model presented here will be an open model for the sake of simplicity.
+A further simplification was to only consider a 1D-0D model since the main goal of this work was to produce a fast differentiable solver the main goal of this work was to produce a fast differentiable solver.
+Incorporating 3D models in this work would have added additional complexity without providing benefits in terms of speed and reasoning w.r.t. differentiability. \cite{köppl2023dimension}
+
+\section{1D Model} \label{sec:sv}
 Within a vessel we consider the conservation of mass and momentum in cylindrical coordinates, that hold for any fluid, to be satisfied.
 In cylindrical coordinates these conservation laws read
 \begin{align}
