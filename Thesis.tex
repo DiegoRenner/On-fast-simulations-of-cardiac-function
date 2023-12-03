@@ -98,23 +98,35 @@ ETH Zürich}
 
 \mainmatter % do not remove this line
 
-% Start writing here
 \chapter{Introduction}
-Among other factors the high number of vessels, the stark differences between these vessels and the resulting different types of flow within them leads to cardiovascular systems being very complex to model.
-Therefore in order to better understand cardiovascular function, numerical methods are often applied.
-Due to the nature of cardiovascular system numerical methods are especially helpful since they are able to simulate processes that are hard to capture in-vivo.
-This also curtails risks to patients and costs that other methods of research might bring along.
-Even with numerical methods the complexity of the cardiovascular system still poses a significant challenge.
-This leads to one-dimensional (1D) models often being chosen over three-dimensional (3D) models. 
-1D models do have a lower accuracy, especially at junctions within the system.
-Nevertheless the accuracy has been shown to be sufficient to simulate haemodynamics in large vascular systems.
-While the increase in simulation speed gained by choosing 1D models over 3D models is significant, an efficient implementation of the solver is still important.
-Next to speed, desired attributes of a simulation are differentiability with respect to the model parameters, maintainability of code base, and ease of use.
-Differentiability leads to a model being easily optimized through parameter inference if appropriate data sets are provided while maintainability and ease of use lower the barrier of entry for future work being supported by the written code as well as the code being applied readily by others.
-For the reasons mentioned in this introduction the goal of this thesis is to provide a fast differentiable 1D cardiovascular simulation code.
-This goal is pursued by using a 1D reduction of the 3D Navier Stokes Equations (NSE) implemented numerically using the JAX library in Python.
-The implementation also allows a platform agnostic acceleration which can be especially useful when wanting to leverage the increased compute power of GPUs.
-Finally the results of this thesis are provided as open source code in hopes to facilitate and further future work.
+Due to the complexity of the cardiovascular system and the significance of cardiovascular disease globally the mathematical and numerical modelling of haemodynamics has gained a lot of traction over recent years.
+Two of the main factors for this complexity are the multi-scale and multi-physics nature of the cardiovascular system that arises from vessels of strongly varying sizes and not much data being available for certain parts of these models to go off of \cite{quarteroni2016geometric}.
+The motivation for researching cardiovascular disease stems from it's prevelance as a cause of death.
+Worldwide it leads 17.3 million deaths per year as of 2015 making it the leading cause of death.
+This number is projected to increase by the year 2030 to more than 23.6 million. \cite{update2015heart}
+In Europe cardiovascular disease was responsible for close to one third (32.7\%) of all deaths in the year 2020 \cite{Coelho2020}.
+In order to tackle the complexity of the meaningful task of modelling cardiovascular systems numerical modelling has become prevalent \cite{formaggia2009multiscale,quarteroni2016geometric,black2020p14,el2018investigating,qureshi2014numerical,reichold2009vascular}.
+Numerical modelling can allow the simulation of quantities that are hard to measure in vivo while also lowering costs with respect to clinical methods.
+However such models in the context of cardiovascular function depend heavily on personalization to produce meaningful ouputs.
+Due to many of the personalized parameters being hard or even impossible to determine this leads to costly optimizations having to be performed to determine these parameters or the parameters being approximated using a population mean.
+Using a population mean often doesn't produce accurate enough results.
+Therefore the parameters have to be determined for each specific patient leading to an invere problem having to be solved, i.e. based on patient data parameters of the model parameters need to be estimated in order to create a model that outputs results relevant to the specific patient.
+The such a model is often referred to as a digital-twin.
+Since the derivatives are often hard to determine for cardiovascular simulations the algorithms of choice for solving the inverse problem are often gradient-free. 
+Moreover due to the cardiovascular system being described by hyperbolic equations the model is very sensitive to it's parameters.
+This means the optimization algorithms have to be run at very small stepsizes. \cite{taylor2009patient,tuccio2022parameter,marsden2014optimization,mineroff2019optimization,bozkurt2022patient}.
+The ability to easily take gradients of a cardiovascular system with respect to it's parameters would greatly improve the process of personalizing such a model.
+Therefore the goal of this work is to provide a fast, differentiable cardiovascular simulation
+For this reason the haemodynamics solver written in the course of this thesis was written in the machine learning framework JAX which allows for the code to be differentiated automatically.
+On top of differentiability Jax also offers device agnostic execution.
+JAX optimizes the executed code to take advantage of parallelization and other advantages of modern hardware regardless of if it's being executed on a CPU, GPU or TPU.
+The optimization for GPU execution is especially useful since it allows for data paralellization, i.e. batch executions of the code on a single device.
+This means multiple digital-twins for different parients could be optimized simultaneously on a single GPU.
+Next to the advantages brought about by the implementation in JAX, the implemenatition of the code in Python makes the solver accessible for future work.
+We also provide the written code as is in an open-source manner hoping to aid progress in the field overall.
+For this thesis we chose a coupled 0D-1D model where the 0D part is used to compute boundary conditions for certain outlets of the 1D cardiovascular network.
+While failing to capture complex flow patterns as opposed to a 3D model the 1D model can still simulate pulse wave transmission and systemic wave reflection effects. \cite{shi2011review} 
+Clearly 1D models also offer a big advantage in execution time as opposed to 3D models.
 In the next section we will provide a basic understanding of the cardiovascular system which will serve as a base for describing the cardiovascular simulation throughout this work.
 
 
