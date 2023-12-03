@@ -185,7 +185,7 @@ In the next section we will provide a basic understanding of the cardiovascular 
 This section serves as an overview of the cardiovascular system with a focus on the arteries of the systemic circulation. 
 Section \ref{mbb} will describe the main building blocks of the cardiovascular system and their relation, section \ref{aw} will give the characteristics of the arterial walls, and section \ref{b} the characteristics of blood.
 \section{Main Building Blocks} \label{mbb}
-The cardiovascular system contains two major circulations.
+The cardiovascular system contains two major circulatory systems.
 These are the systemic and the pulmonary circulation. 
 Both are fed with blood pumped from the heart.
 Through the systemic circulation organs are supplied with oxygen-rich blood which is then transported back to the heart where it then enters the pulmonary circulation.
@@ -216,11 +216,13 @@ In these devices water would be pumped by hand from the reservoir causing pressu
 This would push water into an air chamber.
 Here the air would get compressed which is analogous to the deforming of the artery.
 The natural decompressing of the air would then push the water out through the hose in a steady manner, just like the contracting of the artery would push out the blood.
+The Windkessel effect is often applied in vascular simulations to apply outlet boundary conditions.
+We will describe how this is done more closely in \autoref{sssec:outl}.
+For further reference in the following chapters we will also introduce some notation.
 We call the radius of an artery in it's undeformed state the lumen radius $r_0$ and refer to the reference vessel wall thickness by $h_0$ from here on out.
 Furthermore we denote the reference cross-section by $A_0 = \pi r_0^2$.
 
 \section{Blood} \label{b}
-
 Blood consists of red blood cells (Erythocytes), white blood cells (Leukocytes), and platelets (Thrombocytes).
 The Erythocytes make up about 97\% of the cellular volume.
 They are flexible, can bind to oneanother, and their micro-structure determines the blood mechanical properties.
@@ -234,15 +236,12 @@ where $F$ is the force applied coplaner to the cross-section and $A$ is the surf
 The cross-section affected by the shear stress is deformed at a certain angle. 
 This angle can be assigned an angular velocity and is referred to as the shear rate.
 We denote the shear rate by $D$. \cite{köppl2023dimension}
-
 The blood dynamic viscosity $\mu$ decreases hyperbolically with the shear rate $D$.
 At about $D > 100s^{-1}$ the viscosity stays constant for common haematocrit values.
 In larger arteries the average shear rate close to the walls is above this threshold. \cite{MCDbook}
-
-Therefore the blood's viscosity is often considered constant and it can roughly be viewed as Newtonian fluid for the sake of simplicity \cite{fung1996biomechanics} \cite{guyton2006textbook} \cite{MCDbook} \cite{pedley_1980} \cite{zamir2000physics} \cite{zamir2006physics}.
-
-Blood density $\rho$ is constant within the range of $1050 \pm 10 \text{ kg}\cdot\text{m}^{-3}$ \cite{PMID:2658951} \cite{kenner1977continuous}.
-
+Therefore the blood's viscosity is often considered constant and it can roughly be viewed as Newtonian fluid for the sake of simplicity \cite{fung1996biomechanics,guyton2006textbook,MCDbook,pedley_1980,zamir2000physics,zamir2006physics}. 
+The blood density $\rho$ is considered constant within the range of $1050 \pm 10 \text{ kg}\cdot\text{m}^{-3}$, i.e. blood can be considered an incompressible fluid \cite{PMID:2658951,kenner1977continuous,helmig1997multiphase}.
+We will take the assumption of blood being an incompressible Newtonian fluid into account when constructing the underlying model for our cardiovascular solver in \autoref{sec:sv}.
 
 \chapter{1D-Model} \label{chap:1dm}
 In this chapter we are going to describe a 1D-model of blood flow, specifically of blood flow in the arteries of the systemic circulation.
@@ -630,7 +629,7 @@ The missing input quantities are then computed from the new Riemann invariants a
 	Q_0^{n+1} &= A_0^{n+1} u_0^{n+1}
 \end{align}
 where $P^{n+1}_0$ is given through input data.
-\subsubsection{Outlets} \label{sssec:oulets}
+\subsubsection{Outlets} \label{sssec:outl}
 
 Reflection
 
