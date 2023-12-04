@@ -289,14 +289,93 @@ We consider a vessel to be an axisymmetric tube along the $z$ axis in a cylindri
 Under the following assumptions the 3D-Navier-Stokes equations can be reduced to a 1D-model:
 
 \begin{enumerate}
-	\item vessels are narrow, long, and circular
-	\item vessels are straight and have linearly elastic compliant walls
-	\item vessel walls can be displaced slightly in radial direction but not in longitudinal direction
-	\item blood is an incompressible Newtonian fluid.
+	\item vessels are narrow, long, and circular,
+	\item vessels are straight and have linearly elastic compliant walls, 
+	\item vessel walls can be displaced slightly in radial direction but not in longitudinal direction,
+	\item blood is an incompressible Newtonian fluid and it's properties do not vary over a cross-section.
 \end{enumerate}
-
-The linearized 1D NSE for quantities averaged along the radial component under these assumptions read:
-
+In order to make this reduction we first apply the assumption that $\rho$ is constant in the continuity equation and expand the momentum equation in it's components
+\begin{equation}
+	\frac{\partial u_z}{\partial z} + \frac{1}{r} \frac{\partial (ru_r)}{\partial r} + \frac{1}{r}\frac{\partial u_\phi}{\partial \phi} = 0, 
+\end{equation}
+\begin{multline}
+	\frac{\partial u_z}{\partial t} + u_z \frac{\partial u_z}{\partial z} + u_r \frac{\partial u_z}{\partial r} + \frac{u_\phi}{r}\frac{\partial u_z}{\partial \phi} = \\
+	-\frac{1}{\rho}\frac{\partial P}{\partial z} + \frac{\mu}{\rho} \left( \frac{\partial^2 u_z}{\partial z^2} + \frac{\partial^2 u_z}{\partial r^2} + \frac{1}{r} \frac{\partial u_z}{\partial r} + \frac{1}{r^2}\frac{\partial^2 u_z}{\partial \phi^2} \right), 
+\end{multline}
+\begin{multline}
+	\frac{\partial u_r}{\partial t} + u_z \frac{\partial u_r}{\partial z} + u_r \frac{\partial u_r}{\partial r} + \frac{u_\phi}{r}\frac{\partial u_r}{\partial \phi} -\frac{u_\phi^2}{r} = \\
+	-\frac{1}{\rho}\frac{\partial P}{\partial r} + \frac{\mu}{\rho} \left( \frac{\partial^2 u_r}{\partial z^2} + \frac{\partial^2 u_r}{\partial r^2} + \frac{1}{r} \frac{\partial u_r}{\partial r} + \frac{1}{r^2}\frac{\partial^2 u_r}{\partial \phi^2} -\frac{2}{r^2}\frac{\partial u_\phi}{\partial \phi} - \frac{u_r}{r^2} \right), 
+\end{multline}
+\begin{multline}
+	\frac{\partial u_\phi}{\partial t} + u_z \frac{\partial u_\rho}{\partial z} + u_r \frac{\partial u_\phi}{\partial r} + \frac{u_\phi}{r}\frac{\partial u_\phi}{\partial \phi} -\frac{u_r u_\phi}{r} = \\
+	-\frac{1}{\rho}\frac{\partial P}{\partial \phi} + \frac{\mu}{\rho} \left( \frac{\partial^2 u_\phi}{\partial z^2} + \frac{\partial^2 u_\phi}{\partial r^2} + \frac{1}{r} \frac{\partial u_\phi}{\partial r} + \frac{1}{r^2}\frac{\partial^2 u_\phi}{\partial \phi^2} -\frac{2}{r^2}\frac{\partial u_r}{\partial \phi} - \frac{u_\phi}{r^2}\right). \label{eq:momp}
+\end{multline}
+Here we have dropped the explicit dependence on time and space variables in favor of readability
+Since the model is considered to be axisymmetric we set $v_\phi=0$ and ignore derivatives in this direction.
+This means we can drop \autoref{eq:momp}.
+The remaining three variables read
+\begin{equation}
+	\frac{\partial u_z}{\partial z} + \frac{1}{r} \frac{\partial (r u_r)}{\partial r} = 0, \label{eq:cont1}
+\end{equation}
+\begin{equation}
+	\frac{\partial u_z}{\partial t} + u_z \frac{\partial u_z}{\partial z} + u_r \frac{\partial u_z}{\partial r} = -\frac{1}{\rho} \frac{\partial P}{\partial z} + \frac{\mu}{\rho} \left( \frac{\partial^2 u_z}{\partial z^2} + \frac{\partial^2 u_z}{\partial r^2} + \frac{1}{r} \frac{\partial u_z}{\partial r} \right),
+\end{equation}
+\begin{equation}
+	\frac{\partial u_r}{\partial t} + u_z \frac{\partial u_r}{\partial z} + u_r \frac{\partial u_r}{\partial r} = -\frac{1}{\rho} \frac{\partial P}{\partial r} + \frac{\mu}{\rho} \left( \frac{\partial^2 u_r}{\partial z^2} + \frac{\partial^2 u_r}{\partial r^2} + \frac{1}{r} \frac{\partial u_r}{\partial r} - \frac{u_r}{r^2}\right). \label{eq:momr}
+\end{equation}
+In order to simplify the equations we introduce typical velocities $U_z$ and $U_r$ and define the nondimensional quantities as:
+\begin{equation}
+	\tilde{r} = \frac{r}{r_0}, \ \tilde{z} = \frac{z}{l_0}, \ \tilde{t} = t \frac{U_z}{l_0}, \ \tilde{u}_z = \frac{u_z}{U_z}, \ \tilde{u}_r = \frac{u_r}{U_r}, \ \tilde{P} = \frac{P}{\rho U_z^2}, \ \epsilon = \frac{U_r}{U_z}.
+\end{equation}
+We note that in a laminar flow the maximum value of $U_r$ is the radial velocity of the arterial wall.
+As we assume that these walls can only be diplaced slightly $U_r$ can be assumed to be small and therefore $\epsilon << 1$. \cite{womersley1957elastic}
+Inserting the nondimensional into \autoref{eq:cont1} - \autoref{eq:momr} and dropping the terms of order $\epsilon^2$ or higher yields
+\begin{equation}
+	\frac{\partial (\tilde{r} \tilde{u}_r)}{\partial \tilde{r}} + \frac{\partial (\tilde{r} \tilde{u}_z)}{\partial\tilde{z}} = 0, \label{eq:cont2}
+\end{equation}
+\begin{equation}
+	\tilde{r} \frac{\partial \tilde{u}_z}{\partial \tilde{t}} + \frac{ \partial (\tilde{r} \tilde{u}_z^2)}{\partial \tilde{z}} + \frac{ \partial (\tilde{r} \tilde{u}_z \tilde{u}_r)}{\partial \tilde{r}} + \tilde{r} \frac{\partial \tilde{P}}{\partial \tilde{z}} = \frac{\mu}{\rho} \frac{l_0}{U_z r_0^2} \frac{\partial}{\partial \tilde{r}} \left( \tilde{r} \frac{\partial \tilde{u}_z}{\partial \tilde{r}} \right) \label{eq:momz}
+\end{equation}
+\begin{equation}
+	\frac{\partial \tilde{P}}{\tilde{r}} = 0
+\end{equation}
+Introducing the nondimensional vessel inner radius $\hat r$ the averaged velocity over the cross-section
+\begin{equation}
+\hat{u} := \frac{1}{\hat{r}^2} \int_0^{\hat{r}} 2 \tilde{u}_z \tilde{r} d\tilde{r}
+\end{equation}
+and the Coriolis' coefficient
+\begin{equation}
+	\alpha := \frac{1}{\hat{r}^2 \hat{u}} \int_0^{\hat{r}} 2 \tilde{u}_z^2 \tilde{r} d\tilde{r}
+\end{equation}
+can be defined.
+The Coriolis' coefficient is the correction parameter that stems from the fact that our new momentum equation no longer expresses the conservation of momentum but actually the conservation of the momentum averaged over the radial component.\cite{article10002407}
+Using these definitions and applying the no-slip boundary condition while assuming negligible longitudinal wall diplacement
+\begin{equation}
+	\tilde{u}_r|_{\tilde{r}=\hat{r}} = \frac{\partial \hat{r}}{\partial \tilde{t}}
+\end{equation}
+the equations \autoref{eq:cont2} and \autoref{eq:momz} read
+\begin{equation}
+	\hat{r} \frac{\partial \hat{r}}{\partial \tilde{t}} + \frac{1}{2}\frac{\partial}{\partial \tilde{z}} \left(  \hat{u}\hat{r}^2 \right) = 0 \label{eq:cont3}
+\end{equation}
+\begin{equation}
+	\frac{(\partial \hat{r}^2 \hat{u})}{\partial \tilde{t}} + \frac{\partial \left( \alpha \hat{r}^2 \hat{u}^2 \right)}{\partial \tilde{z}} + \hat{r}^2 \frac{\partial \tilde{P}}{\partial \tilde{z}} = 2\frac{\mu}{\rho} \frac{l_0}{U_z r_0^2} \hat{r} \frac{\partial \tilde{u}_z}{\partial \tilde{z}} |_{\hat{r}}.\label{eq:momz1}
+\end{equation}
+After reintroducing a dimensional axial velocity in terms of the dimensional inner vessel radius $\bar{r}$
+\begin{equation}
+	u := U_z \hat{u} = \frac{1}{\bar{r}^2} \int_0^{\bar{r}} 2su_zds
+\end{equation}
+we can also write the coriolis coefficient in terms of dimensional variables
+\begin{equation}
+\alpha = \frac{1}{\bar{r}^2 u^2} \int_0^{\bar{r}} 2ru_z^2dr.
+\end{equation}
+In dimensional variables the continuity equation (\autoref{eq:cont3}) and the $z$-momentum equation (\autoref{eq:momz1}) are
+\begin{equation}
+	\frac{\partial \bar{r}^2}{\partial t} + \frac{\partial (\bar{r}^2 u^2)}{\partial z} = 0
+\end{equation}
+\begin{equation}
+	\frac{\partial (\bar{r}^2 u)}{\partial t} + \frac{\partial (\alpha \bar{r}^2 u^2) }{\partial z} + \frac{\bar{r}^2}{\rho} \frac{\partial P}{\partial z} = 2 \frac{\mu}{\rho} \bar{r} \frac{\partial u_z}{\partial r} |_{\bar{r}}.
+\end{equation}
+In terms of the cross-section $A := \pi \bar{r}^2$ and the volumetric flow-rate $Q := Au$ the 1D NSE equations finally read
 \begin{equation}
 		\begin{aligned} 
 			\frac{\partial A(z;t)}{\partial t} + \frac{\partial Q(z;t)}{\partial z} &= 0, \\ 
@@ -305,24 +384,17 @@ The linearized 1D NSE for quantities averaged along the radial component under t
 			z \in [0,l],\ & t \in \mathbb{R}_{\geq 0}, 
 		\end{aligned} \label{eq:1Deqs1}
 \end{equation}
-
-where $A$ and $Q$ are the cross-sectional area of the vessel and the volumetric flow rate $Au$ respectively, with $u$ being the fluid velocity along $z$. $l$ is the length of the vessel
-$\alpha$ is the Coriolis' coefficient which is the correction parameter stemming from the fact that our new momentum equation no longer expresses the conservation of momentum but actually the conservation of the momentum averaged over the radial component.
-The Coriolis' coefficient is computed by 
+where we have reintroduced the time and space dependence for clarity.
+Here $\gamma$ is the velocity profile parameter that determines the velocity profile by a common parametric approximation 
 \begin{equation}
-	\alpha(z;t) = \frac{2}{u(z;t)^2r(z;t)^2} \int_0^{r(z;t)} v_z(z, s; t) sds 
-\end{equation}
-where $v_z$ is the velocity profile.\cite{article10002407}
-$\gamma$ is the velocity profile parameter that determines the velocity profile by a common parametric approximation 
-\begin{equation}
-	v_z(z,r;t) = \frac{\gamma + 2}{\gamma} u(z;t) \left[ 1 - \left( \frac{r}{r_0(z;t)} \right) \right].
+	u_z(z,r;t) = \frac{\gamma + 2}{\gamma} u(z;t) \left[ 1 - \left( \frac{r}{\bar{r}(z;t)} \right) \right].
 \end{equation}
 For this velocity profile the Coriolis coefficient is
 \begin{equation}
 	\alpha = \frac{\gamma + 2}{\gamma + 1}
 \end{equation}
 For $\gamma=2, \alpha = \frac{4}{3}$ this gives a plug flow, a rather flat velocity profile that decays rapidly at the arterie walls.
-For $\gamma=9, \alpha = \frac{11}{10} $ we get a hyperbolic velocity profile and hence a Poisseuille-like flow. (plot?)\cite{köppl2023dimension}
+For $\gamma=9, \alpha = \frac{11}{10} $ we get a hyperbolic velocity profile and hence a Poisseuille-like flow. (plot?)\cite{köppl2023dimension} \cite{barnard1966theory}
 We want to determine the variables $Q, A,$ and $P$.
 Until now we've considered the two equations of mass and momentum conservation determining $Q$ and $A$.
 In order to determine $P$ we therefore need another equation, a so called tube law.
@@ -403,7 +475,6 @@ The conservative form then reads:
 \mathbf{U} \left( l;t \right) &= \mathbf{U}_R \left( t \right), \ t>0
 	\end{aligned} \label{eq:1deqs3}
 \end{equation}
-
 where we have added initial values $\mathbf{U}_0$ and boundary conditions $\mathbf{U}_L$ and $\mathbf{U}_R$ so that equation \ref{eq:1deqs3} now yields a well posed problem.\cite{formaggia2010cardiovascular}
 This concludes the description of the 1D-model for a single artery.
 The explicit setting of the aforementioned initial conditions and boundary values will be described in \autoref{sec:icbc} after introducing our numerical methods and the used notation in the next chapter.
