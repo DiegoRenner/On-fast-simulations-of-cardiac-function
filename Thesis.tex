@@ -107,13 +107,14 @@ This number is projected to increase by the year 2030 to more than 23.6 million.
 In Europe cardiovascular disease was responsible for close to one third (32.7\%) of all deaths in the year 2020 \cite{Coelho2020}.
 In order to tackle the complexity of the meaningful task of modelling cardiovascular systems numerical modelling has become prevalent \cite{formaggia2009multiscale,quarteroni2016geometric,black2020p14,el2018investigating,qureshi2014numerical,reichold2009vascular}.
 Numerical modelling can allow the simulation of quantities that are hard to measure in vivo while also lowering costs with respect to clinical methods.
-However such models in the context of cardiovascular function depend heavily on personalization to produce meaningful ouputs.
-Due to many of the personalized parameters being hard or even impossible to determine this leads to costly optimizations having to be performed to determine these parameters or the parameters being approximated using a population mean.
+However such models in the context of cardiovascular function depend heavily on personalized parameters to produce meaningful ouputs.
+Different approaches to solving this inverse problem have already been demonstrated \cite{charlton2019modeling,melis2017gaussian}.
+However due to the complexity and the computational cost of the models, expensive optimizations have to be performed to determine the parameters \cite{manganotti2022modeling} or the parameters have to be approximated using a population mean.
 Using a population mean often doesn't produce accurate enough results.
-Therefore the parameters have to be determined for each specific patient leading to an invere problem having to be solved, i.e. based on patient data parameters of the model parameters need to be estimated in order to create a model that outputs results relevant to the specific patient.
-The such a model is often referred to as a digital-twin.
+Therefore the parameters have to be determined for each specific patient leading to an inverse problem having to be solved, i.e. based on patient data parameters of the model parameters need to be estimated in order to create a model that outputs results relevant to the specific patient.
+Such models are often referred to as digital-twins and they are quickly advancing the field of precision medicine \cite{ashley2016towards}.
 Since the derivatives are often hard to determine for cardiovascular simulations the algorithms of choice for solving the inverse problem are often gradient-free. 
-Moreover due to the cardiovascular system being described by hyperbolic equations the model is very sensitive to it's parameters.
+Moreover due to the cardiovascular system being described by hyperbolic equations the model is very sensitive to it's parameters and there are ambigous solutions \cite{nolte2022inverse,quick2001infinite}.
 This means the optimization algorithms have to be run at very small stepsizes. \cite{taylor2009patient,tuccio2022parameter,marsden2014optimization,mineroff2019optimization,bozkurt2022patient}.
 The ability to easily take gradients of a cardiovascular system with respect to it's parameters would greatly improve the process of personalizing such a model.
 Therefore the goal of this work is to provide a fast, differentiable cardiovascular simulation
@@ -491,6 +492,20 @@ In this chapter we will first Introduce the MUSCL scheme and the Gudonov average
 We will then apply the MUSCL scheme to the homogenous part of \autoref{eq:1deqs3}.
 Finally we describe the forward-euler timestep used to accomodate the inhomogenous part as well as the newton solver for the outlets and junctions.
 
+\section{Literature Review}
+The governing equations derived in \autoref{sec:sv} have mainly been approache numerically in four differnet manners.
+Namely through the method of characteristics or finite difference (FD), finite volume (FV), or finite element (FE) schemes.
+Using the method of characteristics the hyperbolic PDE that describes the haemodynamics rewritten as an ODE of the Riemann invariants of the system along the corresponding characteristic lines.
+This method was used in \cite{streeter1963pulsatile,bodley1971non,parker1990forward,wang2004wave,wang2003time}.
+The finite difference scheme was applied by \cite{smith2002anatomically,elad1991numerical,elad1991numerical,pontrelli2003numerical,reymond2009validation}.
+The finite volume and the finite element methods have become more prevalent in recent years.
+The advantage of the FV solver over the FD solver is that they are shock-capturing \cite{toro2001shock}, i.e. they can deal with potential large gradients occurring in the solution \cite{shu1988efficient,harten1997uniformly}.
+The finite volume method was applied by \cite{melis2017gaussian,brook1999numerical,brook2002model} and the finite element method has been used by \cite{sherwin2003one,sherwin2003computational,formaggia2001coupling,wan2002one,porenta1986finite,rooz1982finite,bessems2008experimental}
+While higher accuracy and faster convergence can technically be achieved by a FE method, there are applications in venous systems where FE schemes do not converge.
+There is also increasing complexity involved when implementing models that are based on the method of characteristics all the way up to finite element methods.
+For this work we chose to implement the haemodynamics solver using a FV scheme, specifically using the MUSCL solver.
+The reason for this is that the FV solver offers numerical stability, particularly when dealing with shocks and provides sufficient accuracy, while avoiding an overly complicated implementation that wouldn't have aided the primary goal of developing a differentiable solver.
+
 \section{Finite Volume (FV)} 
 In order to describe the finite volume solver that was applied to solve \autoref{eq:1deqs3} we will first introduce a space and time discretization.
 The space discretisation is defined as follows:
@@ -595,8 +610,8 @@ In order to get a first approximation for the flux that needs to be computed the
 			\mathbf{\hat{U}}_{i+1}^n(z_{i+\frac{1}{2}}) \text{, for } z > z_{i+\frac{1}{2}},
 	\end{array} \right.  
 \end{align}
-has to solved.
-This yields a flux $\mathbf{F^*}$ with which we compute compute our averaged quantities at the next half-timestep using \autoref{eq:fv}
+has to be solved.
+This yields a flux $\mathbf{F^*}$ with which we compute our averaged quantities at the next half-timestep using \autoref{eq:fv}
 \begin{align}
 	\mathbf{U}_{i+\frac{1}{2},L}^{n+\frac{1}{2}} &= \mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) + \frac{\Delta t}{2 \Delta x} \left( \mathbf{F}(\mathbf{\hat{U}}_i^n( z_{i-\frac{1}{2}})) - \mathbf{F}(\mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) \right)\\
 	\mathbf{U}_{i+\frac{1}{2},R}^{n+\frac{1}{2}} &= \mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) + \frac{\Delta t}{2 \Delta x} \left( \mathbf{F}(\mathbf{\hat{U}}_{i+1}^n( z_{i+\frac{1}{2}})) - \mathbf{F}(\mathbf{\hat{U}}_i^n(z_{i+\frac{3}{2}}) \right),

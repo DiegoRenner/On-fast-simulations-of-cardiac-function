@@ -36,15 +36,20 @@ issn = {1991-7120},
 doi = {https://doi.org/},
 url = {http://global-sci.org/intro/article_detail/cicp/7792.html}
 }
-@unpublished{wreo19175,
-           month = {August},
-           title = {Gaussian process emulators for 1D vascular models},
-          school = {University of Sheffield},
-          author = {Alessandro Melis},
-       publisher = {University of Sheffield},
-            year = {2017},
-             url = {https://etheses.whiterose.ac.uk/19175/},
-             note = {https://etheses.whiterose.ac.uk/19175/},
+
+@phdthesis{melis2017gaussian,
+  title={Gaussian process emulators for 1D vascular models},
+  author={Melis, Alessandro},
+  year={2017},
+  school={University of Sheffield}
+}
+
+@phdthesis{manganotti2022modeling,
+  title={Modeling and inverse problem in hemodynamics: towards augmented cardiovascular monitoring},
+  author={Manganotti, Jessica},
+  year={2022},
+  school={Institut Polytechnique de Paris}
+}
         abstract = {One-dimensional numerical models of the arterial vasculature are capable of simulating the physics of pulse wave transmission and reflection. These models are computationally efficient and represents and ideal choice with great translational opportunities in healthcare. However, the use of these models in a patient-specific scenario is hampered by the difficulty in measuring the model inputs (parameters, boundary conditions, and initial conditions) in the clinical setting. As a result, most of the model inputs are noisy or missing, and the inputs uncertainty is transmitted to the model outputs. A fundamental step in the model development consists in performing a sensitivity and uncertainty analysis aimed at understanding how variations on the inputs affect the output variability, with the final aim of instruct the measurement process. A typical sensitivity analysis conducted by means of {$\backslash$}break Monte Carlo sampling is computationally expensive due to the large number of runs required. A novel approach aimed at reducing the computational time consists in using a statistical emulator capable of mimicking mean and variance behaviours of the 1D deterministic model. In this study, emulators built through Gaussian process method are used to predict outcomes of a 1D finite-volume solver for networks of elastic vessels. The 1D model is discussed and validated showing good agreement with published results. The emulator approach for sensitivity analysis is validated against Monte Carlo sampling and a 99.9\% reduction in computational time is obtained. This methodology is further applied in the context of cerebral vasospasm where the sensitivity analysis results are used to identify new biomechanical metrics for this pathology. The novel biomarkers are effective at detecting the cerebral vasospasm better than the currently used one. In particular, the progression of the disease is characterised from an early onset even when the vasospasm is occurring at some distance away from the measurement location.}
 }
 
@@ -526,5 +531,235 @@ url="https://doi.org/10.1007/978-3-319-69909-7_944-2"
   number={6},
   pages={717--724},
   year={1966},
+  publisher={Elsevier}
+}
+
+@article{charlton2019modeling,
+  title={Modeling arterial pulse waves in healthy aging: a database for in silico evaluation of hemodynamics and pulse wave indexes},
+  author={Charlton, Peter H and Mariscal Harana, Jorge and Vennin, Samuel and Li, Ye and Chowienczyk, Phil and Alastruey, Jordi},
+  journal={American Journal of Physiology-Heart and Circulatory Physiology},
+  volume={317},
+  number={5},
+  pages={H1062--H1085},
+  year={2019},
+  publisher={American Physiological Society Bethesda, MD}
+}
+
+@article{ashley2016towards,
+  title={Towards precision medicine},
+  author={Ashley, Euan A},
+  journal={Nature Reviews Genetics},
+  volume={17},
+  number={9},
+  pages={507--522},
+  year={2016},
+  publisher={Nature Publishing Group UK London}
+}
+
+@article{nolte2022inverse,
+  title={Inverse problems in blood flow modeling: A review},
+  author={Nolte, David and Bertoglio, Cristobal},
+  journal={International journal for numerical methods in biomedical engineering},
+  volume={38},
+  number={8},
+  pages={e3613},
+  year={2022},
+  publisher={Wiley Online Library}
+}
+
+@article{quick2001infinite,
+  title={Infinite number of solutions to the hemodynamic inverse problem},
+  author={Quick, Christopher M and Young, William L and Noordergraaf, Abraham},
+  journal={American Journal of Physiology-Heart and Circulatory Physiology},
+  volume={280},
+  number={4},
+  pages={H1472--H1479},
+  year={2001},
+  publisher={American Physiological Society Bethesda, MD}
+}
+
+@article{streeter1963pulsatile,
+  title={Pulsatile pressure and flow through distensible vessels},
+  author={Streeter, Victor L and Keitzer, W Ford and Bohr, David F},
+  journal={Circulation Research},
+  volume={13},
+  number={1},
+  pages={3--20},
+  year={1963},
+  publisher={Am Heart Assoc}
+}
+
+@article{bodley1971non,
+  title={The non-linearities of arterial blood flow},
+  author={Bodley, WE},
+  journal={Physics in Medicine \& Biology},
+  volume={16},
+  number={4},
+  pages={663},
+  year={1971},
+  publisher={IOP Publishing}
+}
+
+@article{parker1990forward,
+  title={Forward and backward running waves in the arteries: analysis using the method of characteristics},
+  author={Parker, Kim H and Jones, CJH},
+  year={1990}
+}
+
+@article{wang2004wave,
+  title={Wave propagation in a model of the arterial circulation},
+  author={Wang, JJ and Parker, KH},
+  journal={Journal of biomechanics},
+  volume={37},
+  number={4},
+  pages={457--470},
+  year={2004},
+  publisher={Elsevier}
+}
+
+@article{wang2003time,
+  title={Time-domain representation of ventricular-arterial coupling as a windkessel and wave system},
+  author={Wang, Jiun-Jr and O'Brien, Aoife B and Shrive, Nigel G and Parker, Kim H and Tyberg, John V},
+  journal={American Journal of Physiology-Heart and Circulatory Physiology},
+  volume={284},
+  number={4},
+  pages={H1358--H1368},
+  year={2003},
+  publisher={American Physiological Society Bethesda, MD}
+}
+
+@article{elad1991numerical,
+  title={Numerical schemes for unsteady fluid flow through collapsible tubes},
+  author={Elad, D and Katz, D and Kimmel, E and Einav, S},
+  journal={Journal of biomedical engineering},
+  volume={13},
+  number={1},
+  pages={10--18},
+  year={1991},
+  publisher={Elsevier}
+}
+
+@article{li1993nonlinear,
+  title={A nonlinear fluid model for pulmonary blood circulation},
+  author={Li, CW and Cheng, HD},
+  journal={Journal of biomechanics},
+  volume={26},
+  number={6},
+  pages={653--664},
+  year={1993},
+  publisher={Elsevier}
+}
+
+@article{pontrelli2003numerical,
+  title={Numerical modelling of the pressure wave propagation in the arterial flow},
+  author={Pontrelli, Giuseppe and Rossoni, Enrico},
+  journal={International journal for numerical methods in fluids},
+  volume={43},
+  number={6-7},
+  pages={651--671},
+  year={2003},
+  publisher={Wiley Online Library}
+}
+
+@article{reymond2009validation,
+  title={Validation of a one-dimensional model of the systemic arterial tree},
+  author={Reymond, Philippe and Merenda, Fabrice and Perren, Fabienne and Rufenacht, Daniel and Stergiopulos, Nikos},
+  journal={American Journal of Physiology-Heart and Circulatory Physiology},
+  volume={297},
+  number={1},
+  pages={H208--H222},
+  year={2009},
+  publisher={American Physiological Society}
+}
+
+@article{brook1999numerical,
+  title={Numerical solutions for unsteady gravity-driven flows in collapsible tubes: evolution and roll-wave instability of a steady state},
+  author={Brook, BS and Falle, SAEG and Pedley, TJ},
+  journal={Journal of Fluid Mechanics},
+  volume={396},
+  pages={223--256},
+  year={1999},
+  publisher={Cambridge University Press}
+}
+
+@article{brook2002model,
+  title={A model for time-dependent flow in (giraffe jugular) veins: uniform tube properties},
+  author={Brook, BS and Pedley, TJ},
+  journal={Journal of biomechanics},
+  volume={35},
+  number={1},
+  pages={95--107},
+  year={2002},
+  publisher={Elsevier}
+}
+
+@article{formaggia2001coupling,
+  title={On the coupling of 3D and 1D Navier--Stokes equations for flow problems in compliant vessels},
+  author={Formaggia, Luca and Gerbeau, Jean-Fr{\'e}d{\'e}ric and Nobile, Fabio and Quarteroni, Alfio},
+  journal={Computer methods in applied mechanics and engineering},
+  volume={191},
+  number={6-7},
+  pages={561--582},
+  year={2001},
+  publisher={Elsevier}
+}
+
+@article{wan2002one,
+  title={A one-dimensional finite element method for simulation-based medical planning for cardiovascular disease},
+  author={Wan, Jing and Steele, Brooke and Spicer, Sean A and Strohband, Sven and Feijo{\'{}} o, Gonzalo R and Hughes, Thomas JR and Taylor, Charles A},
+  journal={Computer Methods in Biomechanics \& Biomedical Engineering},
+  volume={5},
+  number={3},
+  pages={195--206},
+  year={2002},
+  publisher={Taylor \& Francis}
+}
+
+@article{porenta1986finite,
+  title={A finite-element model of blood flow in arteries including taper, branches, and obstructions},
+  author={Porenta, G and Young, DF and Rogge, TR},
+  year={1986}
+}
+
+@article{rooz1982finite,
+  title={A finite-element simulation of pulsatile flow in flexible obstructed tubes},
+  author={Rooz, Elkana and Young, DF and Rogge, TR},
+  year={1982}
+}
+
+@article{bessems2008experimental,
+  title={Experimental validation of a time-domain-based wave propagation model of blood flow in viscoelastic vessels},
+  author={Bessems, David and Giannopapa, Christina G and Rutten, Marcel CM and van de Vosse, Frans N},
+  journal={Journal of biomechanics},
+  volume={41},
+  number={2},
+  pages={284--291},
+  year={2008},
+  publisher={Elsevier}
+}
+
+
+@book{toro2001shock,
+  title={Shock-capturing methods for free-surface shallow flows},
+  author={Toro, Eleuterio Francisco and others},
+  year={2001},
+  publisher={Wiley and Sons Ltd.}
+}
+
+@book{harten1997uniformly,
+  title={Uniformly high order accurate essentially non-oscillatory schemes, III},
+  author={Harten, Ami and Engquist, Bjorn and Osher, Stanley and Chakravarthy, Sukumar R},
+  year={1997},
+  publisher={Springer}
+}
+
+@article{shu1988efficient,
+  title={Efficient implementation of essentially non-oscillatory shock-capturing schemes},
+  author={Shu, Chi-Wang and Osher, Stanley},
+  journal={Journal of computational physics},
+  volume={77},
+  number={2},
+  pages={439--471},
+  year={1988},
   publisher={Elsevier}
 }
