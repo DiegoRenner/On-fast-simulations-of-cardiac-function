@@ -101,20 +101,20 @@ ETH Zürich}
 \chapter{Introduction}
 Due to the complexity of the cardiovascular system and the significance of cardiovascular disease globally the mathematical and numerical modelling of haemodynamics has gained a lot of traction over recent years.
 Two of the main factors for this complexity are the multi-scale and multi-physics nature of the cardiovascular system that arises from vessels of strongly varying sizes and not much data being available for certain parts of these models to go off of \cite{quarteroni2016geometric}.
-The motivation for researching cardiovascular disease stems from it's prevelance as a cause of death.
+The motivation for researching cardiovascular disease stems from it's prevalence as a cause of death.
 Worldwide it leads 17.3 million deaths per year as of 2015 making it the leading cause of death.
 This number is projected to increase by the year 2030 to more than 23.6 million. \cite{update2015heart}
 In Europe cardiovascular disease was responsible for close to one third (32.7\%) of all deaths in the year 2020 \cite{Coelho2020}.
 In order to tackle the complexity of the meaningful task of modelling cardiovascular systems numerical modelling has become prevalent \cite{formaggia2009multiscale,quarteroni2016geometric,black2020p14,el2018investigating,qureshi2014numerical,reichold2009vascular}.
 Numerical modelling can allow the simulation of quantities that are hard to measure in vivo while also lowering costs with respect to clinical methods.
-However such models in the context of cardiovascular function depend heavily on personalization to produce meaningful ouputs.
-Due to many of the personalized parameters being hard or even impossible to determine this leads to costly optimizations having to be performed to determine these parameters or the parameters being approximated using a population mean.
+However such models in the context of cardiovascular function depend heavily on personalization to produce meaningful outputs.
+Due to many of the personalized parameters being hard or even impossible to determine, this leads to costly optimization processes to determine these parameters or the parameters being approximated using a population mean.
 Using a population mean often doesn't produce accurate enough results.
-Therefore the parameters have to be determined for each specific patient leading to an invere problem having to be solved, i.e. based on patient data parameters of the model parameters need to be estimated in order to create a model that outputs results relevant to the specific patient.
+Therefore the parameters have to be determined for each specific patient leading to an inverse problem having to be solved, i.e. based on patient data parameters of the model parameters need to be estimated in order to create a model that outputs information relevant to the specific patient.
 The such a model is often referred to as a digital-twin.
 Since the derivatives are often hard to determine for cardiovascular simulations the algorithms of choice for solving the inverse problem are often gradient-free. 
 Moreover due to the cardiovascular system being described by hyperbolic equations the model is very sensitive to it's parameters.
-This means the optimization algorithms have to be run at very small stepsizes. \cite{taylor2009patient,tuccio2022parameter,marsden2014optimization,mineroff2019optimization,bozkurt2022patient}.
+This means the optimization algorithms have to be run at very small step sizes. \cite{taylor2009patient,tuccio2022parameter,marsden2014optimization,mineroff2019optimization,bozkurt2022patient}.
 The ability to easily take gradients of a cardiovascular system with respect to it's parameters would greatly improve the process of personalizing such a model.
 Therefore the goal of this work is to provide a fast, differentiable cardiovascular simulation
 For this reason the haemodynamics solver written in the course of this thesis was written in the machine learning framework JAX which allows for the code to be differentiated automatically.
