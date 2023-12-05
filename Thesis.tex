@@ -100,11 +100,11 @@ ETH Zürich}
 
 \chapter{Introduction}
 
-By taking into account the characteristics of an individual patient and customizing the treatment this patient receives according to which characteristics-dependent subpopulation this patient falls into, personalized medicine aims to improve upon results a more generalized approach would achieve \cite{ashley2016towards,national2011toward,giardino2017role}.
+By taking into account the characteristics of an individual patient and customizing the treatment this patient receives according to which characteristics-dependent sub-population this patient falls into, personalized medicine aims to improve upon results a more generalized approach would achieve \cite{ashley2016towards,national2011toward,giardino2017role}.
 To succeed in the personalization of a treatment, a disease specific number of quantities (biomarkers) need to be determined \cite{burke1998integrating}.
 These biomarkers can have a varying degree of correlation with a diseases existence, progression, and outcome.
 For instance local vascular pressure is highly correlated with hypertension.
-While there are methods to estimate this quantity from ultrasound or Magnetic Resonance Imaging \cite{markl20124d}, these methods tend not to be accurate enough for standard clinical pratice \cite{everett2012beyond}.
+While there are methods to estimate this quantity from ultrasound or Magnetic Resonance Imaging \cite{markl20124d}, these methods tend not to be accurate enough for standard clinical practice \cite{everett2012beyond}.
 On the other hand more invasive techniques might not offer the proper risk to reward ratio.
 For example, to diagnose hypertensive pregnancy disorder it would be very risky to perform the measurement of the absolute vascular pressure in-vivo on a pregnant subject \cite{kett2002adverse}.
 Therefore in order to determine the biomarkers that are hard to capture in a clinical setting computational methods are often applied.
@@ -118,7 +118,7 @@ What has therefore become the method of choice to adress the issue of personaliz
 There are two main ways of achieving the goal of callibrating a simulation for an individual
 \begin{enumerate}
 	\item A "classical" approach, where the inverse problem is solved using Markow-Chain-Monte-Carlo \cite{melis2017gaussian}, Kalman filter \cite{manganotti2022modeling}, or coupling techniques.
-	\item A Deep-Learning approach where the callibration is avoided all together in favor of learning the model from data.
+	\item A Deep-Learning approach where the calibration is avoided all together in favor of learning the model from data.
 \end{enumerate}
 The reason Deep-Learning techniques were attempted is due to the fact that the "classical" aproaches are very inefficient.
 This is because the derivatives are often hard to determine for the attempted simulations so the algorithms of choice for solving the inverse problem are gradient-free. 
