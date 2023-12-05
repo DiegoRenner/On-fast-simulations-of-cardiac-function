@@ -99,35 +99,56 @@ ETH Zürich}
 \mainmatter % do not remove this line
 
 \chapter{Introduction}
+
+By taking into account the characteristics of an individual patient and customizing the treatment this patient receives according to which characteristics-dependent subpopulation this patient falls into, personalized medicine aims to improve upon results a more generalized approach would achieve \cite{ashley2016towards,national2011toward,giardino2017role}.
+To succeed in the personalization of a treatment, a disease specific number of quantities (biomarkers) need to be determined \cite{burke1998integrating}.
+These biomarkers can have a varying degree of correlation with a diseases existence, progression, and outcome.
+For instance local vascular pressure is highly correlated with hypertension.
+While there are methods to estimate this quantity from ultrasound or Magnetic Resonance Imaging \cite{markl20124d}, these methods tend not to be accurate enough for standard clinical pratice \cite{everett2012beyond}.
+On the other hand more invasive techniques might not offer the proper risk to reward ratio.
+For example, to diagnose hypertensive pregnancy disorder it would be very risky to perform the measurement of the absolute vascular pressure in-vivo on a pregnant subject \cite{kett2002adverse}.
+Therefore in order to determine the biomarkers that are hard to capture in a clinical setting computational methods are often applied.
+
+Such computational models aim to simulate a patients individual physiology in order to reveal aforementioned "hidden" biomarkers.
+However the simulations depend heavily on a high number of personalized parameters, leading to a similar problem as described initially: needing to determine biomarkers for an individual patient that can be hard to access.
+An attempt to avoid the problem of having to know these values is using population averaged values.
+This however defeats the purpose of personalized medicine.
+What has therefore become the method of choice to adress the issue of personalized medicine using computational models is to build simulators that output the values of some desired biomarkers and to then try and solve the inverse problem of fitting the parameters of the simulator to a specific patient.
+
+There are two main ways of achieving this goal
+\begin{enumerate}
+	\item A "classical" approach, where the inverse problem is solved using Markow-Chain-Monte-Carlo \cite{melis2017gaussian}, Kalman filter \cite{manganotti2022modeling}, or coupling techniques.
+	\item A Deep-Learning approach where the callibration is avoided all together in favor of learning the model from data.
+\end{enumerate}
+The reason Deep-Learning techniques were attempted is due to the fact that the "classical" aproaches are very inefficient.
+This is because the derivatives are often hard to determine for the attempted simulations so the algorithms of choice for solving the inverse problem are gradient-free. 
+Moreover due to the models being very sensitive to it's parameters and there being ambigous solutions \cite{nolte2022inverse,quick2001infinite} these gradient-free algorithms have to be run at very small step sizes. \cite{taylor2009patient,tuccio2022parameter,marsden2014optimization,mineroff2019optimization,bozkurt2022patient}.
+The ability to easily take gradients of one of these models with respect to it's parameters would greatly improve the process of personalizing them without loosing the interpretability as would be the case when using a Deep-Learning algorithm.
+
 Due to the complexity of the cardiovascular system and the significance of cardiovascular disease globally the mathematical and numerical modelling of haemodynamics has gained a lot of traction over recent years.
 Two of the main factors for this complexity are the multi-scale and multi-physics nature of the cardiovascular system that arises from vessels of strongly varying sizes and not much data being available for certain parts of these models to go off of \cite{quarteroni2016geometric}.
-The motivation for researching cardiovascular disease stems from it's prevalence as a cause of death.
-Worldwide it leads 17.3 million deaths per year as of 2015 making it the leading cause of death.
+
+The motivation for researching cardiovascular disease stems from it being the number one cause of death.
+Worldwide it leads 17.3 million deaths per year as of 2015.
 This number is projected to increase by the year 2030 to more than 23.6 million. \cite{update2015heart}
 In Europe cardiovascular disease was responsible for close to one third (32.7\%) of all deaths in the year 2020 \cite{Coelho2020}.
 In order to tackle the complexity of the meaningful task of modelling cardiovascular systems numerical modelling has become prevalent \cite{formaggia2009multiscale,quarteroni2016geometric,black2020p14,el2018investigating,qureshi2014numerical,reichold2009vascular}.
-Numerical modelling can allow the simulation of quantities that are hard to measure in vivo while also lowering costs with respect to clinical methods.
-However such models in the context of cardiovascular function depend heavily on personalization to produce meaningful outputs.
-Due to many of the personalized parameters being hard or even impossible to determine, this leads to costly optimization processes to determine these parameters or the parameters being approximated using a population mean.
-Using a population mean often doesn't produce accurate enough results.
-Therefore the parameters have to be determined for each specific patient leading to an inverse problem having to be solved, i.e. based on patient data parameters of the model parameters need to be estimated in order to create a model that outputs information relevant to the specific patient.
-The such a model is often referred to as a digital-twin.
-Since the derivatives are often hard to determine for cardiovascular simulations the algorithms of choice for solving the inverse problem are often gradient-free. 
-Moreover due to the cardiovascular system being described by hyperbolic equations the model is very sensitive to it's parameters.
-This means the optimization algorithms have to be run at very small step sizes. \cite{taylor2009patient,tuccio2022parameter,marsden2014optimization,mineroff2019optimization,bozkurt2022patient}.
-The ability to easily take gradients of a cardiovascular system with respect to it's parameters would greatly improve the process of personalizing such a model.
-Therefore the goal of this work is to provide a fast, differentiable cardiovascular simulation
-For this reason the haemodynamics solver written in the course of this thesis was written in the machine learning framework JAX which allows for the code to be differentiated automatically.
+The general issue described up until now with regards to the difficulty of personalizing treatments is also relevant when considering the cardiovascular system.
+
+Therefore the goal of this work is to provide a fast, differentiable cardiovascular simulation.
+For this reason the haemodynamics solver written in the course of this thesis was written using the JAX library which allows for the code to be differentiated automatically.
 On top of differentiability Jax also offers device agnostic execution.
 JAX optimizes the executed code to take advantage of parallelization and other advantages of modern hardware regardless of if it's being executed on a CPU, GPU or TPU.
 The optimization for GPU execution is especially useful since it allows for data paralellization, i.e. batch executions of the code on a single device.
-This means multiple digital-twins for different parients could be optimized simultaneously on a single GPU.
+This means multiple models for different patients could be optimized simultaneously on a single GPU.
 Next to the advantages brought about by the implementation in JAX, the implemenatition of the code in Python makes the solver accessible for future work.
 We also provide the written code as is in an open-source manner hoping to aid progress in the field overall.
+
 For this thesis we chose a coupled 0D-1D model where the 0D part is used to compute boundary conditions for certain outlets of the 1D cardiovascular network.
-While failing to capture complex flow patterns as opposed to a 3D model the 1D model can still simulate pulse wave transmission and systemic wave reflection effects. \cite{shi2011review} 
-Clearly 1D models also offer a big advantage in execution time as opposed to 3D models.
+While failing to capture complex flow patterns and wall shear stress as opposed to a 3D model the 1D model can still simulate pulse wave transmission and systemic wave reflection effects.
+Clearly 1D models also offer a big advantage in execution time as opposed to 3D models. \cite{shi2011review,pfaller2020using,arzani2022machine} 
 In the next section we will provide a basic understanding of the cardiovascular system which will serve as a base for describing the cardiovascular simulation throughout this work.
+
 
 
 
@@ -491,6 +512,20 @@ In this chapter we will first Introduce the MUSCL scheme and the Gudonov average
 We will then apply the MUSCL scheme to the homogenous part of \autoref{eq:1deqs3}.
 Finally we describe the forward-euler timestep used to accomodate the inhomogenous part as well as the newton solver for the outlets and junctions.
 
+\section{Literature Review}
+The governing equations derived in \autoref{sec:sv} have mainly been approache numerically in four differnet manners.
+Namely through the method of characteristics or finite difference (FD), finite volume (FV), or finite element (FE) schemes.
+Using the method of characteristics the hyperbolic PDE that describes the haemodynamics rewritten as an ODE of the Riemann invariants of the system along the corresponding characteristic lines.
+This method was used in \cite{streeter1963pulsatile,bodley1971non,parker1990forward,wang2004wave,wang2003time}.
+The finite difference scheme was applied by \cite{smith2002anatomically,elad1991numerical,elad1991numerical,pontrelli2003numerical,reymond2009validation}.
+The finite volume and the finite element methods have become more prevalent in recent years.
+The advantage of the FV solver over the FD solver is that they are shock-capturing \cite{toro2001shock}, i.e. they can deal with potential large gradients occurring in the solution \cite{shu1988efficient,harten1997uniformly}.
+The finite volume method was applied by \cite{melis2017gaussian,brook1999numerical,brook2002model} and the finite element method has been used by \cite{sherwin2003one,sherwin2003computational,formaggia2001coupling,wan2002one,porenta1986finite,rooz1982finite,bessems2008experimental}
+While higher accuracy and faster convergence can technically be achieved by a FE method, there are applications in venous systems where FE schemes do not converge.
+There is also increasing complexity involved when implementing models that are based on the method of characteristics all the way up to finite element methods.
+For this work we chose to implement the haemodynamics solver using a FV scheme, specifically using the MUSCL solver.
+The reason for this is that the FV solver offers numerical stability, particularly when dealing with shocks and provides sufficient accuracy, while avoiding an overly complicated implementation that wouldn't have aided the primary goal of developing a differentiable solver.
+
 \section{Finite Volume (FV)} 
 In order to describe the finite volume solver that was applied to solve \autoref{eq:1deqs3} we will first introduce a space and time discretization.
 The space discretisation is defined as follows:
@@ -595,11 +630,11 @@ In order to get a first approximation for the flux that needs to be computed the
 			\mathbf{\hat{U}}_{i+1}^n(z_{i+\frac{1}{2}}) \text{, for } z > z_{i+\frac{1}{2}},
 	\end{array} \right.  
 \end{align}
-has to solved.
-This yields a flux $\mathbf{F^*}$ with which we compute compute our averaged quantities at the next half-timestep using \autoref{eq:fv}
+has to be solved.
+This yields a flux $\mathbf{F^*}$ with which we compute our averaged quantities at the next half-timestep using \autoref{eq:fv}
 \begin{align}
-	\mathbf{U}_{i+\frac{1}{2},L}^{n+\frac{1}{2}} &= \mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) + \frac{\Delta t}{2 \Delta x} \left( \mathbf{F}(\mathbf{\hat{U}}_i^n( z_{i-\frac{1}{2}})) - \mathbf{F}(\mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) \right)\\
-	\mathbf{U}_{i+\frac{1}{2},R}^{n+\frac{1}{2}} &= \mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) + \frac{\Delta t}{2 \Delta x} \left( \mathbf{F}(\mathbf{\hat{U}}_{i+1}^n( z_{i+\frac{1}{2}})) - \mathbf{F}(\mathbf{\hat{U}}_i^n(z_{i+\frac{3}{2}}) \right),
+	\mathbf{U}_{i+\frac{1}{2},L}^{n+\frac{1}{2}} &= \mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) + \frac{\Delta t}{2 \Delta x} \left( \mathbf{F^*}(\mathbf{\hat{U}}_i^n( z_{i-\frac{1}{2}})) - \mathbf{F^*}(\mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) \right)\\
+	\mathbf{U}_{i+\frac{1}{2},R}^{n+\frac{1}{2}} &= \mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) + \frac{\Delta t}{2 \Delta x} \left( \mathbf{F^*}(\mathbf{\hat{U}}_{i+1}^n( z_{i+\frac{1}{2}})) - \mathbf{F^*}(\mathbf{\hat{U}}_i^n(z_{i+\frac{3}{2}}) \right),
 \end{align}
 where we have ignored the source term $\mathbf{S}$ for the moment.
 The resulting $\mathbf{U}_{i+\frac{1}{2},L}^{n+\frac{1}{2}}$ and $\mathbf{U}_{i+\frac{1}{2},R}^{n+\frac{1}{2}}$ are then used as left and right states of a new Riemann problem.
@@ -608,24 +643,18 @@ The flux is not for solved analytically but numerically using the numerical sche
 In the section we will be adressing how to handle the source term.
 
 \section{Time step, source term}
+In the previous section we have ignored the source term $\mathbf{S}$.
+To account for the source term the following problem has to be solved:
 Next the inhomogeneous part has to be solved:
-
 \begin{equation}
-	\left\{\begin{array}{l}
-			\frac{d \mathbf{U}}{d t}=\mathbf{S}(\mathbf{U}), \\
-			\overline{\mathbf{U}}^{n+1}
-	\end{array} \quad \rightarrow \quad \mathbf{U}^{n+1},\right.
+			\frac{d \mathbf{U}}{d t}=\mathbf{S}(\mathbf{U}) .
 \end{equation}
-
-This is done using the forward Euler method
-
+This is done here by using the forward Euler method
 \begin{equation}
-	\mathbf{U}^{n+1}=\mathbf{U}^n + \Delta t \mathbf{S}\left(t^n, \mathbf{U}^n\right)
+	\mathbf{U}^{n+1}=\mathbf{U}^n + \Delta t \mathbf{S}\left(t^n, \mathbf{U}^n\right).
 \end{equation}
+TODO: justification, adjust notation for to reflect MUSCL step.
 
-In newer versions of the code a visco-elastic constitutive equation is solved as described in \cite{ALASTRUEY20112250}.
-This is more accurate than the linear-elastic formulation described here.
-The corresponding code can be found in 
 
 \section{Initial Conditions and Boundary Values} \label{sec:icbc}
 We need to consider initial conditions for each vessel in our system which we will adress in \autoref{ssec:initial_conditions}.
@@ -643,8 +672,9 @@ What is usually done therefore is to simply set
 	Q(z;0) &= u(z;0)A(z;0) = 0, &z \in [0,l].
 \end{align}
 The pressure $P$ is then computed by \autoref{eq:p_tot}.
-This can lead to false values propagating from the initial conditions.
-However this effect usually persists for only about 2-3 heartbeats as long as correct boundary values are set.\cite{formaggia2010cardiovascular}
+The physically inacurate initial consitions can lead to false values propagating when solving the system.
+Therefore the output of the solve is usually fed back into the simulation as a new initial condition until s stable state has been reached.
+The negative effect from bad initial conditions usually persists for only about 2-3 heartbeats as long as correct boundary values are set.\cite{formaggia2010cardiovascular}
 In the next subsection we discuss how to set these boundary values. 
 
 \subsection{Boundary Values} \label{ssec:boundary_values}
@@ -661,39 +691,30 @@ This data either represents the pressure $P_L(t)$ or the volumetric flow $Q_L(t)
 	P(0,t) &= P_L(t), &t \in [0,\infty) \\
 	Q(0,t) &= Q_L(t), &t \in [0,\infty).
 \end{align}
-If one of these quantities is given at a time $t_2$ and the other $u, A, c$, and $P$ can be computed using 
-
-	
-
-The inlet boundary conditions are set from data (either through P or Q) and then the ambiguities in the remaining quantities are determined through extrapolations of characteristics.
+If one of these quantities is given at a time $t_2$ and the other $u, A, c$, and $P$ can be computed using extrapolation of characteristics.
 First off the Riemann invariants need to be computed at the first and second point of the space discretization for the current time step.
-At the first point the two Riemann invariants read as
+We use the notation for the space-time discretization previously introduced with approximations of quantites averaged over cell $i$ at time step $n$ being denoted by a lowered $i$ and raised $n$ index respectively.
+At the first cell the two Riemann invariants read as
 \begin{align}
 	W_{1,0}^n &= u^n_0 - 4c^n_0\\
 	W_{2,0}^n &= u^n_0 + 4c^n_0.
 \end{align}
-
 At the second point they are denoted by
 \begin{align}
-	W_{1,0}^n &= u^n_1 - 4c^n_1\\
-	W_{2,0}^n &= u^n_1 - 4c^n_1.
+	W_{1,1}^n &= u^n_1 - 4c^n_1\\
+	W_{2,1}^n &= u^n_1 - 4c^n_1.
 \end{align}
-
-We used $c_i^n$ as shorthand for
-
+We used $c_i^n$ is the wave speed that is computed as
 \begin{equation}
-	c^n_i = \sqrt{\frac{3}{2}\gamma\sqrt{A^n_i}}.
+	c^n_i = \sqrt{\frac{\beta}{2\rho}\sqrt{A}}.
 \end{equation}
-
-If Q is given the Riemann invariants at the next time step are computed via the following update formula:
+If the input data is given in as a volumtric flow, the Riemann invariants at the next time step are computed via the following update formula:
 
 \begin{align}
 	W_{1,0}^{n+1} &= W^n_{1,0} + (W^n_{1,1} - W^n_{1,0})(c^n_0-u^n_0) \frac{\Delta t}{\Delta x} \label{update1a}\\
 	W_{2,0}^{n+1} &= \frac{2Q^{n+1}_0}{A^n_0} - W^{n+1}_{1,0} \label{update2a}
 \end{align}
 where $Q^{n+1}_0$ is given through input data.
-The time step size is defined as described in section \ref{sec:cfl},
-The space step size is defined by $\Delta x \coloneqq \frac{L}{M}$.
 The missing input quantities are then computed from the new Riemann invariants as follows:
 
 \begin{align}
@@ -703,7 +724,7 @@ The missing input quantities are then computed from the new Riemann invariants a
 	P_0^{n+1} &= P_{ext} + \beta \left( \sqrt{\frac{A_0^{n+1}}{A_{0,0}}} - 1 \right). 
 \end{align}
 where $P_{ext}$ is user defined and $A_{0,0}$ is the reference cross-section at the start point $i=0$ of the vessel.
-If P is given the Riemann invariants at the next time step are computed via the following update formula:
+If the input data is given as a pressure wave, the Riemann invariants at the next time step are computed via the following update formula:
 
 \begin{align}
 	W_{1,0}^{n+1} &= W^n_{1,0} + (W^n_{1,1} - W^n_{1,0})(c^n_0-u^n_0) \frac{\Delta t}{\Delta x} \label{update1b}\\
@@ -719,18 +740,26 @@ The missing input quantities are then computed from the new Riemann invariants a
 	Q_0^{n+1} &= A_0^{n+1} u_0^{n+1}
 \end{align}
 where $P^{n+1}_0$ is given through input data.
+
 \subsubsection{Outlets} \label{sssec:outl}
+A very basic method to compute the outlet boundary values is by considerint the outlet to be reflective.
 
 Reflection
 
 In the general case this is done equivalently to the inlet boundary conditions through extrapolation of characteristics:
-\begin{equation}
-	\left\{\begin{array}{l}
-			W_{2,M}^{n+1}=W_{2,M}^n+(W_{2,M-1}^n-W_{2,M-1}^n) (u_M^n+c_M^n) \frac{\Delta t}{\Delta x}, \\
-			W_{1,M}^{n+1}=W_{1,M}^0-R_t (W_{2,M}^{n+1}-W_{2,M}^0),
-	\end{array}\right.
-\end{equation}
+\begin{align}
+	W_{2,M}^{n+1}&=W_{2,M}^n+(W_{2,M-1}^n-W_{2,M-1}^n) (u_M^n+c_M^n) \frac{\Delta t}{\Delta x}, \\
+			W_{1,M}^{n+1}&=W_{1,M}^0-R_t (W_{2,M}^{n+1}-W_{2,M}^0),
+\end{align}
 where $R_t \in [-1,1]$ is the reflection coefficient.
+The simulation quantities are then computed from the Riemann invariants as follows
+\begin{align}
+	u_M^{n+1} &= \frac{W_{1,M}^{n+1} + W_{2,M}^{n+1}}{2} \\
+	c_M^{n+1} &= \frac{W_{2,M}^{n+1} - W_{1,M}^{n+1}}{4} \\
+	Q_M^{n+1} &= A_M^n u_M^{n+1}.
+\end{align}
+A more accurate method of computing the outlet boundary values is using a Windkessel model.
+
 
 Windkessel
 
