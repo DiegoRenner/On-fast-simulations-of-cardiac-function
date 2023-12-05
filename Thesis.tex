@@ -749,15 +749,15 @@ Reflection
 
 In the general case this is done equivalently to the inlet boundary conditions through extrapolation of characteristics:
 \begin{align}
-	W_{2,M}^{n+1}&=W_{2,M}^n+(W_{2,M-1}^n-W_{2,M-1}^n) (u_M^n+c_M^n) \frac{\Delta t}{\Delta x}, \\
-			W_{1,M}^{n+1}&=W_{1,M}^0-R_t (W_{2,M}^{n+1}-W_{2,M}^0),
+	W_{2,N}^{n+1}&=W_{2,N}^n+(W_{2,N-1}^n-W_{2,N-1}^n) (u_N^n+c_N^n) \frac{\Delta t}{\Delta x}, \\
+			W_{1,N}^{n+1}&=W_{1,N}^0-R_t (W_{2,N}^{n+1}-W_{2,N}^0),
 \end{align}
 where $R_t \in [-1,1]$ is the reflection coefficient.
 The simulation quantities are then computed from the Riemann invariants as follows
 \begin{align}
-	u_M^{n+1} &= \frac{W_{1,M}^{n+1} + W_{2,M}^{n+1}}{2} \\
-	c_M^{n+1} &= \frac{W_{2,M}^{n+1} - W_{1,M}^{n+1}}{4} \\
-	Q_M^{n+1} &= A_M^n u_M^{n+1}.
+	u_N^{n+1} &= \frac{W_{1,N}^{n+1} + W_{2,N}^{n+1}}{2} \\
+	c_N^{n+1} &= \frac{W_{2,N}^{n+1} - W_{1,N}^{n+1}}{4} \\
+	Q_N^{n+1} &= A_N^n u_N^{n+1}.
 \end{align}
 A more accurate method of computing the outlet boundary values is using a Windkessel model.
 
@@ -771,8 +771,7 @@ Such models are referred to as lumped-parameter or 0D models due to the spatial 
 	45
 	D outlet) and $\left(A_r, u_r\right)$ (0D inlet) (Alastruey et al., 2008).
 \end{comment}
-In order to compute the output value through the Windkessel model we introduce an intermediate state $A^*$, $u^*$ that generates from the values at the end of the vessel $A_M$, $u_M$.
-This state must satisfies a linearized version of the equations describing the blood flow that is computed by integrating out the spatial component
+In order to compute the output value through the Windkessel model we introduce a linearized version of the equations describing the blood flow that is computed by integrating out the spatial component
 \begin{comment}
 	\begin{equation}
 		A^* u^*\left(1+\frac{R_1}{R_2}\right)+C_c R_1 \frac{\partial\left(A^* u^*\right)}{\partial t}=\frac{P_e-P_{\text {out }}}{R_2}+C_c \frac{\partial P_e}{\partial t}, \label{wk_eq1}
@@ -794,84 +793,71 @@ This state must satisfies a linearized version of the equations describing the b
 
 	src/boundary\_conditions.jl:169-216.
 \end{comment}
-\begin{equation}
-	\left\{\begin{array}{l}
-			\ C_c\frac{d P_{c}}{d t}+Q_{M}-A^*u^*=0,\\
-			{L}{\frac{d Q_{out}}{d t}}+P_{M}-P_{c}=-R_2 Q_{M}\,.
-	\end{array}\right.
-\end{equation}
-The following substitutions were introduced in order to be able to view the system analogously to an RCL-circuit
-\begin{equation}
-	L = \rho \frac{c}{A_0}, \  
-	R_2 = \frac{\rho K_\nu}{A_0^2}, \ 
-	C_c =\frac{2A_0}{\beta\sqrt{\pi}}. 
-\end{equation}
-
-Introducing a finite difference for the derivatives in both of these equations leads to
 \begin{align}
-	C_c{\frac{(P_{c})^{n}-(P_{c})^{n-1}}{\Delta t}} &+ (Q_M)^{n}-A^{*}U^{*} = 0, \label{lin_disc1}\\ 
-	L\frac{(Q_M)^{n}-(Q_M)^{n-1}}{\Delta t} &+ R_{2}(Q_M)^{n}+P_M-(P_{c})^{n} = 0. \label{lin_disc2}
+	C\frac{d P_C^{n+1}}{d t}+Q_{M}^{n+1}-Q_M^{n+1}&=0, \label{eq:RLC1}\\
+	{L}{\frac{d Q_M^{n+1}}{d t}}+P_{M}^n-P_C^{n+1}&=-R_2 Q_{M}^{n+1} \label{eq:RLC2}.
 \end{align}
-
+The variables $R$, $L$, $C$ are parameters that have to be determined for each individual application and they are named after the RLC-circuit in analogy to which this algotihm was setup.
+Different networks can have very different parameters and their derivation is not trivial.
+This is a prime example for the need of efficient calibration algorithms which this thesis aims to work towards by providing a differentiable solver.
+We will derive a timestep algorithm in order to compute the value of $P_C^{n+1}$.
+Introducing a finite difference for the derivatives in the equations \autoref{eq:RLC1} and \autoref{eq:RLC2} leads to
+\begin{align}
+	C{\frac{P_C^{n+1}-P_C^{n}}{\Delta t}} &+ Q_M^{n+1}-Q_M^n = 0, \label{lin_disc1}\\ 
+	L\frac{Q_M^{n+1}-Q_M^{n}}{\Delta t} &+ R_{2}Q_M^{n+1}+P_M^n-P_C^{n+1} = 0. \label{lin_disc2}
+\end{align}
 Using \ref{lin_disc2} to eliminate any occurrence of $Q_M^n$ \ref{lin_disc1} we get
 \begin{align}
-	(P_c)^n = \left(R_2 + \frac{L}{\Delta t}\right) \left( - C_c \frac{(P_c)^n - (P_c)^{n-1}}{\Delta t} + A^*u^*\right)+ P_M - \frac{L}{\Delta t} (Q_M)^{n-1}
+	P_C^{n+1} = \left(R_2 + \frac{L}{\Delta t}\right) \left( - C \frac{P_C^{n+1} - P_C^{n}}{\Delta t} + Q_M^n\right)+ P_M^n - \frac{L}{\Delta t} Q_M^{n}
 \end{align}
-and then solving for $(P_c)^n$ gives
+and then solving for $P_C^{n+1}$ gives
 \begin{multline}
-	\left( 1+ \frac{C_c}{\Delta t}\left( R_2 + \frac{L}{\Delta t} \right) \right) (P_c)^n = \\
-	\left( R_2 + \frac{L}{\Delta t} \right) \left( \frac{C_c}{\Delta t} (P_c)^{n-1} + A^*u^* \right) + P_M - \frac{L}{\Delta t} (Q_M)^{n-1}.
+	\left( 1+ \frac{C}{\Delta t}\left( R_2 + \frac{L}{\Delta t} \right) \right) P_C^{n+1} = \\
+	\left( R_2 + \frac{L}{\Delta t} \right) \left( \frac{C}{\Delta t} P_C^n + Q_M^n \right) + P_M^n - \frac{L}{\Delta t} Q_M^n.
 \end{multline}
-
 Simplifying the equation and regrouping the terms gives
 \begin{equation}
-	\phi(P_{c})^{n}=R_2 \left( \frac{C}{\Delta t}(P_{c})^{n-1} + A^{*}U^{*}+\frac{1}{L+R_{2}\Delta t}\left(\Delta t P_M-L(Q_M)^{n-1}\right) \right),
+	\phi P_{C}^{n+1}=R_2 \left( \frac{C}{\Delta t}P_C^{n} + Q_M^n+\frac{1}{L+R_{2}\Delta t}\left(\Delta t P_M^n-L Q_M^{n}\right) \right),
 \end{equation}
 with 
 \begin{equation}
-	\phi{\cal=}\frac{R_{2}C}{\Delta t}{\bf+}\frac{R_{2}\Delta t}{L{+}R_{2}\Delta t}. \label{RCL}
+	\phi=\frac{R_{2}C}{\Delta t}{\bf+}\frac{R_{2}\Delta t}{L{+}R_{2}\Delta t}. \label{RCL}
 \end{equation}
-
 This gives us an update formula through which we can compute new values of $P_C$ at each step.
 Since the inertia effect is negligible in the capillary bed we can set $L=0$ changing the update function for $P_C$ to 
 \begin{equation}
-	\phi(P_{C})^{n}=\frac{R_{2}C}{\Delta t}(P_{C})^{n-1}+R_{2}A^{*}U^{*}+P_{out},
+	\phi P_{C}^{n+1}=\frac{R_{2}C}{\Delta t}(P_{C})^{n}+R_{2} Q_M^n+P_M^n,
 \end{equation}
 with 
 \begin{equation}
-	\phi{\cal=}\frac{R_{2}C}{\Delta t} + 1. 
+	\phi = \frac{R_{2}C}{\Delta t} + 1. 
 \end{equation}
-
 Introducing the relation
 \begin{equation}
-	A^{*}U^{*}={\frac{P_e(A^{*})-(P_{\mathrm{C}})^{n}}{R_{1}}} \label{RCLR}
+	Q_M^n={\frac{P_M^n-P_{\mathrm{C}}^{n}}{R_{1}}} \label{RCLR}
 \end{equation}
 turns our RCL-circuit into an RCLR-circuit.
-$P_e(A^*)$ denotes the pressure at the 1D/0D interface which is given through the tube law
-\begin{equation}
-	P_{e}(A^*)={\frac{\beta}{A_{0}}}\left({\sqrt{A^{*}}}-{\sqrt{A_{0}}}\right).
-\end{equation}
-
 Introducing the extra resistance prevents non-physical reflection of incoming waves.
 We can rewrite \ref{RCLR} as 
 \begin{equation}
-	A^{*}U^{*}={\frac{P_e(A^{*})-(P_{M})_{R C L R}}{R_{1}+{\frac{R_{2}}{\phi}}}}, 
+	Q_M^n={\frac{P_M^n-(P_{M})_{R C L R}}{R_{1}+{\frac{R_{2}}{\phi}}}}, 
 \end{equation}
 with 
 \begin{equation}
-	\bigl(P_{M}\bigr)_{RCLR}=\bigl(P_{C}\bigr)^{n}-{\frac{R_{2}}{\phi}}A^{\ast}U^{\ast}.
+	\bigl(P_{M}\bigr)_{RCLR}=\bigl(P_{C}\bigr)^{n}-{\frac{R_{2}}{\phi}}Q_M^n.
 \end{equation}
-Inserting the tube law and requiring the outgoing characteristic at the end of the vessel $W_{2,M}$ to be equal to the incoming characteristic of our intermediate state $W_2^*$ we can derive a function whose roots correspond to the correct value for $A^*$
+Inserting the tube law and simplifying we can derive a function whose roots correspond to the correct value for $A_M^{n+1}$
 \begin{multline}
-	f(A^{*}) = \left(R_{1}+{\frac{R_{2}}{\phi}}\right)\left( \left(u_{M}+4c_{M} \right)A^{*}-4c^*A^{*} \right) \\
-	-{\frac{\beta}{A_{0}}}\Big(\sqrt{A^{*}}-\sqrt{A_{0}}\Big)+(P_{M})_{R C L R} =0. \label{wk_newton}
+	f(A_M^{n+1}) = \left(R_{1}+{\frac{R_{2}}{\phi}}\right)\left( \left(u_{M}^n+4c_{M}^n \right)A_M^{n+1}-4c_M^nA_M^{n+1} \right) \\
+	-{\frac{\beta}{A_{0,M}}}\Big(\sqrt{A_M^{n+1}}-\sqrt{A_{0,M}}\Big)+(P_{M}^n)_{R C L R} =0. \label{wk_newton}
 \end{multline}
 
 Finally we can simplify \ref{wk_newton} by writing out $(P_{M})_{RCLR}$ and once more using that the outgoing Riemann invariant at the end of the vessel is equal to the incoming one of our intermediate state giving us
-\begin{equation}
-	f\left(A^*\right)=A^* R_1\left(u_M+4 c_M\right)-4 A^* R_1 c^*-\frac{\beta}{A_0}\left(\sqrt{A^*}-\sqrt{A_0}\right)+P_c = 0. \label{wk_eq3}
-\end{equation}
-
+\begin{multline}
+	f\left(A_M^{n+1}\right) = A_M^{n+1} R_1\left(u_M^n+4 c_M^n\right)-4 A_M^{n+1} R_1 c_M^n\\
+	-\frac{\beta}{A_{0,M}}\left(\sqrt{A_M^{n+1}}-\sqrt{A_{0,M}}\right)+P_C^n = 0. \label{wk_eq3}
+\end{multline}
+This equation can be solve using a Newton solver.
 
 \subsubsection{Junctions} \label{sssec:junctions}
 Three types of junctions are considered.
