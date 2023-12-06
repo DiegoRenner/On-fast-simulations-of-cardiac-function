@@ -110,8 +110,10 @@ For example, to diagnose hypertensive pregnancy disorder it would be very risky 
 Therefore in order to determine the biomarkers that are hard to capture in a clinical setting computational methods are often applied.
 
 Such computational models aim to simulate a patients individual physiology in order to reveal aforementioned "hidden" biomarkers.
-Not only can biomarkers be determined that are usually hard to measure but their causal relation to the disease outcome can also be more closely revealed using such models 
-This is due to the underlying physics closely connecting an illness to it's initial roots whereas common clinical techniques often have to rely on symptoms of the disease or just more secondary indicators.
+The prerequisite for this to work is that biomarkers can be simulated that are strongly show strong correlations with a disease.
+For example being able to determine the genetic predisposition of a patient with respect to a certain disease would be a very strong indicator of the outcome od said disease.
+However this cannot be attempted with such methods.
+On the otherhand for instance the local vascular pressure, or the resistance within a cardiovascular network are good indicators that can in fact be simulated due to the underlying physics being well understood.
 However the simulations depend heavily on a high number of personalized parameters, leading to a similar problem as described initially: needing to access difficult to measurable or unobtainable data for a specific patient.
 An attempt to avoid the problem of having to know these values is using population averaged values.
 This however defeats the purpose of personalized medicine.
@@ -119,8 +121,8 @@ What has therefore become the method of choice to address the issue of personali
 
 There are two main ways of achieving the goal of calibrating a simulation for an individual
 \begin{enumerate}
-	\item A "classical" approach, where the inverse problem is solved using Markov-Chain-Monte-Carlo \cite{melis2017gaussian}, or Kalman filter \cite{manganotti2022modeling}.
-	\item A Deep-Learning approach where the calibration is avoided all together in favor of learning the model from data.
+	\item A "classical" approach, where the inverse problem is solved using Markov-Chain-Monte-Carlo \cite{melis2017gaussian}, or Kalman filters \cite{manganotti2022modeling}.
+	\item A Deep-Learning approach where the calibration is avoided all together in favor of learning the model from data. \cite{kissas2020machine,arzani2022machine}
 \end{enumerate}
 The reason Deep-Learning techniques were attempted is due to the fact that the "classical" approaches are very inefficient.
 This is because the derivatives are often hard to determine for the attempted simulations so the algorithms of choice for solving the inverse problem are gradient-free. 
