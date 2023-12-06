@@ -508,29 +508,35 @@ The explicit setting of the aforementioned initial conditions and boundary value
 
 
 \chapter{Numerical Methods} \label{chap:nm}
-The numerical realization of the 1D-Model within a single vessel described in \autoref{sec:sv} is achieved using a Finite Volume (FV) method to solve the homogenous part of the equation \autoref{eq:1deqs3} while the source term is accounted for by using a forward-euler timestep. 
+The numerical realization of the 1D-model within a single vessel described in \autoref{sec:sv} is achieved using a Finite Volume (FV) method to solve the homogenous part of the equation \autoref{eq:1deqs3} while the source term is accounted for by using a forward-euler timestep. 
 The FV method that was applied here is the monotonic upstream-centered scheme for conservation laws (MUSCL).
-A newton solver is applied to solve the linear systems of equations arrising from the junctions or the Windkessel model for outlets.
-In this chapter we will first Introduce the MUSCL scheme and the Gudonov average applied within this scheme.
-We will then apply the MUSCL scheme to the homogenous part of \autoref{eq:1deqs3}.
-Finally we describe the forward-euler timestep used to accomodate the inhomogenous part as well as the newton solver for the outlets and junctions.
+The initial data, inlets, junctions, and outlets of the system are set from data, in accordance with neighbouring vessels, or through a reflective or a Windkessel model.
 
-\section{Literature Review}
+In this chapter we will first discuss a the different approaches taken to solve the previously described 1D-model and why we chose the FV method in \autoref{sec:lr}.
+We will then describe the FV method and state the specific MUSCL scheme we used in \autoref{sec:fv} and \autoref{sec:muscl}.
+Thereafter we briefly describe the forward-euler timestep used to accomodate the inhomogenous part of our 1D-equations in \autoref{sec:fe} and finally we state how we applied initial conditions and boundary values in \autoref{sec:icbc}.
+
+\section{Literature Review} \label{sec:lr}
 The governing equations derived in \autoref{sec:sv} have mainly been approache numerically in four differnet manners.
 Namely through the method of characteristics or finite difference (FD), finite volume (FV), or finite element (FE) schemes.
-Using the method of characteristics the hyperbolic PDE that describes the haemodynamics rewritten as an ODE of the Riemann invariants of the system along the corresponding characteristic lines.
+Using the method of characteristics the hyperbolic PDE that describes the haemodynamics is rewritten as an ODE of the Riemann invariants of the system along the corresponding characteristic lines.
 This method was used in \cite{streeter1963pulsatile,bodley1971non,parker1990forward,wang2004wave,wang2003time}.
-The finite difference scheme was applied by \cite{smith2002anatomically,elad1991numerical,elad1991numerical,pontrelli2003numerical,reymond2009validation}.
+A finite difference scheme was applied by \cite{smith2002anatomically,elad1991numerical,elad1991numerical,pontrelli2003numerical,reymond2009validation}.
 The finite volume and the finite element methods have become more prevalent in recent years.
 The advantage of the FV solver over the FD solver is that they are shock-capturing \cite{toro2001shock}, i.e. they can deal with potential large gradients occurring in the solution \cite{shu1988efficient,harten1997uniformly}.
 The finite volume method was applied by \cite{melis2017gaussian,brook1999numerical,brook2002model} and the finite element method has been used by \cite{sherwin2003one,sherwin2003computational,formaggia2001coupling,wan2002one,porenta1986finite,rooz1982finite,bessems2008experimental}
 While higher accuracy and faster convergence can technically be achieved by a FE method, there are applications in venous systems where FE schemes do not converge.
 There is also increasing complexity involved when implementing models that are based on the method of characteristics all the way up to finite element methods.
 For this work we chose to implement the haemodynamics solver using a FV scheme, specifically using the MUSCL solver.
-The reason for this is that the FV solver offers numerical stability, particularly when dealing with shocks and provides sufficient accuracy, while avoiding an overly complicated implementation that wouldn't have aided the primary goal of developing a differentiable solver.
+The reason for this is that the FV solver offers many benefits when applied to hyperbolic systems.
+The 1D-NSE (\autoref{eq:1deqs3}) is a hyperbolic PDE, i.e. these equations describe phenomena where informatino travels at finite speeds. 
+Some of the benefits of using FV methods to solve hyperbolic systems are the ability of these methods to be shock capturing and to be inherently conservative.
+They therefore offer enough accuracy to model the problem while having the added benefit of reduced complexity when comparing them to a FE implementation.
+Offering enough accuracy therefore the FV method was the most straight forward one towards a differentiable 1D-haemodynamics solver.
 
-\section{Finite Volume (FV)} 
-In order to describe the finite volume solver that was applied to solve \autoref{eq:1deqs3} we will first introduce a space and time discretization.
+
+\section{Finite Volume (FV)} \label{sec:fv}
+In order to describe the FV method that was applied to solve \autoref{eq:1deqs3} we will first introduce a space and time discretization.
 The space discretisation is defined as follows:
 \begin{align}
 	&0 = z_0 < z_1 < z_2 < ... < z_N = l, \\
@@ -570,6 +576,7 @@ Dividing by $\Delta z$ and rearranging the terms gives
 \end{equation}
 Therefore the value of $\mathbf{U}$ at the next timestep $n+1$ can be determined from the value at the current timestep $n$ and the values of the flux $\mathbf{F}$ and the source term $\mathbf{S}$ at the intermediate timestep $n + \frac{1}{2}$.
 In the following section we will discuss how to commpute the flux terms \cite{guinot2012wave}.
+
 \section{MUSCL} \label{sec:muscl}
 The MUSCL scheme was developed by Van Leer towards the end of the 1970s \cite{van1977towards} \cite{van1979towards}.
 The version represented here is the most commonly used one.
@@ -645,7 +652,7 @@ The flux from this Riemann problem is again inserted into \autoref{eq:fv} giving
 The flux is not for solved analytically but numerically using the numerical scheme resulting in the Lax-Friedrichs flux.
 In the section we will be adressing how to handle the source term.
 
-\section{Time step, source term}
+\section{Time step, source term} \label{sec:fe}
 In the previous section we have ignored the source term $\mathbf{S}$.
 To account for the source term the following problem has to be solved:
 Next the inhomogeneous part has to be solved:
