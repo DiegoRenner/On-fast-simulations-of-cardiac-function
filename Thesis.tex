@@ -651,8 +651,10 @@ This yields a flux $\mathbf{F^*}$ with which we compute our averaged quantities 
 where we have ignored the source term $\mathbf{S}$ for the moment.
 The resulting $\mathbf{U}_{i+\frac{1}{2},L}^{n+\frac{1}{2}}$ and $\mathbf{U}_{i+\frac{1}{2},R}^{n+\frac{1}{2}}$ are then used as left and right states of a new Riemann problem.
 The flux from this Riemann problem is again inserted into \autoref{eq:fv} giving the final value for $\mathbf{U}_i^{n+1}$.
-The flux is not for solved analytically but numerically using the numerical scheme resulting in the Lax-Friedrichs flux.
-In the section we will be adressing how to handle the source term.
+The flux is not solved for analytically but numerically using the numerical scheme resulting in the Lax-Friedrichs flux.
+Given that the flux function is Lipschitz continuous, this scheme is conservative and consistent \cite{koppl2023dimension}.
+In general it is first order accurate and stable for small enough step sizes (see \autoref{sec:cfl}) \cite{leveque1992numerical}.
+In the next section we will be adressing how to handle the source term $\mathbf{S}$ that we have ignored here.
 
 \section{Time step, source term} \label{sec:fe}
 In the previous section we have ignored the source term $\mathbf{S}$.
