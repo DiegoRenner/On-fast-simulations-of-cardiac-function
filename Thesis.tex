@@ -447,7 +447,7 @@ It is the ratio of transverse contraction to longitudinal extension strain in th
 Combining \autoref{eq:pdef}-\autoref{eq:strain} with a term for the external pressure $P_{ext}$ we get \cite{sherwin2003one} \cite{sherwin2003computational}: 
 \begin{align} 
 	P(z;t) &= P_{ext}(z;t) + \beta \left( \sqrt{A(z;t)} - \sqrt{A_0(z)} \right),  \label{eq:p_tot}\\
-	\beta(z;t) &=  \frac{\sqrt{\pi} E h_0(z)}{1-\nu^2}.
+	\beta(z) &=  \frac{\sqrt{\pi} E h_0(z)}{1-\nu^2}.
 \end{align}
 Comparison with experimental data shows that a plug-flow is a reasonable approximation of the velocity profile \cite{hunter1972numerical} \cite{smith2000generation} \cite{smith2002anatomically}.
 Therefore it is reasonable to set $\gamma = 9, \alpha = \frac{11}{10}$.
@@ -756,6 +756,9 @@ The missing input quantities are then computed from the new Riemann invariants a
 where $P^{n+1}_0$ is given through input data.
 
 \subsubsection{Outlets} \label{sssec:outl}
+One of the most basic ways of setting outlet conditions is to use reflection coefficient to model how much of a wave leaves the vessel and how much gets reflective.
+In cases where this doesn't provide enough accuracy windkesselmodels are applied \cite {formaggia2010cardiovascular}.
+We introduce here a reflective and a three-parameter Windkessel model.
 A very basic method to compute the outlet boundary values is by considerint the outlet to be reflective.
 
 Reflection
