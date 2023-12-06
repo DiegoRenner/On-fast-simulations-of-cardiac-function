@@ -113,16 +113,16 @@ Such computational models aim to simulate a patients individual physiology in or
 However the simulations depend heavily on a high number of personalized parameters, leading to a similar problem as described initially: needing to determine biomarkers for an individual patient that can be hard to access.
 An attempt to avoid the problem of having to know these values is using population averaged values.
 This however defeats the purpose of personalized medicine.
-What has therefore become the method of choice to adress the issue of personalized medicine using computational models is to build simulators that output the values of some desired biomarkers and to then try and solve the inverse problem of fitting the parameters of the simulator to a specific patient.
+What has therefore become the method of choice to address the issue of personalized medicine using computational models is to build simulators that output the values of some desired biomarkers and to then try and solve the inverse problem of fitting the parameters of the simulator to a specific patient.
 
-There are two main ways of achieving the goal of callibrating a simulation for an individual
+There are two main ways of achieving the goal of calibrating a simulation for an individual
 \begin{enumerate}
-	\item A "classical" approach, where the inverse problem is solved using Markow-Chain-Monte-Carlo \cite{melis2017gaussian}, Kalman filter \cite{manganotti2022modeling}, or coupling techniques.
+	\item A "classical" approach, where the inverse problem is solved using Markov-Chain-Monte-Carlo \cite{melis2017gaussian}, or Kalman filter \cite{manganotti2022modeling}.
 	\item A Deep-Learning approach where the calibration is avoided all together in favor of learning the model from data.
 \end{enumerate}
-The reason Deep-Learning techniques were attempted is due to the fact that the "classical" aproaches are very inefficient.
+The reason Deep-Learning techniques were attempted is due to the fact that the "classical" approaches are very inefficient.
 This is because the derivatives are often hard to determine for the attempted simulations so the algorithms of choice for solving the inverse problem are gradient-free. 
-Moreover due to the models being very sensitive to it's parameters and there being ambigous solutions \cite{nolte2022inverse,quick2001infinite} these gradient-free algorithms have to be run at very small step sizes. \cite{taylor2009patient,tuccio2022parameter,marsden2014optimization,mineroff2019optimization,bozkurt2022patient}
+Moreover due to the models being very sensitive to it's parameters and there being ambiguous solutions \cite{nolte2022inverse,quick2001infinite} these gradient-free algorithms have to be run at very small step sizes. \cite{taylor2009patient,tuccio2022parameter,marsden2014optimization,mineroff2019optimization,bozkurt2022patient}
 The ability to easily take gradients of one of these models with respect to it's parameters would greatly improve the process of personalizing them without loosing the interpretability as would be the case when using a Deep-Learning algorithm.
 
 Due to the complexity of the cardiovascular system and the significance of cardiovascular disease globally the mathematical and numerical modelling of haemodynamics has gained a lot of traction over recent years.
@@ -136,13 +136,13 @@ In order to tackle the complexity of the meaningful task of modelling cardiovasc
 The general issue described up until now with regards to the difficulty of personalizing treatments is also relevant when considering the cardiovascular system.
 
 Therefore the goal of this work is to provide a fast, differentiable cardiovascular simulation.
-This is a step towards enabling efficient and interpretable model callibration to be applied in personalised medicine.
+This is a step towards enabling efficient and interpretable model calibration to be applied in personalised medicine.
 In order to be differentiable the haemodynamics solver written in the course of this thesis was written using the JAX library.
 On top of differentiability JAX also offers device agnostic execution.
 JAX optimizes the executed code to take advantage of parallelization and other advantages of modern hardware regardless of if it's being executed on a CPU, GPU or TPU.
 The optimization for GPU execution is especially useful since it allows for data paralellization, i.e. batch executions of the code on a single device.
 This means multiple models for different patients could be optimized simultaneously on a single GPU.
-Next to the advantages brought about by the implementation in JAX, the implemenatition of the code in Python makes the solver accessible for future work.
+Next to the advantages brought about by the implementation in JAX, the implementation of the code in Python makes the solver accessible for future work.
 We also provide the written code as is in an open-source manner hoping to aid progress in the field overall.
 
 For this thesis we chose a coupled 0D-1D model where the 0D part is used to compute boundary conditions for certain outlets of the 1D cardiovascular network.
