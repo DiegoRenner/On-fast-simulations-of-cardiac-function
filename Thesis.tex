@@ -106,14 +106,14 @@ These biomarkers can have a varying degree of correlation with a diseases existe
 For instance local vascular pressure is highly correlated with hypertension.
 While there are methods to estimate this quantity from ultrasound or Magnetic Resonance Imaging \cite{markl20124d}, these methods tend not to be accurate enough for standard clinical practice \cite{everett2012beyond}.
 On the other hand more invasive techniques might not offer the proper risk to reward ratio.
-For example, to diagnose hypertensive pregnancy disorder it would be very risky to perform the measurement of the absolute vascular pressure in-vivo on a pregnant subject \cite{kett2002adverse}.
+For example, to diagnose hypertensive pregnancy disorder it would be very risky to perform the measurement of the absolute vascular pressure in vivo on a pregnant subject \cite{kett2002adverse}.
 Therefore in order to determine the biomarkers that are hard to capture in a clinical setting computational methods are often applied.
 
 Such computational models aim to simulate a patients individual physiology in order to reveal aforementioned "hidden" biomarkers.
 The prerequisite for this to work is that biomarkers can be simulated that are strongly show strong correlations with a disease.
-For example being able to determine the genetic predisposition of a patient with respect to a certain disease would be a very strong indicator of the outcome od said disease.
+For example being able to determine the genetic predisposition of a patient with respect to a certain disease would be a very strong indicator of the outcome of said disease.
 However this cannot be attempted with such methods.
-On the otherhand for instance the local vascular pressure, or the resistance within a cardiovascular network are good indicators that can in fact be simulated due to the underlying physics being well understood.
+On the other hand for instance the local vascular pressure, or the resistance within a cardiovascular network are good indicators that can in fact be simulated due to the underlying physics being well understood.
 However the simulations depend heavily on a high number of personalized parameters, leading to a similar problem as described initially: needing to access difficult to measurable or unobtainable data for a specific patient.
 An attempt to avoid the problem of having to know these values is using population averaged values.
 This however defeats the purpose of personalized medicine.
@@ -122,7 +122,7 @@ What has therefore become the method of choice to address the issue of personali
 There are two main ways of achieving the goal of calibrating a simulation for an individual
 \begin{enumerate}
 	\item A "classical" approach, where the inverse problem is solved using Markov-Chain-Monte-Carlo \cite{melis2017gaussian}, or Kalman filters \cite{manganotti2022modeling}.
-	\item A Deep-Learning approach where the calibration is avoided all together in favor of learning the model from data. \cite{kissas2020machine,arzani2022machine}
+	\item A Deep-Learning approach where the calibration is avoided all together in favour of learning the model from data. \cite{kissas2020machine,arzani2022machine}
 \end{enumerate}
 The reason Deep-Learning techniques were attempted is due to the fact that the "classical" approaches are very inefficient.
 This is because the derivatives are often hard to determine for the attempted simulations so the algorithms of choice for solving the inverse problem are gradient-free. 
@@ -144,7 +144,7 @@ This is a step towards enabling efficient and interpretable model calibration to
 In order to be differentiable the haemodynamics solver written in the course of this thesis was written using the JAX library.
 On top of differentiability JAX also offers device agnostic execution.
 JAX optimizes the executed code to take advantage of parallelization and other advantages of modern hardware regardless of if it's being executed on a CPU, GPU or TPU.
-The optimization for GPU execution is especially useful since it allows for data paralellization, i.e. batch executions of the code on a single device.
+The optimization for GPU execution is especially useful since it allows for data parallelization, i.e. batch executions of the code on a single device.
 This means multiple models for different patients could be optimized simultaneously on a single GPU.
 Next to the advantages brought about by the implementation in JAX, the implementation of the code in Python makes the solver accessible for future work.
 We also provide the written code as is in an open-source manner hoping to aid progress in the field overall.
@@ -215,7 +215,7 @@ The cardiovascular system contains two major circulatory systems.
 These are the systemic and the pulmonary circulation. 
 Both are fed with blood pumped from the heart.
 Through the systemic circulation organs are supplied with oxygen-rich blood which is then transported back to the heart where it then enters the pulmonary circulation.
-Through the pulmonary circulation the oxygen-poor blood is sent to the lungs where it is replenished with oxygen and then returned to the heart to reenter the systemic circulation.
+Through the pulmonary circulation the oxygen-poor blood is sent to the lungs where it is replenished with oxygen and then returned to the heart to re-enter the systemic circulation.
 Vessels carrying the blood away from the heart are referred to as arteries and the ones carrying the blood to the heart are referred to as veins.
 In both the systemic and the pulmonary circulation the oxygen exchange (from blood to organs or from lungs to blood respectively) take place within so called capillary vessels.
 Capillaries are very small vessels that connect arteries to veins.
@@ -237,7 +237,7 @@ The compliance of the larger elastic arteries is responsible for transforming th
 The pulse-like pressure change coming from the heart leads to the elastic arteries close to the heart expanding.
 Until the next pulse arrives these vessels will contract slowly, pushing the blood at a constant rate into the arteries farther away from the heart and finally into the capillaries.
 This mechanism is called the Windkessel effect.
-It is named after the inner workings of waterpumps used by early fire brigades.
+It is named after the inner workings of water pumps used by early fire brigades.
 In these devices water would be pumped by hand from the reservoir causing pressure pulses.
 This would push water into an air chamber.
 Here the air would get compressed which is analogous to the deforming of the artery.
@@ -245,13 +245,13 @@ The natural decompressing of the air would then push the water out through the h
 The Windkessel effect is often applied in vascular simulations to apply outlet boundary conditions.
 We will describe how this is done more closely in \autoref{sssec:outl}.
 For further reference in the following chapters we will also introduce some notation.
-We call the radius of an artery in it's undeformed state the lumen radius $r_0$ and refer to the reference vessel wall thickness by $h_0$ from here on out.
+We call the radius of an artery in it's non-deformed state the lumen radius $r_0$ and refer to the reference vessel wall thickness by $h_0$ from here on out.
 Furthermore we denote the reference cross-section by $A_0 = \pi r_0^2$.
 
 \section{Blood} \label{b}
-Blood consists of red blood cells (Erythocytes), white blood cells (Leukocytes), and platelets (Thrombocytes).
-The Erythocytes make up about 97\% of the cellular volume.
-They are flexible, can bind to oneanother, and their micro-structure determines the blood mechanical properties.
+Blood consists of red blood cells (Erythrocytes), white blood cells (Leukocytes), and platelets (Thrombocytes).
+The Erythrocytes make up about 97\% of the cellular volume.
+They are flexible, can bind to one another, and their micro-structure determines the blood mechanical properties.
 The volume occupied by red blood cells in respect to the total blood volume is called the haematocrit value.
 At different age, altitude, health, and bodily activity the haematocrit value varies.
 Shear stress on a cross section of a material is defined as 
@@ -277,8 +277,8 @@ First we will describe the 1D-model for a single artery and then we will describ
 In this thesis we focus on simulating macrocirculation in arteries, i.e. cardiovascular networks consisting of the largest arteries of the human circulation.
 The length and diameters of these vessels are on the scale of meters.
 According with which an accuracy with which the system is supposed to be represented different dimensions of models can be chosen.
-3D models for instance can represent such quantities as turbulence or wall shear stresses.
-1D models cannot represent these 3D quantities but can still compute pressure and flow along an arterie at reasonable accuracy while requiring significantly less computation than a 3D model.
+3D-models for instance can represent such quantities as turbulence or wall shear stresses.
+1D-models cannot represent these 3D quantities but can still compute pressure and flow along an artery at reasonable accuracy while requiring significantly less computation than a 3D model.
 Finally 0D models such as the Windkessel model can represent the approximate behaviour of omitted vessels.
 On one end of this spectrum (3D models) there is high accuracy but also high computational effort.
 On the other end (0D models) only very specific phenomenon can be represented but at a considerably lower cost.
@@ -336,7 +336,7 @@ In order to make this reduction we first apply the assumption that $\rho$ is con
 	\frac{\partial u_\phi}{\partial t} + u_z \frac{\partial u_\rho}{\partial z} + u_r \frac{\partial u_\phi}{\partial r} + \frac{u_\phi}{r}\frac{\partial u_\phi}{\partial \phi} -\frac{u_r u_\phi}{r} = \\
 	-\frac{1}{\rho}\frac{\partial P}{\partial \phi} + \frac{\mu}{\rho} \left( \frac{\partial^2 u_\phi}{\partial z^2} + \frac{\partial^2 u_\phi}{\partial r^2} + \frac{1}{r} \frac{\partial u_\phi}{\partial r} + \frac{1}{r^2}\frac{\partial^2 u_\phi}{\partial \phi^2} -\frac{2}{r^2}\frac{\partial u_r}{\partial \phi} - \frac{u_\phi}{r^2}\right). \label{eq:momp}
 \end{multline}
-Here we have dropped the explicit dependence on time and space variables in favor of readability
+Here we have dropped the explicit dependence on time and space variables in favour of readability
 Since the model is considered to be axisymmetric we set $v_\phi=0$ and ignore derivatives in this direction.
 This means we can drop \autoref{eq:momp}.
 The remaining three variables read
@@ -349,13 +349,13 @@ The remaining three variables read
 \begin{equation}
 	\frac{\partial u_r}{\partial t} + u_z \frac{\partial u_r}{\partial z} + u_r \frac{\partial u_r}{\partial r} = -\frac{1}{\rho} \frac{\partial P}{\partial r} + \frac{\mu}{\rho} \left( \frac{\partial^2 u_r}{\partial z^2} + \frac{\partial^2 u_r}{\partial r^2} + \frac{1}{r} \frac{\partial u_r}{\partial r} - \frac{u_r}{r^2}\right). \label{eq:momr}
 \end{equation}
-In order to simplify the equations we introduce typical velocities $U_z$ and $U_r$ and define the nondimensional quantities as:
+In order to simplify the equations we introduce typical velocities $U_z$ and $U_r$ and define the non-dimensional quantities as:
 \begin{equation}
 	\tilde{r} = \frac{r}{r_0}, \ \tilde{z} = \frac{z}{l_0}, \ \tilde{t} = t \frac{U_z}{l_0}, \ \tilde{u}_z = \frac{u_z}{U_z}, \ \tilde{u}_r = \frac{u_r}{U_r}, \ \tilde{P} = \frac{P}{\rho U_z^2}, \ \epsilon = \frac{U_r}{U_z}.
 \end{equation}
 We note that in a laminar flow the maximum value of $U_r$ is the radial velocity of the arterial wall.
-As we assume that these walls can only be diplaced slightly $U_r$ can be assumed to be small and therefore $\epsilon << 1$. \cite{womersley1957elastic}
-Inserting the nondimensional into \autoref{eq:cont1} - \autoref{eq:momr} and dropping the terms of order $\epsilon^2$ or higher yields
+As we assume that these walls can only be displaced slightly $U_r$ can be assumed to be small and therefore $\epsilon << 1$. \cite{womersley1957elastic}
+Inserting the non-dimensional into \autoref{eq:cont1} - \autoref{eq:momr} and dropping the terms of order $\epsilon^2$ or higher yields
 \begin{equation}
 	\frac{\partial (\tilde{r} \tilde{u}_r)}{\partial \tilde{r}} + \frac{\partial (\tilde{r} \tilde{u}_z)}{\partial\tilde{z}} = 0, \label{eq:cont2}
 \end{equation}
@@ -365,7 +365,7 @@ Inserting the nondimensional into \autoref{eq:cont1} - \autoref{eq:momr} and dro
 \begin{equation}
 	\frac{\partial \tilde{P}}{\tilde{r}} = 0
 \end{equation}
-Introducing the nondimensional vessel inner radius $\hat r$ the averaged velocity over the cross-section
+Introducing the non-dimensional vessel inner radius $\hat r$ the averaged velocity over the cross-section
 \begin{equation}
 	\hat{u} := \frac{1}{\hat{r}^2} \int_0^{\hat{r}} 2 \tilde{u}_z \tilde{r} d\tilde{r}
 \end{equation}
@@ -375,7 +375,7 @@ and the Coriolis' coefficient
 \end{equation}
 can be defined.
 The Coriolis' coefficient is the correction parameter that stems from the fact that our new momentum equation no longer expresses the conservation of momentum but actually the conservation of the momentum averaged over the radial component.\cite{article10002407}
-Using these definitions and applying the no-slip boundary condition while assuming negligible longitudinal wall diplacement
+Using these definitions and applying the no-slip boundary condition while assuming negligible longitudinal wall displacement
 \begin{equation}
 	\tilde{u}_r|_{\tilde{r}=\hat{r}} = \frac{\partial \hat{r}}{\partial \tilde{t}}
 \end{equation}
@@ -390,7 +390,7 @@ After reintroducing a dimensional axial velocity in terms of the dimensional inn
 \begin{equation}
 	u := U_z \hat{u} = \frac{1}{\bar{r}^2} \int_0^{\bar{r}} 2su_zds
 \end{equation}
-we can also write the coriolis coefficient in terms of dimensional variables
+we can also write the Coriolis' coefficient in terms of dimensional variables
 \begin{equation}
 	\alpha = \frac{1}{\bar{r}^2 u^2} \int_0^{\bar{r}} 2ru_z^2dr.
 \end{equation}
@@ -419,26 +419,26 @@ For this velocity profile the Coriolis coefficient is
 \begin{equation}
 	\alpha = \frac{\gamma + 2}{\gamma + 1}
 \end{equation}
-For $\gamma=2, \alpha = \frac{4}{3}$ this gives a plug flow, a rather flat velocity profile that decays rapidly at the arterie walls.
-For $\gamma=9, \alpha = \frac{11}{10} $ we get a hyperbolic velocity profile and hence a Poisseuille-like flow. (plot?)\cite{köppl2023dimension} \cite{barnard1966theory}
+For $\gamma=2, \alpha = \frac{4}{3}$ this gives a plug flow, a rather flat velocity profile that decays rapidly at the artery walls.
+For $\gamma=9, \alpha = \frac{11}{10} $ we get a hyperbolic velocity profile and hence a Poiseuille-like flow. (plot?)\cite{köppl2023dimension} \cite{barnard1966theory}
 We want to determine the variables $Q, A,$ and $P$.
 Until now we've considered the two equations of mass and momentum conservation determining $Q$ and $A$.
 In order to determine $P$ we therefore need another equation, a so called tube law.
-There are many different ways to model the pressure $P$ whithin a deforming tube and there is no way that is considered the defacto right way.
+There are many different ways to model the pressure $P$ within a deforming tube and there is no way that is considered the de facto right way.
 For a full comparison of a wide range of such models we refer to \cite{gomez2017analysis}.
 In the model used in this work the pressure $P$ is given by the external pressure $P_{ext}$ stemming from surrounding tissue as well as the pressure from the deformation of the vessel:
 \begin{equation}
 	P_{def}(z;t) = \frac{h_0(z) \sigma(z;t)}{\pi r(z;t)}. \label{eq:pdef}
 \end{equation}
 given by the Young-Laplace law \cite{laplace1805traité} \cite{young1804essay}.
-Here $\sigma$ is the stress which describes the internal forces that neighbouring particles of the continuouse material exert on eachother.
+Here $\sigma$ is the stress which describes the internal forces that neighbouring particles of the continuous material exert on each other.
 Assuming linear elasticity and using Hooke's law \cite{hooke1678lectures} we arrive at:
 \begin{equation}
 	\sigma(z;t) = \epsilon(z;t) E \label{eq:stress}
 \end{equation}
 where $E$ describes the stiffness of the elastic material and is called Young's modulus.
 $\epsilon$ is the stress and gives the deformation of the material.
-Assuming an isotropic, homogeneous, and incompressible arterial wall, an axisymmetric deformation, and circular cross-sections that are independent of eachother it $\epsilon$ is given by:
+Assuming an isotropic, homogeneous, and incompressible arterial wall, an axisymmetric deformation, and circular cross-sections that are independent of each other it $\epsilon$ is given by:
 \begin{equation}
 	\epsilon(z;t) = \frac{r(z;t)-r_0(z;t)}{ (1-\nu^2) r_0(z;t)}. \label{eq:strain}
 \end{equation}
@@ -461,7 +461,7 @@ Inserting these fixed values for $\gamma$ and $\alpha$ into  \autoref{eq:1Deqs1}
 	\end{aligned} \label{1Deqs2}
 \end{equation}
 where from here on out we have dropped the space and time dependence.
-We can rewrite equation \ref{1Deqs2} in it's conservative form by defining the following shorthands:
+We can rewrite equation \ref{1Deqs2} in it's conservative form by defining the following shorthand:
 
 \begin{equation}
 	\mathbf{U} := 
@@ -510,16 +510,16 @@ The explicit setting of the aforementioned initial conditions and boundary value
 
 
 \chapter{Numerical Methods} \label{chap:nm}
-The numerical realization of the 1D-model within a single vessel described in \autoref{sec:sv} is achieved using a Finite Volume (FV) method to solve the homogenous part of the equation \autoref{eq:1deqs3} while the source term is accounted for by using a forward-euler timestep. 
-The FV method that was applied here is the monotonic upstream-centered scheme for conservation laws (MUSCL).
+The numerical realization of the 1D-model within a single vessel described in \autoref{sec:sv} is achieved using a Finite Volume (FV) method to solve the homogeneous part of the equation \autoref{eq:1deqs3} while the source term is accounted for by using a forward Euler time-step. 
+The FV method that was applied here is the monotonic upstream-centred scheme for conservation laws (MUSCL).
 The initial data, inlets, junctions, and outlets of the system are set from data, in accordance with neighbouring vessels, or through a reflective or a Windkessel model.
 
-In this chapter we will first discuss a the different approaches taken to solve the previously described 1D-model and why we chose the FV method in \autoref{sec:lr}.
+In this chapter we will first discuss the different approaches taken to solve the previously described 1D-model and why we chose the FV method in \autoref{sec:lr}.
 We will then describe the FV method and state the specific MUSCL scheme we used in \autoref{sec:fv} and \autoref{sec:muscl}.
-Thereafter we briefly describe the forward-euler timestep used to accomodate the inhomogenous part of our 1D-equations in \autoref{sec:fe} and finally we state how we applied initial conditions and boundary values in \autoref{sec:icbc}.
+Thereafter we briefly describe the forward Euler time-step used to accommodate the inhomogeneous part of our 1D-equations in \autoref{sec:fe} and finally we state how we applied initial conditions and boundary values in \autoref{sec:icbc}.
 
 \section{Literature Review} \label{sec:lr}
-The governing equations derived in \autoref{sec:sv} have mainly been approache numerically in four differnet manners.
+The governing equations derived in \autoref{sec:sv} have mainly been approach numerically in four different manners.
 Namely through the method of characteristics or finite difference (FD), finite volume (FV), or finite element (FE) schemes.
 Using the method of characteristics the hyperbolic PDE that describes the haemodynamics is rewritten as an ODE of the Riemann invariants of the system along the corresponding characteristic lines.
 This method was used in \cite{streeter1963pulsatile,bodley1971non,parker1990forward,wang2004wave,wang2003time}.
@@ -531,7 +531,7 @@ While higher accuracy and faster convergence can technically be achieved by a FE
 There is also increasing complexity involved when implementing models that are based on the method of characteristics all the way up to finite element methods.
 For this work we chose to implement the haemodynamics solver using a FV scheme, specifically using the MUSCL solver.
 The reason for this is that the FV solver offers many benefits when applied to hyperbolic systems.
-The 1D-NSE (\autoref{eq:1deqs3}) is a hyperbolic PDE, i.e. these equations describe phenomena where informatino travels at finite speeds. 
+The 1D-NSE (\autoref{eq:1deqs3}) is a hyperbolic PDE, i.e. these equations describe phenomena where information travels at finite speeds. 
 Some of the benefits of using FV methods to solve hyperbolic systems are the ability of these methods to be shock capturing and to be inherently conservative.
 They therefore offer enough accuracy to model the problem while having the added benefit of reduced complexity when comparing them to a FE implementation.
 Offering enough accuracy therefore the FV method was the most straight forward one towards a differentiable 1D-haemodynamics solver.
@@ -539,13 +539,13 @@ Offering enough accuracy therefore the FV method was the most straight forward o
 
 \section{Finite Volume (FV)} \label{sec:fv}
 In order to describe the FV method that was applied to solve \autoref{eq:1deqs3} we will first introduce a space and time discretization.
-The space discretisation is defined as follows:
+The space discretization is defined as follows:
 \begin{align}
 	&0 = z_0 < z_1 < z_2 < ... < z_N = l, \\
 	&z_i :=  i \Delta z,\ i \in \{0,1,...,N\} , \\
 	&\Delta z := \frac{l}{N}.
 \end{align}
-For the time discretisation a timestep series is defined
+For the time discretization a time-step series is defined
 \begin{align}
 	0 < t^1 < t^2 < t^3 < ...
 \end{align}
@@ -566,18 +566,18 @@ For the specific control volume, also referred to as cell $i$,
 	&[z_{i-\frac{1}{2}},z_{i+\frac{1}{2}}] \times [t^n, t^{n+1}], \\
 	&\Delta t := t^{n+1}-t^n,
 \end{align}
-where $z_{i \pm \frac{1}{2}}$ are the spatial points exactly inbetween $z_{i}$, $z_{i+1}$ and $z_{i-1}$, $z_{i}$ respectively, the balance equation yields
+where $z_{i \pm \frac{1}{2}}$ are the spatial points exactly in-between $z_{i}$, $z_{i+1}$ and $z_{i-1}$, $z_{i}$ respectively, the balance equation yields
 \begin{equation}
 	(\mathbf{U} _i^{n+1}-\mathbf{U} _i^n) \Delta z = (\mathbf{F}_{i-\frac{1}{2}}^{n+\frac{1}{2}} - \mathbf{F}_{i+\frac{1}{2}}^{n+\frac{1}{2}}) \Delta t + \mathbf{S}_i^{n+\frac{1}{2}} \Delta z \Delta t.
 \end{equation}
-Here $\mathbf{U}_i^n$, $i \in \{0,1,...,N\}$ is the average of $\mathbf{U}$ over the spatial component of the cell $i$ at timestep $n$,
-$\mathbf{F}_{i \pm \frac{1}{2}}^{n + \frac{1}{2}}$ is the average of the flux $\mathbf{F}$ where the cells $i$ and $i+1$, or  $i-1$ and $i$  meet exactly inbetween the timesteps $n$ and $n + 1$, and $\mathbf{S}_i^{n+\frac{1}{2}}$ is the average of the source term $\mathbf{S}$ over the spatial component of the cell, again at the timestep right inbetween $n$ and $n+1$.
+Here $\mathbf{U}_i^n$, $i \in \{0,1,...,N\}$ is the average of $\mathbf{U}$ over the spatial component of the cell $i$ at time-step $n$,
+$\mathbf{F}_{i \pm \frac{1}{2}}^{n + \frac{1}{2}}$ is the average of the flux $\mathbf{F}$ where the cells $i$ and $i+1$, or  $i-1$ and $i$  meet exactly in-between the time-steps $n$ and $n + 1$, and $\mathbf{S}_i^{n+\frac{1}{2}}$ is the average of the source term $\mathbf{S}$ over the spatial component of the cell, again at the time-step right in-between $n$ and $n+1$.
 Dividing by $\Delta z$ and rearranging the terms gives
 \begin{equation}
 	\mathbf{U} _i^{n+1} = \mathbf{U}_i^n + \frac{\Delta t}{\Delta z} (\mathbf{F}_{i-\frac{1}{2}}^{n+\frac{1}{2}} - \mathbf{F}_{i+\frac{1}{2}}^{n+\frac{1}{2}}) + \mathbf{S}_i^{n+\frac{1}{2}} \Delta t. \label{eq:fv}
 \end{equation}
-Therefore the value of $\mathbf{U}$ at the next timestep $n+1$ can be determined from the value at the current timestep $n$ and the values of the flux $\mathbf{F}$ and the source term $\mathbf{S}$ at the intermediate timestep $n + \frac{1}{2}$.
-In the following section we will discuss how to commpute the flux terms \cite{guinot2012wave}.
+Therefore the value of $\mathbf{U}$ at the next time-step $n+1$ can be determined from the value at the current time-step $n$ and the values of the flux $\mathbf{F}$ and the source term $\mathbf{S}$ at the intermediate time-step $n + \frac{1}{2}$.
+In the following section we will discuss how to compute the flux terms \cite{guinot2012wave}.
 
 \section{MUSCL} \label{sec:muscl}
 The MUSCL scheme was developed by Van Leer towards the end of the 1970s \cite{van1977towards} \cite{van1979towards}.
@@ -596,13 +596,13 @@ This means that the average of the reconstruction over the cell needs to be the 
 \begin{equation}
 	\frac{1}{\Delta z} \int_{z_{i-\frac{1}{2}}}^{z_{i+\frac{1}{2}}} \mathbf{\hat{U}}_i^n(z;t^n) dz = \mathbf{U}_i^n.
 \end{equation}
-The reconstruction in this MUSCL scheme is chosen to be the followinng linear expression
+The reconstruction in this MUSCL scheme is chosen to be the following linear expression
 \begin{align}
 	\mathbf{\hat{U}}(z;t^n) &= \mathbf{U}_i^n + (z-z_i)a_i^n \\
 	a_i^n &= \frac{\mathbf{U}_{i+1}^n - \mathbf{U}_{i-1}}{z_{i+1} - z_{i-1}}
 \end{align}
 \subsection{Profile Limiting} \label{ssec:pl}
-We define the total variation of the numerical solution $\mathbf{U}_i^n$ at timestep $n$ to be 
+We define the total variation of the numerical solution $\mathbf{U}_i^n$ at time-step $n$ to be 
 \begin{equation}
 	TV(\mathbf{U})^n = \sum_{i=0}^{N-1} | \mathbf{U}_{i+1}^n - \mathbf{U}_{i}^n|.
 \end{equation}
@@ -617,7 +617,7 @@ According to \cite{van1977towards} and \cite{colella1984piecewise} the MUSCL sch
 \end{align}
 This can be achieved by running the following checks:
 \begin{enumerate}
-	\item Cell $i$ is not a local extremum, i.e. $(\mathbf{U}_i^n - \mathbf{U}_{i-1}^n)(\mathbf{U}_{i+1}^n-\mathbf{U}_i^n) > 0$. \label{chk1}
+	\item Cell $i$ is not a local extrema, i.e. $(\mathbf{U}_i^n - \mathbf{U}_{i-1}^n)(\mathbf{U}_{i+1}^n-\mathbf{U}_i^n) > 0$. \label{chk1}
 	\item \autoref{eq:tvd1} is satisfied. \label{chk2}
 	\item \autoref{eq:tvd2} is satisfied. \label{chk3}
 \end{enumerate}
@@ -643,7 +643,7 @@ In order to get a first approximation for the flux that needs to be computed the
 	\end{array} \right.  
 	\end{align}
 	has to be solved.
-	This yields a flux $\mathbf{F^*}$ with which we compute our averaged quantities at the next half-timestep using \autoref{eq:fv}
+	This yields a flux $\mathbf{F^*}$ with which we compute our averaged quantities at the next half-time-step using \autoref{eq:fv}
 	\begin{align}
 		\mathbf{U}_{i+\frac{1}{2},L}^{n+\frac{1}{2}} &= \mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) + \frac{\Delta t}{2 \Delta x} \left( \mathbf{F^*}(\mathbf{\hat{U}}_i^n( z_{i-\frac{1}{2}})) - \mathbf{F^*}(\mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) \right)\\
 		\mathbf{U}_{i+\frac{1}{2},R}^{n+\frac{1}{2}} &= \mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) + \frac{\Delta t}{2 \Delta x} \left( \mathbf{F^*}(\mathbf{\hat{U}}_{i+1}^n( z_{i+\frac{1}{2}})) - \mathbf{F^*}(\mathbf{\hat{U}}_i^n(z_{i+\frac{3}{2}}) \right),
@@ -654,7 +654,7 @@ In order to get a first approximation for the flux that needs to be computed the
 	The flux is not solved for analytically but numerically using the numerical scheme resulting in the Lax-Friedrichs flux.
 	Given that the flux function is Lipschitz continuous, this scheme is conservative and consistent \cite{koppl2023dimension}.
 	In general it is first order accurate and stable for small enough step sizes (see \autoref{sec:cfl}) \cite{leveque1992numerical}.
-	In the next section we will be adressing how to handle the source term $\mathbf{S}$ that we have ignored here.
+	In the next section we will be addressing how to handle the source term $\mathbf{S}$ that we have ignored here.
 
 	\section{Time step, source term} \label{sec:fe}
 	In the previous section we have ignored the source term $\mathbf{S}$.
@@ -671,11 +671,11 @@ In order to get a first approximation for the flux that needs to be computed the
 
 
 	\section{Initial Conditions and Boundary Values} \label{sec:icbc}
-	We need to consider initial conditions for each vessel in our system which we will adress in \autoref{ssec:initial_conditions}.
+	We need to consider initial conditions for each vessel in our system which we will address in \autoref{ssec:initial_conditions}.
 	Furthermore each vessel also needs to have boundary values set as described in \autoref{ssec:boundary_values}.
 	For vessels at the edge of the network that get fed by the heart we set the input values through data.
 	For vessels within the network the boundary values are set in correspondence with the neighbouring vessels.
-	For vessels at the edge at the network that provide blood to get capillary bed the output values are set through either a reflection or a windkessel model
+	For vessels at the edge at the network that provide blood to get capillary bed the output values are set through either a reflection or a Windkessel model
 	These three cases of boundary values that need to be set are descried in \autoref{sssec:inlets} - \autoref{sssec:junctions}.
 	\subsection{Initial Conditions} \label{ssec:initial_conditions}
 	It is difficult to determine useful initial conditions for a haemodynamics computation.
@@ -686,7 +686,7 @@ In order to get a first approximation for the flux that needs to be computed the
 		Q(z;0) &= u(z;0)A(z;0) = 0, &z \in [0,l].
 	\end{align}
 	The pressure $P$ is then computed by \autoref{eq:p_tot}.
-	The physically inacurate initial consitions can lead to false values propagating when solving the system.
+	The physically inaccurate initial conditions can lead to false values propagating when solving the system.
 	Therefore the output of the solve is usually fed back into the simulation as a new initial condition until s stable state has been reached.
 	The negative effect from bad initial conditions usually persists for only about 2-3 heartbeats as long as correct boundary values are set.\cite{formaggia2010cardiovascular}
 	In the next subsection we discuss how to set these boundary values. 
@@ -695,7 +695,7 @@ In order to get a first approximation for the flux that needs to be computed the
 	Setting boundary values depends on where in the network a vessel is positioned.
 	Vessels at the edges are set from data (inputs) or given by a reflective or a Windkessel model (outputs).
 	Vessels within the network have their boundary values set by computing inlet/outlet compatibility with the neighbouring vessels.
-	We will treat all these cases in the next three subsubsections.
+	We will treat all these cases in the next three sub-subsections.
 
 	\subsubsection{Inlets}\label{sssec:inlets}
 	Usually vessels that are at the edge of the network and that have an inlet that is not connected to another vessel are considered to be fed by the heart.
@@ -707,7 +707,7 @@ In order to get a first approximation for the flux that needs to be computed the
 	\end{align}
 	If one of these quantities is given at a time $t_2$ and the other $u, A, c$, and $P$ can be computed using extrapolation of characteristics.
 	First off the Riemann invariants need to be computed at the first and second point of the space discretization for the current time step.
-	We use the notation for the space-time discretization previously introduced with approximations of quantites averaged over cell $i$ at time step $n$ being denoted by a lowered $i$ and raised $n$ index respectively.
+	We use the notation for the space-time discretization previously introduced with approximations of quantities averaged over cell $i$ at time step $n$ being denoted by a lowered $i$ and raised $n$ index respectively.
 	At the first cell the two Riemann invariants read as
 	\begin{align}
 		W_{1,0}^n &= u^n_0 - 4c^n_0\\
@@ -722,7 +722,7 @@ In order to get a first approximation for the flux that needs to be computed the
 	\begin{equation}
 		c^n_i = \sqrt{\frac{\beta}{2\rho}\sqrt{A}}.
 	\end{equation}
-	If the input data is given in as a volumtric flow, the Riemann invariants at the next time step are computed via the following update formula:
+	If the input data is given in as a volumetric flow, the Riemann invariants at the next time step are computed via the following update formula:
 
 	\begin{align}
 		W_{1,0}^{n+1} &= W^n_{1,0} + (W^n_{1,1} - W^n_{1,0})(c^n_0-u^n_0) \frac{\Delta t}{\Delta x} \label{update1a}\\
@@ -757,9 +757,9 @@ In order to get a first approximation for the flux that needs to be computed the
 
 	\subsubsection{Outlets} \label{sssec:outl}
 	One of the most basic ways of setting outlet conditions is to use reflection coefficient to model how much of a wave leaves the vessel and how much gets reflective.
-	In cases where this doesn't provide enough accuracy windkesselmodels are applied \cite {formaggia2010cardiovascular}.
+	In cases where this doesn't provide enough accuracy Windkessel models are applied \cite {formaggia2010cardiovascular}.
 	We introduce here a reflective and a three-parameter Windkessel model.
-	A very basic method to compute the outlet boundary values is by considerint the outlet to be reflective.
+	A very basic method to compute the outlet boundary values is by considering the outlet to be reflective.
 
 	Reflection
 
@@ -813,10 +813,10 @@ In order to get a first approximation for the flux that needs to be computed the
 		C\frac{d P_C^{n+1}}{d t}+Q_{M}^{n+1}-Q_M^{n+1}&=0, \label{eq:RLC1}\\
 		{L}{\frac{d Q_M^{n+1}}{d t}}+P_{M}^n-P_C^{n+1}&=-R_2 Q_{M}^{n+1} \label{eq:RLC2}.
 	\end{align}
-	The variables $R$, $L$, $C$ are parameters that have to be determined for each individual application and they are named after the RLC-circuit in analogy to which this algotihm was setup.
+	The variables $R$, $L$, $C$ are parameters that have to be determined for each individual application and they are named after the RLC-circuit in analogy to which this algorithm was setup.
 	Different networks can have very different parameters and their derivation is not trivial \cite{koppl2023dimension}.
 	This is a prime example for the need of efficient calibration algorithms which this thesis aims to work towards by providing a differentiable solver.
-	We will derive a timestep algorithm in order to compute the value of $P_C^{n+1}$.
+	We will derive a time-step algorithm in order to compute the value of $P_C^{n+1}$.
 	Introducing a finite difference for the derivatives in the equations \autoref{eq:RLC1} and \autoref{eq:RLC2} leads to
 	\begin{align}
 		C{\frac{P_C^{n+1}-P_C^{n}}{\Delta t}} &+ Q_M^{n+1}-Q_M^n = 0, \label{lin_disc1}\\ 
@@ -927,7 +927,7 @@ In order to get a first approximation for the flux that needs to be computed the
 			Where $\mathbf{J}_c$ is the Jacobian
 $$\mathbf{J}_{c}=\left[\begin{array}{c c c c}{{{1}}}&{{0}}&{{{4}k_{1}}}&{{0}}\\ {{0}}&{{{1}}}&{{0}}&{{-4k_{2}}}\\ {{q_{c3}^{4}}}&{{-q_{c4}^{4}}}&{{4q_{c3}q_{3}^{3}}}&{{-4q_{c4}q_{c}^{3}}}\\ {{q_{c1}^{4}}}&{{-\rho q_{c2}}}&{{2\beta_{1}\frac{q_{c}}{A_{01}^{1/2}}}}&{{-2\beta_{2}\frac{q_{4}}{A_{02}^{42}}}}\end{array}\right].$$
 
-The Jacobian depends on $\mathbf{q}_c^n$ and would have to be updated at every iteration of the Newton method but in this code a modified Newton method also known as frozen Newton is applied wherein the Jacobian is initialized with the initial value of $\mathbf{q}_c$ and then not updated anymore throughout further computations.
+The Jacobian depends on $\mathbf{q}_c^n$ and would have to be updated at every iteration of the Newton method but in this code a modified Newton method also known as frozen Newton is applied wherein the Jacobian is initialized with the initial value of $\mathbf{q}_c$ and then not updated any more throughout further computations.
 \paragraph{Bifurcations} \label{par:bifurcations}
 For bifurcations the same conservation laws are applied.
 This lead to the following system of equations:
@@ -995,10 +995,10 @@ As in the case of Bifurcations the kinetic energy terms in the pressure conserva
 
 \section{CFL Condition} \label{sec:cfl}
 
-The CFL condition is set so that the information traveling along a characteristic curve is only affect neighboring cells. 
-Since the numerical scheme only takes neighboring cells into account doing otherwise would result in numerical error stacking up.
+The CFL condition is set so that the information travelling along a characteristic curve is only affect neighbouring cells. 
+Since the numerical scheme only takes neighbouring cells into account doing otherwise would result in numerical error stacking up.
 Usually $\Delta x$ is given by the user leaving $\Delta t$ to be determined.
-Taking into account the aforementioned condition of preventing the characteristic curves from reaching beyond the neighboring cell within $\Delta t$ leads to the following equation:
+Taking into account the aforementioned condition of preventing the characteristic curves from reaching beyond the neighbouring cell within $\Delta t$ leads to the following equation:
 \begin{equation}
 	\Delta t \leq C_{CFL} \frac{\Delta x}{S_{max}},\hspace{10pt}  C_{CFL} \in (0,1).
 \end{equation}
@@ -1013,28 +1013,28 @@ In this chapter we  will give an overview of the functionality of JAX relating t
 
 \section{JAX} \label{sec:jax}
 JAX used to stand for "Just After eXecution" which refers to the manner in which JAX used to optimize during compilation.
-Jax achieves optimization during compilation along other things through tracing.
+JAX achieves optimization during compilation along other things through tracing.
 In the tracing the code is optimized with the help of a computational graph.
 Essentially the code is parsed without executing it in order to detect inefficiencies in data movement and computation.
 While JAX still uses tracing to speed up code execution it is not done in a "Just After eXecution"-manner.
-Later on JAX was thought of as a recursive acronym "JAX is Autograd and XLA" in the spirit of the well known scronym GNU ("GNU is Not Unix"),
+Later on JAX was thought of as a recursive acronym "JAX is Autograd and XLA" in the spirit of the well known acronym GNU ("GNU is Not Unix"),
 Autograd is a now deprecated Python library that can automatically differentiate native Python and NumPy code.
 XLA stands for "Accelerated Linear Algebra" and it is an open-source compiler that optimizes models from commonly used frameworks such as PyTorch, Tensor Flow, and also JAX.
-XLA optimizes these models across different hardware platoforms (CPUs, GPUs, TPUs, etc.).
-Often these optimizations done by XLA are directly intograted back into the projects the origianl models stem from.
-XLA is also a part of JAX but while JAX used to be based on Autograd this is not the case anymore and JAX achives automatic differentiation through it's own implementation thereof.
+XLA optimizes these models across different hardware platforms (CPUs, GPUs, TPUs, etc.).
+Often these optimizations done by XLA are directly integrated back into the projects the original models stem from.
+XLA is also a part of JAX but while JAX used to be based on Autograd this is not the case any more and JAX achieves automatic differentiation through it's own implementation thereof.
 Therefore JAX is not considered an acronym nowadays and JAX is just considered a library that implements the features of Autograd in it's own way while including XLA optimization.
 This results in the potential fast differentiable code as the result of using the JAX library.
-However the automatic differentiation as well as the XLA optimization can't be applied to any Python code hence there are some caveats that had to be taken into account when writing this numrical code using JAX.
-We will be adressing these caveats in the next five subsections starting with the functional purity required when programming using JAX.
+However the automatic differentiation as well as the XLA optimization can't be applied to any Python code hence there are some caveats that had to be taken into account when writing this numerical code using JAX.
+We will be addressing these caveats in the next five subsections starting with the functional purity required when programming using JAX.
 
 \subsection{Functional Purity}
-All Jax code has to be written in a functionally pure manner.
+All JAX code has to be written in a functionally pure manner.
 This means that all inputs to a function need to be passed explicitly through the function's arguments while all outputs need to be returned explicitly through the return variables.
 Hence any kind of global variables should be avoided at all costs.
 The reason for this is that otherwise unwanted side effects might occur.
 This would mean that a global variable that has a certain value at compile time and changes it's value during code execution will in the eyes of JAX always keep the value it had assigned at compile time.
-The described behaviour midht lead to unexpected results as a side effect of the compilation JAX performs.
+The described behaviour might lead to unexpected results as a side effect of the compilation JAX performs.
 Furthermore this behaviour is not guaranteed leading to the only way to write code in JAX that provides fully reproducible results is to code in a fully functionally pure manner.
 
 \subsection{Vectorization} \label{sec:vect}
@@ -1044,38 +1044,38 @@ The equations of the MUSCL solver within a single vessel are clearly very suitab
 Vectorization can even be applied more widely using the techniques padding (\autoref{sec:pdd}) and masking (\autoref{sec:msk}).
 
 \subsection{Padding} \label{sec:pdd}
-The MUSCL solver in \autoref{sec:muscl} is described for a single vesel.
-However all of the MUSCL solvers applied to the individual vessels could be performed simulataneously and even in a vectorized mannner.
+The MUSCL solver in \autoref{sec:muscl} is described for a single vessel.
+However all of the MUSCL solvers applied to the individual vessels could be performed simultaneously and even in a vectorized manner.
 In order to do so the values to be computed on by the MUSCL solver of each vessel are all written into one single array and one MUSCL solve is performed on the entire array.
 To avoid errors at the ends of a vessel, where the values stored from another vessel would influence the computed values for the initial vessel, one can apply padding.
-In this case this means to add entries in the array between each array that are solely there to acoid two neighboring vessels from influencing oneanother.
-The errors that occur from collectiong all data in one array then only effect the padded entries which are ignored when reading out the final results.
+In this case this means to add entries in the array between each array that are solely there to avoid two neighbouring vessels from influencing one another.
+The errors that occur from collections all data in one array then only effect the padded entries which are ignored when reading out the final results.
 After each MUSCL solve, when computing boundary conditions for each vessel, the padded areas are set to equal the values of the edges of the adjacent vessels.
-Finally the technique of padding doesn't just allow for efficiently applying the MUSCL solver to all vessels at once but also allows to use an inhomogenous mesh on the vessels of the simulation.
+Finally the technique of padding doesn't just allow for efficiently applying the MUSCL solver to all vessels at once but also allows to use an inhomogeneous mesh on the vessels of the simulation.
 That means every vessel can be meshed according to it's need which is very useful in this kind of simulation since the vessel can be severely different in size.
-The reason for why padding allows for the inhomogenous mesh is described in the next section.
+The reason for why padding allows for the inhomogeneous mesh is described in the next section.
 
 \subsection{Static Array Sizes and Avoiding Loops} \label{sec:al}
 The sizes of arrays computed on in JAX codes need to all be known at the time of tracing, i.e. JAX needs to be able to infer all array sizes at compile time in order to be able to apply it's optimization.
 Furthermore it is recommended to avoid loops when writing code with JAX.
 This is because these loops need to be unrolled completely during JAX's compilation.
-This can be avoided by using JAX builtin loop constructions.
+This can be avoided by using JAX built-in loop constructions.
 However these have restrictions and one needs to satisfy a very strict signature when writing loops with them.
 Moreover the arrays operated on in each iteration of the loop need to be the same size.
-So if it were not for padding the MUSCL solver would have to be applied to each vessel seperately by looping over all vessels.
+So if it were not for padding the MUSCL solver would have to be applied to each vessel separately by looping over all vessels.
 This could be done with a common Python for loop resulting in long compilation times when simulating cardiovascular systems consisting of many vessels due to having to having to fully unroll the loop.
 Another option would be to us one of the JAX loop constructions, the so-called JAX \emph{fori\_loop}.
 This would avoid the large overhead at compile time.
-However the restriction of having to have the same-sized arrays in every loop iteration would make the simulation either inherently inefficent or inherently in-accurate since very small vessels would have to simulated withe fine meshes or vice versa large vessels with coarse meshes.
-Therefore padding doesn't only allow for increased vectorization but also provides the ability to use an inhomogenous mesh with relatively short compile times.
+However the restriction of having to have the same-sized arrays in every loop iteration would make the simulation either inherently inefficient or inherently in-accurate since very small vessels would have to simulated with fine meshes or vice versa large vessels with coarse meshes.
+Therefore padding doesn't only allow for increased vectorization but also provides the ability to use an inhomogeneous mesh with relatively short compile times.
 
 \subsection{Masking} \label{sec:msk}
 At certain points within the MUSCL solver ghost cells need to be inserted at the edges of the vessels.
 In order to avoid having to loop over the array and introducing the usual issues that come along with using loops in JAX one can apply these values using a technique called masking.
 In order to apply the wanted value to the ghost cells one need to store five arrays.
-Once the origianl array that needs to have ghost cells inserted padded with a zero on either end, two times the origianl array with two zeros at the beginning or the end respectively, and two times a boolean array containing the locations of either the ghost cells at the inlet or the outlet.
-The padded original array, the forward shifted array and the boolean array with the locations of the ghost cells at the outlets can ve combined with the JAX equivalent of the NumPy where function to insert the outlet ghost cells.
-Equivalenty fot the original array, the shifted back array, the boolean array with the locations of the ghost cells at the inlets, and the inlet ghost cells.
+Once the original array that needs to have ghost cells inserted padded with a zero on either end, two times the original array with two zeros at the beginning or the end respectively, and two times a boolean array containing the locations of either the ghost cells at the inlet or the outlet.
+The padded original array, the forward shifted array and the boolean array with the locations of the ghost cells at the outlets can be combined with the JAX equivalent of the NumPy where function to insert the outlet ghost cells.
+Equivalently for the original array, the shifted back array, the boolean array with the locations of the ghost cells at the inlets, and the inlet ghost cells.
 
 \section{Code Structure} \label{sec:cs}
 The code structure is denoted in pseudo-code in \autoref{lst:pc}.
@@ -1083,10 +1083,10 @@ Before the simulation is ran the simulation data needs to be initialized.
 This is done through hard coded functions that set initial values such as described in \autoref{sssec:inlets} and from values read from the file \emph{<path\_to\_network\_configuration>.yml}.
 This is denoted on line \ref{ln:init} in the pseudo-code.
 Thereafter a while loop is initiated within which at each iteration an entire cardiac cycle is computed.
-Each cardiac cycle is itself described by a while-loop that computes the next time step (line \ref{ln:cfl}) as in \autoref{sec:cfl}, updates boundary values (line \ref{ln:bv}) as in \autoref{ssec:boundary_values}, executes the MUSCL solver described in \autoref{sec:muscl} over all vessels (line \ref{ln:muscl}), saves the pressure at the center of each vessel for each individual timestep (line \ref{ln:svp}), and finaly increases the time by the timestep that was just computed (line \ref{ln:updt}).
-After computing a caridac cycle the saved pressures are compared to the ones from the previous cardiac cycle at each vessel and the old simulation data and pressure values are overwritten by the new ones (line \ref{ln:conv} - \ref{ln:ow2}).
+Each cardiac cycle is itself described by a while-loop that computes the next time step (line \ref{ln:cfl}) as in \autoref{sec:cfl}, updates boundary values (line \ref{ln:bv}) as in \autoref{ssec:boundary_values}, executes the MUSCL solver described in \autoref{sec:muscl} over all vessels (line \ref{ln:muscl}), saves the pressure at the centre of each vessel for each individual time-step (line \ref{ln:svp}), and finally increases the time by the time-step that was just computed (line \ref{ln:updt}).
+After computing a cardiac cycle the saved pressures are compared to the ones from the previous cardiac cycle at each vessel and the old simulation data and pressure values are overwritten by the new ones (line \ref{ln:conv} - \ref{ln:ow2}).
 Cardiac cycles are computed until the greatest euclidean norm of the pressure difference within a vessel compared to itself in the previous cardiac cycle is smaller than $0.1$ mmHg which is expressed by the line \ref{ln:conv}.
-This is in accordance with the comment made in \autoref{ssec:initial_conditions} about a steady state needing to be reached in order to get rid negative effects from inprecisely set initial conditions.
+This is in accordance with the comment made in \autoref{ssec:initial_conditions} about a steady state needing to be reached in order to get rid negative effects from imprecisely set initial conditions.
 \begin{lstlisting}[language=Python, caption=code structure in pseudocode, label=lst:pc, escapechar=|]
 converged = False
 
@@ -1108,22 +1108,23 @@ while not converged:
 	P_t = P_t_new |\label{ln:ow2}|
 \end{lstlisting}
 It is noted that the computation of the boundary conditions in line \ref{ln:bv} requires a for loop.
-This for loop is constructed using a the JAX \emph{fori\_loop} as discussed in \autoref{sec:al} in order to improve scaling of the compile time.
+This for loop is constructed using the JAX \emph{fori\_loop} as discussed in \autoref{sec:al} in order to improve scaling of the compile time.
 The same goes for the two while loops mentioned in \autoref{lst:pc} and their JAX equivalent \emph{while\_loop}
-The effect of avoiding builtin python loops can be seen in \autoref{sec:sc}.
+The effect of avoiding built-in python loops can be seen in \autoref{sec:sc}.
 On the other hand the need for loops has been completely avoided when executing the MUSCL solver on all vessel (line \ref{ln:muscl}).
-This was done by applying padding (\autoref{sec:pdd}) and masking (\autoref{sec:msk}) allowing for jax to better optimize this code section and leverage GPU ressources more effectively as opposed to an implementation using loops.
-Finally what is denoted in \autoref{lst:pc} by \emph{simulation\_data} consists of multiple 2D-arrays containing global constants, vessel constants, and simulation qunatites.
+This was done by applying padding (\autoref{sec:pdd}) and masking (\autoref{sec:msk}) allowing for JAX to better optimize this code section and leverage GPU resources more effectively as opposed to an implementation using loops.
+Finally what is denoted in \autoref{lst:pc} by \emph{simulation\_data} consists of multiple 2D-arrays containing global constants, vessel constants, and simulation quantities.
 This is less accessible than for instance having a class that describes a vessel but allows for more efficient data movement and to more easily adhere to JAX's requirements when using their loop construct or their optimizations overall.
 More details on the code as well as instructions on how to parse model configuration from different sources and run said models can be found in \autoref{app:doc}
 
 
 
 \chapter{Results}
-In this chapter we will present the results produced with our jax implementation of the haemodynamics solver described in \autoref{chap:1dm} and \autoref{chap:nm}. 
+In this chapter we will present the results produced with our JAX implementation of the haemodynamics solver described in \autoref{chap:1dm} and \autoref{chap:nm}. 
 In \autoref{sec:da} we will show some examples of simulations that were run on different anatomies.
 In \autoref{sec:sc} we will talk about scaling with respect to compile time and run time of our code.
-Finally in \autoref{sec:sc} we describe an example of the code performing parameter inference.
+Finally in \autoref{sec:pi} we describe an example of the code performing parameter inference.
+
 \section{Different Anatomies} \label{sec:da}
 We present here the pressure waves simulated by our code on four different models.
 All models represent anatomies from healthy individuals.
@@ -1137,7 +1138,7 @@ taken from \cite{blanco2014anatomically} with the parameters
 \end{equation}
 Three of the models are taken from the \emph{vascularmodel.com} website \cite{vascularmodel}.
 These three models represent arteries around the aorta, abdominal arteries and arteries of the cerebral circulation respectively.
-The input data provided by \emph{vascularmode.com} was used to set the inlet boundary conditions.
+The input data provided by \emph{vascularmodel.com} was used to set the inlet boundary conditions.
 The Young's modulus for these models was calculated using the parametrization:
 \begin{equation}
 	E = \frac{r_0}{h} k_1 \exp(k_2 r_0) + k_3
@@ -1148,7 +1149,7 @@ given in \cite{ottesen2004applied} with the values
 	k_2 &= -22.53 \frac{1}{\ \text{cm}}, \\
 	k_3 &= 8.65 \times 10^5 \frac{\text{g}}{\text{s}^2\text{cm}}.
 \end{align}
-The fourth model is the so called "anatomically-detailed arterial network" or "ADAN" model and it is made up of the largest arteris of the human circulation.
+The fourth model is the so called "anatomically-detailed arterial network" or "ADAN" model and it is made up of the largest arteries of the human circulation.
 The model was developed by Blanco et al. \cite{blanco2014anatomically,blanco2014blood} and this specific variant of it contains 56 vessels.
 Therefore it is commonly referred to as "ADAN56".
 The 56 vessels are split into 61 arterial segments which are in turn split into a total of 77 segments for simulation purposes.
@@ -1186,7 +1187,7 @@ These arteries are listed in \autoref{tab:aort} which also serves as a legend fo
 \end{table}
 
 The second \emph{vascularmodel.com} model, the abdominal model, consists of the following arteries: 
-The right and left common, external, and internal iliac arteries, the right and left femoral arteries, as well as the right and left renal arteries, the celiac trunc and the superior mesentric artery.
+The right and left common, external, and internal iliac arteries, the right and left femoral arteries, as well as the right and left renal arteries, the celiac trunk and the superior mesentric artery.
 The results from our simulation of the abdominal model can be seen in \autoref{fig:abdominal} and the corresponding legend is contained in \autoref{tab:abdo}.
 \begin{figure} [!h]
 	\centering
@@ -1234,7 +1235,7 @@ The results are visualized in \autoref{fig:adan56}.
 \begin{figure} [!ht]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{figures/adan56_annotated.png}
-	\caption{The simulation results from the ADAN56 artery network show that larger systems can be simulated by our jax code as well.}
+	\caption{The simulation results from the ADAN56 artery network show that larger systems can be simulated by our JAX code as well.}
 	\label{fig:adan56}
 \end{figure}
 \begin{table}[!ht]
@@ -1254,7 +1255,7 @@ The results are visualized in \autoref{fig:adan56}.
 			$\mathbf{8}$& left superior cerebellar artery \\
 			$\mathbf{10}$& right posterior central artery \\
 			$\mathbf{11}$& right posterior cerebellar artery \\
-			$\mathbf{12}$& right posterior comunicating artery \\
+			$\mathbf{12}$& right posterior communicating artery \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -1263,7 +1264,7 @@ The results are visualized in \autoref{fig:adan56}.
 \end{table}
 A stark difference between the models from \emph{vascularmodel.com} and the ADAN56 model is how much variety there is in the different pulse waves generated for different arteries in the ADAN56 model as opposed to the ones generated for the other models.
 This is most likely a result of the way the RCR parameters were set for these different models.
-For the ADAN56 model the resistances and the compliance were carefully analized and calibrated in \cite{blanco2014anatomically,blanco2014blood} to provide a physiologically realistic result.
+For the ADAN56 model the resistances and the compliance were carefully analysed and calibrated in \cite{blanco2014anatomically,blanco2014blood} to provide a physiologically realistic result.
 Due to the parameters not always being provided in the \emph{vascularmodel.com} models, here they were computed using a fairly simple approximation.
 The total resistance of the system is computed as:
 \begin{equation}
@@ -1294,7 +1295,7 @@ This is done by invoking an approximate ratio of about 1:10 between the two
 \end{align}
 This recipe was taken from the \emph{simvascular} documentation. \cite{simvascular}
 Some of the resistances were manually fitted to better fit the specific model.
-The different behaviours in the simulation for the meticoulously asigned parameters in the ADAN56 model as opposed to the approximated parameters assigned when simulating the \emph{vascularmodel.com} models demonstrate that there is no simple answer to calibrating the RCR prameters for the Windkessel model.
+The different behaviours in the simulation for the meticulously assigned parameters in the ADAN56 model as opposed to the approximated parameters assigned when simulating the \emph{vascularmodel.com} models demonstrate that there is no simple answer to calibrating the RCR parameters for the Windkessel model.
 This is supported by a closer description of techniques and issues when it comes to calibrating the RCR parameters given in \cite{koppl2023dimension}.
 Here the code written in this work can be seen as a step towards easier and more accurate procedures to determine such parameters.
 Given data the differentiability of the code could be leveraged to perform parameter inference on precisely these parameters.
@@ -1304,16 +1305,16 @@ As mentioned in \autoref{sec:jax} on JAX there is a significant overhead to the 
 This begs the question if the compilation dominates the total computation time and how the compilation time scales for growing numbers of vessel segments in a simulated network.
 If the compilation time doesn't increase much even for larger models this would mean that for big enough systems the compilation overhead could pay off.
 The compilation and total computation time have been plotted for simulations with different numbers of vessel segments in \autoref{fig:timing}
-These timings were prduced on a Xeon E3-1505 v6 with 4 cores and 8 threads, a base frequency of 3.0GHz and a maximum turbo frequency of 4.0GHz, 8MB of cache, and 16GB of DDR4 memory clocked at 2400MT.
+These timings were produced on a Xeon E3-1505 v6 with 4 cores and 8 threads, a base frequency of 3.0GHz and a maximum turbo frequency of 4.0GHz, 8MB of cache, and 16GB of DDR4 memory clocked at 2400MT.
 \begin{figure} [!ht]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{figures/timing.eps}
-	\caption{The compile time doesn't grow significantly with increasing numbers of vessel segments due to builtin Python loops being avoided which would be costly to compile. Total compute times seem to scale linearly w.r.t. the number of vessel segments with the exception of the 20 vessel segment simulation.}
+	\caption{The compile time doesn't grow significantly with increasing numbers of vessel segments due to built-in Python loops being avoided which would be costly to compile. Total compute times seem to scale linearly w.r.t. the number of vessel segments with the exception of the 20 vessel segment simulation.}
 	\label{fig:timing}
 \end{figure}
 The compile time remains almost constant around 3s even as the number of vessel segments increases over two magnitudes of order.
 This is due to the methods described in \autoref{sec:al}.
-Due to avoiding builtin python loops in favor of JAX loop constructions the compile time is kept more or less static since these kind of loops don't have to be unrolled during compilation.
+Due to avoiding built-in python loops in favour of JAX loop constructions the compile time is kept more or less static since these kind of loops don't have to be unrolled during compilation.
 Hence there is barely any additional effort involved with compiling for larger network simulations.
 In general the compile time is only a fraction of the total compute time once a certain amount of vessels is considered in the simulation and becomes and it becomes insignificant with growing model sizes.
 It can also be observed that total compute time shows linear scaling as a function of the number of vessel segments when considering the 20 vessel segment data point to be an outlier.
