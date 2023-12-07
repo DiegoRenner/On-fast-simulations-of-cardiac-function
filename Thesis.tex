@@ -1009,20 +1009,10 @@ The corresponding code can be found in \texttt{src/solver.jl:57-69}.
 \section{Newton Solver}
 
 \chapter{Implementation}
-Since differentiability was a priority in the implementation of this model the library JAX which is written is available as a package in python was used.
-In order to leverage the full effectiveness of JAX some special considerations had to be made when considering the code structure.
-In this chapter we will describe the code structure of the simulation in the first section and in the second section we will give an overview of the functionality of JAX relating to this thesis.
+Since differentiability was a priority in the implementation of this model the library JAX which is available as a package in Python was used.
+In order to leverage the full effectiveness of JAX some special considerations had to be made when considering how to realize the simulation described in \autoref{chap:1dm} and \autoref{chap:nm}.
+In this chapter we will describe the code structure of the simulation will give an overview of the functionality of JAX relating to this thesis in \autoref{sec:jax} and then describe to broad structure of the implemented code \autoref{sec:cs}.
 
-\section{Code Structure}
-\begin{lstlisting}[language=Python, caption=code structure in pseudocode]
-converged = False
-simulation_data = set_initial_conditions()
-while not conv:
-	simulation_data_new = set_boundary_conditions(simulation_data)
-	simulation_data_new = muscl_solver(simulation_data_new)
-	converged = chech_convergence(simulation_data, simulation_data_new)
-	simulation_data = simulation_data_new
-\end{lstlisting}
 
 \section{JAX} \label{sec:jax}
 JAX used to stand for "Just After eXecution" which refers to the manner in which JAX used to optimize during compilation.
@@ -1050,13 +1040,13 @@ This would mean that a global variable that has a certain value at compile time 
 The described behaviour midht lead to unexpected results as a side effect of the compilation JAX performs.
 Furthermore this behaviour is not guaranteed leading to the only way to write code in JAX that provides fully reproducible results is to code in a fully functionally pure manner.
 
-\subsection{Vectorization}
+\subsection{Vectorization} \label{sec:vect}
 JAX's optimization is geared towards leveraging the capabilities of GPUs.
 This means vectorization is key in making full use of JAX's optimization.
-The equations of the MUSCL solver are clearly very suitable for this.
-Vectorization can even be applied more widely applying a technique called padding.
+The equations of the MUSCL solver within a single vessel are clearly very suitable for this.
+Vectorization can even be applied more widely using the techniques padding (\autoref{sec:pdd}) and masking (\autoref{sec:msk}).
 
-\subsection{Padding}
+\subsection{Padding} \label{sec:pdd}
 The MUSCL solver in \autoref{sec:muscl} is described for a single vesel.
 However all of the MUSCL solvers applied to the individual vessels could be performed simulataneously and even in a vectorized mannner.
 In order to do so the values to be computed on by the MUSCL solver of each vessel are all written into one single array and one MUSCL solve is performed on the entire array.
@@ -1068,7 +1058,7 @@ Finally the technique of padding doesn't just allow for efficiently applying the
 That means every vessel can be meshed according to it's need which is very useful in this kind of simulation since the vessel can be severely different in size.
 The reason for why padding allows for the inhomogenous mesh is described in the next section.
 
-\subsection{Static Array Sizes and Avoiding Loops} \label{ssec:al}
+\subsection{Static Array Sizes and Avoiding Loops} \label{sec:al}
 The sizes of arrays computed on in JAX codes need to all be known at the time of tracing, i.e. JAX needs to be able to infer all array sizes at compile time in order to be able to apply it's optimization.
 Furthermore it is recommended to avoid loops when writing code with JAX.
 This is because these loops need to be unrolled completely during JAX's compilation.
@@ -1077,18 +1067,59 @@ However these have restrictions and one needs to satisfy a very strict signature
 Moreover the arrays operated on in each iteration of the loop need to be the same size.
 So if it were not for padding the MUSCL solver would have to be applied to each vessel seperately by looping over all vessels.
 This could be done with a common Python for loop resulting in long compilation times when simulating cardiovascular systems consisting of many vessels due to having to having to fully unroll the loop.
-Another option would be to us one of the JAX loop constructions, the so-called JAX fori\_loop.
+Another option would be to us one of the JAX loop constructions, the so-called JAX \emph{fori\_loop}.
 This would avoid the large overhead at compile time.
 However the restriction of having to have the same-sized arrays in every loop iteration would make the simulation either inherently inefficent or inherently in-accurate since very small vessels would have to simulated withe fine meshes or vice versa large vessels with coarse meshes.
 Therefore padding doesn't only allow for increased vectorization but also provides the ability to use an inhomogenous mesh with relatively short compile times.
 
-\subsection{Masking}
+\subsection{Masking} \label{sec:msk}
 At certain points within the MUSCL solver ghost cells need to be inserted at the edges of the vessels.
 In order to avoid having to loop over the array and introducing the usual issues that come along with using loops in JAX one can apply these values using a technique called masking.
 In order to apply the wanted value to the ghost cells one need to store five arrays.
 Once the origianl array that needs to have ghost cells inserted padded with a zero on either end, two times the origianl array with two zeros at the beginning or the end respectively, and two times a boolean array containing the locations of either the ghost cells at the inlet or the outlet.
 The padded original array, the forward shifted array and the boolean array with the locations of the ghost cells at the outlets can ve combined with the JAX equivalent of the NumPy where function to insert the outlet ghost cells.
 Equivalenty fot the original array, the shifted back array, the boolean array with the locations of the ghost cells at the inlets, and the inlet ghost cells.
+
+\section{Code Structure} \label{sec:cs}
+The code structure is denoted in pseudo-code in \autoref{lst:pc}.
+Before the simulation is ran the simulation data needs to be initialized.
+This is done through hard coded functions that set initial values such as described in \autoref{sssec:inlets} and from values read from the file \emph{<path\_to\_network\_configuration>.yml}.
+This is denoted on line \ref{ln:init} in the pseudo-code.
+Thereafter a while loop is initiated within which at each iteration an entire cardiac cycle is computed.
+Each cardiac cycle is itself described by a while-loop that computes the next time step (line \ref{ln:cfl}) as in \autoref{sec:cfl}, updates boundary values (line \ref{ln:bv}) as in \autoref{ssec:boundary_values}, executes the MUSCL solver described in \autoref{sec:muscl} over all vessels (line \ref{ln:muscl}), saves the pressure at the center of each vessel for each individual timestep (line \ref{ln:svp}), and finaly increases the time by the timestep that was just computed (line \ref{ln:updt}).
+After computing a caridac cycle the saved pressures are compared to the ones from the previous cardiac cycle at each vessel and the old simulation data and pressure values are overwritten by the new ones (line \ref{ln:conv} - \ref{ln:ow2}).
+Cardiac cycles are computed until the greatest euclidean norm of the pressure difference within a vessel compared to itself in the previous cardiac cycle is smaller than $0.1$ mmHg which is expressed by the line \ref{ln:conv}.
+This is in accordance with the comment made in \autoref{ssec:initial_conditions} about a steady state needing to be reached in order to get rid negative effects from inprecisely set initial conditions.
+\begin{lstlisting}[language=Python, caption=code structure in pseudocode, label=lst:pc, escapechar=|]
+converged = False
+
+configuration_filename = "<path_to_network_configuration>.yml" |\label{ln:init}|
+simulation_data = initialize_simulation_data()
+P_t = [0]
+while not converged:
+	t = 0
+	simulation_data_new = simulation_data
+	P_t_new = [0]
+	while t < cardiac_period:
+		dt = compute_dt(simulation_data) |\label{ln:cfl}|
+		simulation_data_new = set_boundary_values(simulation_data_new, dt) |\label{ln:bv}|
+		simulation_data_new = muscl_solver(simulation_data_new, dt) |\label{ln:muscl}|
+		P_t_new = save_pressure(simulation_data_new,P_t_new) |\label{ln:svp}|
+		t = t + dt |\label{ln:updt}|
+	converged = check_convergence(P_t, P_t_new) |\label{ln:conv}|
+	simulation_data = simulation_data_new |\label{ln:ow1}|
+	P_t = P_t_new |\label{ln:ow2}|
+\end{lstlisting}
+It is noted that the computation of the boundary conditions in line \ref{ln:bv} requires a for loop.
+This for loop is constructed using a the JAX \emph{fori\_loop} as discussed in \autoref{sec:al} in order to improve scaling of the compile time.
+The same goes for the two while loops mentioned in \autoref{lst:pc} and their JAX equivalent \emph{while\_loop}
+The effect of avoiding builtin python loops can be seen in \autoref{sec:sc}.
+On the other hand the need for loops has been completely avoided when executing the MUSCL solver on all vessel (line \ref{ln:muscl}).
+This was done by applying padding (\autoref{sec:pdd}) and masking (\autoref{sec:msk}) allowing for jax to better optimize this code section and leverage GPU ressources more effectively as opposed to an implementation using loops.
+Finally what is denoted in \autoref{lst:pc} by \emph{simulation\_data} consists of multiple 2D-arrays containing global constants, vessel constants, and simulation qunatites.
+This is les accessible than for instance having a class that describes a vessel but allows for more efficient data movement and to more easily adhere to JAX's requirements when using their loop construct or their optimizations overall.
+
+
 
 \chapter{Results}
 In this chapter we will present the results produced with our jax implementation of the haemodynamics solver described in \autoref{chap:1dm} and \autoref{chap:nm}. 
@@ -1210,7 +1241,7 @@ These timings were prduced on a Xeon E3-1505 v6 with 4 cores and 8 threads, a ba
 	\label{fig:timing}
 \end{figure}
 The compile time remains almost constant around 3s even as the number of vessel segments increases over two magnitudes of order.
-This is due to the methods described in \autoref{ssec:al}.
+This is due to the methods described in \autoref{sec:al}.
 Due to avoiding builtin python loops in favor of JAX loop constructions the compile time is kept more or less static since these kind of loops don't have to be unrolled during compilation.
 Hence there is barely any additional effort involved with compiling for larger network simulations.
 In general the compile time is only a fraction of the total compute time once a certain amount of vessels is considered in the simulation and becomes and it becomes insignificant with growing model sizes.
