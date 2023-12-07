@@ -100,21 +100,21 @@ ETH Zürich}
 
 \chapter{Introduction}
 
-By taking into account the characteristics of an individual patient and customizing the treatment this patient receives according to which characteristics-dependent sub-population this patient falls into, personalized medicine aims to improve upon results a more generalized approach would achieve \cite{ashley2016towards,national2011toward,giardino2017role}.
+By taking into account the characteristics of an individual patient and customizing the their treatment according to which characteristics-dependent sub-population they fall into, personalized medicine aims to improve upon results a more generalized approach would achieve \cite{ashley2016towards,national2011toward,giardino2017role}.
 To succeed in the personalization of a treatment, a disease specific number of quantities (biomarkers) need to be determined \cite{burke1998integrating}.
-These biomarkers can have a varying degree of correlation with a diseases existence, progression, and outcome.
+These biomarkers can have a varying degree of correlation with a disease's existence, progression, and outcome.
 For instance local vascular pressure is highly correlated with hypertension.
 While there are methods to estimate this quantity from ultrasound or Magnetic Resonance Imaging \cite{markl20124d}, these methods tend not to be accurate enough for standard clinical practice \cite{everett2012beyond}.
 On the other hand more invasive techniques might not offer the proper risk to reward ratio.
 For example, to diagnose hypertensive pregnancy disorder it would be very risky to perform the measurement of the absolute vascular pressure in vivo on a pregnant subject \cite{kett2002adverse}.
-Therefore in order to determine the biomarkers that are hard to capture in a clinical setting computational methods are often applied.
+Therefore, in order to determine the biomarkers that are hard to capture in a clinical setting, computational methods are often applied.
 
 Such computational models aim to simulate a patients individual physiology in order to reveal aforementioned "hidden" biomarkers.
-The prerequisite for this to work is that biomarkers can be simulated that are strongly show strong correlations with a disease.
-For example being able to determine the genetic predisposition of a patient with respect to a certain disease would be a very strong indicator of the outcome of said disease.
-However this cannot be attempted with such methods.
-On the other hand for instance the local vascular pressure, or the resistance within a cardiovascular network are good indicators that can in fact be simulated due to the underlying physics being well understood.
-However the simulations depend heavily on a high number of personalized parameters, leading to a similar problem as described initially: needing to access difficult to measurable or unobtainable data for a specific patient.
+The prerequisite for this to work is that biomarkers can be simulated that are strongly correlated with a disease.
+For example, being able to determine the genetic predisposition of a patient with respect to a certain disease would be a very strong indicator of the outcome of said disease.
+However this cannot be attempted with such computational methods.
+On the other hand, for instance, the local vascular pressure, or the resistance within a cardiovascular network are good indicators that can in fact be simulated due to the underlying physics being well understood.
+However the simulations depend heavily on a high number of personalized parameters, leading to a similar problem as described initially: needing to access difficult to measure or unobtainable data for a specific patient.
 An attempt to avoid the problem of having to know these values is using population averaged values.
 This however defeats the purpose of personalized medicine.
 What has therefore become the method of choice to address the issue of personalized medicine using computational models is to build simulators that output the values of some desired biomarkers and to then try and solve the inverse problem of fitting the parameters of the simulator to a specific patient.
@@ -126,34 +126,37 @@ There are two main ways of achieving the goal of calibrating a simulation for an
 \end{enumerate}
 The reason Deep-Learning techniques were attempted is due to the fact that the "classical" approaches are very inefficient.
 This is because the derivatives are often hard to determine for the attempted simulations so the algorithms of choice for solving the inverse problem are gradient-free. 
-Moreover due to the models being very sensitive to it's parameters and there being ambiguous solutions \cite{nolte2022inverse,quick2001infinite} these gradient-free algorithms have to be run at very small step sizes. \cite{taylor2009patient,tuccio2022parameter,marsden2014optimization,mineroff2019optimization,bozkurt2022patient}
-The ability to easily take gradients of one of these models with respect to it's parameters would greatly improve the process of personalizing them without loosing the interpretability as would be the case when using a Deep-Learning algorithm.
+Moreover due to the models being very sensitive to their parameters and there being ambiguous solutions \cite{nolte2022inverse,quick2001infinite} these gradient-free algorithms have to be run at very small step sizes. \cite{taylor2009patient,tuccio2022parameter,marsden2014optimization,mineroff2019optimization,bozkurt2022patient}
+The ability to easily take gradients of one of these models with respect to it's parameters would greatly improve the process of personalizing it without loosing the interpretability as would be the case when using a Deep-Learning algorithm.
 
 Due to the complexity of the cardiovascular system and the significance of cardiovascular disease globally the mathematical and numerical modelling of haemodynamics has gained a lot of traction over recent years.
 Two of the main factors for this complexity are the multi-scale and multi-physics nature of the cardiovascular system that arises from vessels of strongly varying sizes and not much data being available for certain parts of these models to go off of \cite{quarteroni2016geometric}.
-
-The motivation for researching cardiovascular disease stems from it being the most prevalent cause of death.
-Worldwide it leads 17.3 million deaths per year as of 2015.
+The significance of cardiovascular disease and it's research stems from it being the most prevalent cause of death.
+Worldwide it leads to 17.3 million deaths per year as of 2015.
 This number is projected to increase by the year 2030 to more than 23.6 million. \cite{update2015heart}
 In Europe cardiovascular disease was responsible for close to one third (32.7\%) of all deaths in the year 2020 \cite{Coelho2020}.
 In order to tackle the complexity of the meaningful task of modelling cardiovascular systems numerical modelling has become prevalent \cite{formaggia2009multiscale,quarteroni2016geometric,black2020p14,el2018investigating,qureshi2014numerical,reichold2009vascular}.
-The general issue described up until now with regards to the difficulty of personalizing treatments is also relevant when considering the cardiovascular system.
+The general issue described up until now, with regards to the difficulty of personalizing treatments, is also relevant when considering the cardiovascular system.
 
-Therefore the goal of this work is to provide a fast, differentiable cardiovascular simulation.
+Therefore, the goal of this work is to provide a fast, differentiable cardiovascular simulation.
 This is a step towards enabling efficient and interpretable model calibration to be applied in personalised medicine.
-In order to be differentiable the haemodynamics solver written in the course of this thesis was written using the JAX library.
-On top of differentiability JAX also offers device agnostic execution.
-JAX optimizes the executed code to take advantage of parallelization and other advantages of modern hardware regardless of if it's being executed on a CPU, GPU or TPU.
+In order to be differentiable the haemodynamics solver written in the course of this thesis was written using the JAX library \cite{jax}.
+On top of differentiability, JAX also offers device agnostic execution.
+That is, JAX optimizes the written code to take advantage of parallelization and other advantages of modern hardware regardless of being executed on a CPU, GPU or TPU.
 The optimization for GPU execution is especially useful since it allows for data parallelization, i.e. batch executions of the code on a single device.
 This means multiple models for different patients could be optimized simultaneously on a single GPU.
 Next to the advantages brought about by the implementation in JAX, the implementation of the code in Python makes the solver accessible for future work.
 We also provide the written code as is in an open-source manner hoping to aid progress in the field overall.
 
-For this thesis we chose a coupled 0D-1D model where the 0D part is used to compute boundary conditions for certain outlets of the 1D cardiovascular network.
+For this thesis we choose a coupled 0D-1D model where the 0D part is used to compute boundary conditions for certain outlets of the 1D cardiovascular network.
 While failing to capture complex flow patterns and wall shear stress as opposed to a 3D model the 1D model can still simulate pulse wave transmission and systemic wave reflection effects.
 Clearly 1D models also offer a big advantage in execution time as opposed to 3D models. \cite{shi2011review,pfaller2020using,arzani2022machine} 
-In the next section we will provide a basic understanding of the cardiovascular system which will serve as a base for describing the cardiovascular simulation throughout this work.
 
+In \autoref{chap:cvs} we will provide a basic understanding of the cardiovascular system which will serve as a base for describing the cardiovascular simulation throughout this work.
+Thereafter, in \autoref{chap:1dm} we will describe the underlying 1D-model that we used to simulate blood flow in a single vessel.
+In \autoref{chap:nm} we explain how to solve this model numerically and how to couple multiple such models in order to simulate a cardiovascular network.
+Then, in \autoref{chap:impl}  we will describe key factors of how we implemented the numerical algorithms that solve our 1D-model.
+Finally, in \autoref{chap:resl} we validate this code and present the results produced by it.
 
 
 
@@ -207,9 +210,9 @@ In the next section we will provide a basic understanding of the cardiovascular 
 % 8) Conclusions 
 % (repeat contribution / impact)
 
-\chapter{Cardiovascular System}
+\chapter{Cardiovascular System} \label{chap:cvs}
 This section serves as an overview of the cardiovascular system with a focus on the arteries of the systemic circulation. 
-Section \ref{mbb} will describe the main building blocks of the cardiovascular system and their relation, section \ref{aw} will give the characteristics of the arterial walls, and section \ref{b} the characteristics of blood.
+Section \ref{mbb} will describe the main building blocks of the cardiovascular system and their relation to one another, section \ref{aw} will give the characteristics of the arterial walls, and section \ref{b} the characteristics of blood.
 \section{Main Building Blocks} \label{mbb}
 The cardiovascular system contains two major circulatory systems.
 These are the systemic and the pulmonary circulation. 
@@ -265,7 +268,7 @@ We denote the shear rate by $D$. \cite{köppl2023dimension}
 The blood dynamic viscosity $\mu$ decreases hyperbolically with the shear rate $D$.
 At about $D > 100s^{-1}$ the viscosity stays constant for common haematocrit values.
 In larger arteries the average shear rate close to the walls is above this threshold. \cite{MCDbook}
-Therefore the blood's viscosity is often considered constant and it can roughly be viewed as Newtonian fluid for the sake of simplicity \cite{fung1996biomechanics,guyton2006textbook,MCDbook,pedley_1980,zamir2000physics,zamir2006physics}. 
+Therefore, the blood's viscosity is often considered constant and it can roughly be viewed as Newtonian fluid for the sake of simplicity \cite{fung1996biomechanics,guyton2006textbook,MCDbook,pedley_1980,zamir2000physics,zamir2006physics}. 
 The blood density $\rho$ is considered constant within the range of $1050 \pm 10 \text{ kg}\cdot\text{m}^{-3}$, i.e. blood can be considered an incompressible fluid \cite{PMID:2658951,kenner1977continuous,helmig1997multiphase}.
 We will take the assumption of blood being an incompressible Newtonian fluid into account when constructing the underlying model for our cardiovascular solver in \autoref{sec:sv}.
 
@@ -1005,7 +1008,7 @@ Taking into account the aforementioned condition of preventing the characteristi
 where $S_{max} = \max_{x \in [0,L], v \in V} | u_v(x) + c_v(x) |$ and V is the set of all vessels in the simulation.  
 
 
-\chapter{Implementation}
+\chapter{Implementation} \label{chap:impl}
 Since differentiability was a priority in the implementation of this model the library JAX which is available as a package in Python was used.
 In order to leverage the full effectiveness of JAX some special considerations had to be made when considering how to realize the simulation described in \autoref{chap:1dm} and \autoref{chap:nm}.
 In this chapter we  will give an overview of the functionality of JAX relating to this thesis in \autoref{sec:jax} and then describe the broad structure of the implemented code in \autoref{sec:cs}.
@@ -1119,7 +1122,7 @@ More details on the code as well as instructions on how to parse model configura
 
 
 
-\chapter{Results}
+\chapter{Results} \label{chap:resl}
 In this chapter we will present the results produced with our JAX implementation of the haemodynamics solver described in \autoref{chap:1dm} and \autoref{chap:nm}. 
 In \autoref{sec:da} we will show some examples of simulations that were run on different anatomies.
 In \autoref{sec:sc} we will talk about scaling with respect to compile time and run time of our code.
