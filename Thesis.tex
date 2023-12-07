@@ -814,7 +814,7 @@ In order to compute the output value through the Windkessel model we introduce a
 	{L}{\frac{d Q_M^{n+1}}{d t}}+P_{M}^n-P_C^{n+1}&=-R_2 Q_{M}^{n+1} \label{eq:RLC2}.
 \end{align}
 The variables $R$, $L$, $C$ are parameters that have to be determined for each individual application and they are named after the RLC-circuit in analogy to which this algotihm was setup.
-Different networks can have very different parameters and their derivation is not trivial.
+Different networks can have very different parameters and their derivation is not trivial \cite{koppl2023dimension}.
 This is a prime example for the need of efficient calibration algorithms which this thesis aims to work towards by providing a differentiable solver.
 We will derive a timestep algorithm in order to compute the value of $P_C^{n+1}$.
 Introducing a finite difference for the derivatives in the equations \autoref{eq:RLC1} and \autoref{eq:RLC2} leads to
