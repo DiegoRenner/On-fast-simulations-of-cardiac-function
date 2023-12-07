@@ -873,7 +873,7 @@ Finally we can simplify \ref{wk_newton} by writing out $(P_{M})_{RCLR}$ and once
 	f\left(A_M^{n+1}\right) = A_M^{n+1} R_1\left(u_M^n+4 c_M^n\right)-4 A_M^{n+1} R_1 c_M^n\\
 	-\frac{\beta}{A_{0,M}}\left(\sqrt{A_M^{n+1}}-\sqrt{A_{0,M}}\right)+P_C^n = 0. \label{wk_eq3}
 \end{multline}
-This equation can be solve using a Newton solver.
+This equation can be solved using a Newton solver.
 
 \subsubsection{Junctions} \label{sssec:junctions}
 Three types of junctions are considered.
@@ -1006,7 +1006,6 @@ where $S_{max} = \max_{x \in [0,L], v \in V} | u_v(x) + c_v(x) |$ and V is the s
 For Melis' thesis the value $0.9$ was chosen for $C_{CFL}$ since this offered a good compromise between numerical stability and computational time.
 The corresponding code can be found in \texttt{src/solver.jl:57-69}.
 
-\section{Newton Solver}
 
 \chapter{Implementation}
 Since differentiability was a priority in the implementation of this model the library JAX which is available as a package in Python was used.
@@ -1226,7 +1225,8 @@ This is done by invoking an approximate ratio of about 1:10 between the two
 \end{align}
 This recipe was taken from the \emph{simvascular} documentation. \cite{simvascular}
 Some of the resistances were manually fitted to better fit the specific model.
-The different behaviour in the simulation for the meticoulously asigned parameters in the ADAN56 model as opposed to the approximated parameters assigned when simulating the \emph{vascularmodel.com} models demonstrates that there is no simple answer to calibrating the RCR prameters for the windkessel model.
+The different behaviours in the simulation for the meticoulously asigned parameters in the ADAN56 model as opposed to the approximated parameters assigned when simulating the \emph{vascularmodel.com} models demonstrates that there is no simple answer to calibrating the RCR prameters for the windkessel model.
+This is supported by a closer description of techniques and issues when it comes to calibrating the RCR parameters given in \cite{koppl2023dimension}.
 Here the code written in this work can be seen as a step towards easier and more accurate procedures to determine such parameters.
 Given data the differentiability of the code could be leveraged to perform parameter inference on precisely these parameters.
 \section{Scaling} \label{sec:sc}
