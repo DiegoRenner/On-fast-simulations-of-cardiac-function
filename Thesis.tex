@@ -1125,7 +1125,7 @@ On the other hand the need for loops has been completely avoided when executing 
 This was done by applying padding (\autoref{sec:pdd}) and masking (\autoref{sec:msk}) allowing for JAX to better optimize this code section and leverage GPU resources more effectively as opposed to an implementation using loops.
 Finally what is denoted in \autoref{lst:pc} by \emph{simulation\_data} consists of multiple 2D-arrays containing global constants, vessel constants, and simulation quantities.
 This is less accessible than for instance having a class that describes a vessel but allows for more efficient data movement and to more easily adhere to JAX's requirements when using their loop construct or their optimizations overall.
-More details on the code as well as instructions on how to parse model configuration from different sources and run said models can be found in \autoref{app:doc}
+More details on the code as well as instructions on how to parse model configuration from different sources and run said models can be found in \autoref{app:doc}.
 
 
 
@@ -1134,6 +1134,26 @@ In this chapter we will present the results produced with our JAX implementation
 In \autoref{sec:da} we will show some examples of simulations that were run on different anatomies.
 In \autoref{sec:sc} we will talk about scaling with respect to compile time and run time of our code.
 Finally in \autoref{sec:pi} we describe an example of the code performing parameter inference.
+
+\section{Validation}
+In order to validate our code we compared to the 1D-haemodynamics solver openBF\cite{openBF} that was written and validated in the course of the thesis \cite{melis2017gaussian}.
+This code was written in the julia programming language\cite{julia}.
+We chose four models that will be introduced more closely in \autoref{sec:da}.
+We present from each model a randomly selected vessel and compare the pressure wave over one cardiac cycle in the middle of said vessel.
+The four models consist of 9, 17, 19, and 77 vessel segments.
+The result of comparing the codes can be seen in \autoref{fig:val} where the \emph{P\_JAX} refers to the pressure computed by our code and \emph{P\_jl} refers to the code from openBF.
+\begin{figure} [!ht]
+	\centering
+	\includegraphics[width=0.4\columnwidth]{figures/0007_H_AO_H_right_subclavian_artery_P.eps}
+	\includegraphics[width=0.4\columnwidth]{figures/0029_H_ABAO_H_celiac_branch_P.eps
+	}
+	\includegraphics[width=0.4\columnwidth]{figures/0053_H_CERE_H_basilar_artery_IV_P.eps}
+	\includegraphics[width=0.4\columnwidth]{figures/adan56_common_hepatic_P.eps}
+	\caption{Our code and the openBF code produce close to the same output. In the 0007\_H\_AO\_H and the 0029\_H\_ABAO\_H networks this even leads to the plot of the data from our code being almost completey obfuscated by the openBF data.}
+	\label{fig:val}
+\end{figure}
+The plots show that for each model there is barely any difference in the ouput of the two vascular simulations.
+Furthermore there is less than $1\%$ relative error between openBF's and our implementation which validates our codes correctness.
 
 \section{Different Anatomies} \label{sec:da}
 We present here the pressure waves simulated by our code on four different models.
@@ -1168,14 +1188,14 @@ The results from first the model from \emph{vascularmodel.com}, the aorta model,
 The model represents the ascending, the descending and the arch of the aorta as well as the brachiocephalic and the right and left subclavian and common carotid arteries.
 These arteries are listed in \autoref{tab:aort} which also serves as a legend for the corresponding figure.
 
-\begin{figure} [!h]
+\begin{figure} [!ht]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{figures/0007.eps}
 	\caption{The haemodynamics solver produces qualitatively accurate results for the 8 vessel aorta model.}
 	\label{fig:aorta}
 \end{figure}
 
-\begin{table}[!h] 
+\begin{table}[!ht] 
 	\begin{center}
 		\begin{tabular}{|c|l|} 
 			\hline
@@ -1199,13 +1219,13 @@ These arteries are listed in \autoref{tab:aort} which also serves as a legend fo
 The second \emph{vascularmodel.com} model, the abdominal model, consists of the following arteries: 
 The right and left common, external, and internal iliac arteries, the right and left femoral arteries, as well as the right and left renal arteries, the celiac trunk and the superior mesentric artery.
 The results from our simulation of the abdominal model can be seen in \autoref{fig:abdominal} and the corresponding legend is contained in \autoref{tab:abdo}.
-\begin{figure} [!h]
+\begin{figure} [!ht]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{figures/0029.eps}
 	\caption{The abdominal model consists of 12 models and is therefore slightly larger than the aorta model but can still be simulated accurately.}
 	\label{fig:abdominal}
 \end{figure}
-\begin{table}[!h]
+\begin{table}[!ht]
 	\begin{center}
 		\begin{tabular}{|c|l|}
 			\hline
