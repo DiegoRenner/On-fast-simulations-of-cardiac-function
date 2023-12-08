@@ -567,7 +567,7 @@ The balance equation on the infinitesimal control volume
 	&\tilde{z} \in (0,l), \\
 	&\tilde{t} > 0,
 \end{align}
-for a hyperbolic law in it's conservation form (e.g. \autoref{eq:1deqs3}) is given by
+for a hyperbolic law in it's conservation form \cite{guinot2012wave} (e.g. \autoref{eq:1deqs3}) is given by
 \begin{align}
 	\int_{\tilde{z}}^{\tilde{z} + \delta z} \mathbf{U} (z; \tilde{t} + \delta t) - \mathbf{U} (z;\tilde{t}) dz &= \int_{\tilde{t}}^{\tilde{t}+\delta t} \mathbf{F}(\tilde{z};t) - \mathbf{F}(\tilde{z} + \delta z; t) dt\\
 																											   &+ \int_{\tilde{t}}^{\tilde{t} + \delta t} \int_{\tilde{z}}^{\tilde{z} + \delta z}  \mathbf{S}(z;t) dzdt.
@@ -587,8 +587,8 @@ Dividing by $\Delta z$ and rearranging the terms gives
 \begin{equation}
 	\mathbf{U} _i^{n+1} = \mathbf{U}_i^n + \frac{\Delta t}{\Delta z} (\mathbf{F}_{i-\frac{1}{2}}^{n+\frac{1}{2}} - \mathbf{F}_{i+\frac{1}{2}}^{n+\frac{1}{2}}) + \mathbf{S}_i^{n+\frac{1}{2}} \Delta t. \label{eq:fv}
 \end{equation}
-Therefore the value of $\mathbf{U}$ at the next time-step $n+1$ can be determined from the value at the current time-step $n$ and the values of the flux $\mathbf{F}$ and the source term $\mathbf{S}$ at the intermediate time-step $n + \frac{1}{2}$.
-In the following section we will discuss how to compute the flux terms \cite{guinot2012wave}.
+Therefore the value of $\mathbf{U}$ at the next time-step $n+1$ can be determined from the value at the current time-step $n$ and the values of the flux $\mathbf{F}$ and the source term $\mathbf{S}$ at the intermediate time-step $n + \frac{1}{2}$. \cite{guinot2012wave}
+In the following section we will discuss how to compute the flux terms.
 
 \section{MUSCL} \label{sec:muscl}
 The MUSCL scheme was developed by Van Leer towards the end of the 1970s \cite{van1977towards} \cite{van1979towards}.
@@ -656,21 +656,20 @@ In order to get a first approximation for the flux that needs to be computed the
 	has to be solved.
 	This yields a flux $\mathbf{F^*}$ with which we compute our averaged quantities at the next half-time-step using \autoref{eq:fv}
 	\begin{align}
-		\mathbf{U}_{i+\frac{1}{2},L}^{n+\frac{1}{2}} &= \mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) + \frac{\Delta t}{2 \Delta x} \left( \mathbf{F^*}(\mathbf{\hat{U}}_i^n( z_{i-\frac{1}{2}})) - \mathbf{F^*}(\mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) \right)\\
-		\mathbf{U}_{i+\frac{1}{2},R}^{n+\frac{1}{2}} &= \mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) + \frac{\Delta t}{2 \Delta x} \left( \mathbf{F^*}(\mathbf{\hat{U}}_{i+1}^n( z_{i+\frac{1}{2}})) - \mathbf{F^*}(\mathbf{\hat{U}}_i^n(z_{i+\frac{3}{2}}) \right),
+		\mathbf{U}_{i+\frac{1}{2},L}^{n+\frac{1}{2}} &= \mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) + \frac{\Delta t}{2 \Delta z} \left( \mathbf{F^*}(\mathbf{\hat{U}}_i^n( z_{i-\frac{1}{2}})) - \mathbf{F^*}(\mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) \right)\\
+		\mathbf{U}_{i+\frac{1}{2},R}^{n+\frac{1}{2}} &= \mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) + \frac{\Delta t}{2 \Delta z} \left( \mathbf{F^*}(\mathbf{\hat{U}}_{i+1}^n( z_{i+\frac{1}{2}})) - \mathbf{F^*}(\mathbf{\hat{U}}_i^n(z_{i+\frac{3}{2}}) \right),
 	\end{align}
 	where we have ignored the source term $\mathbf{S}$ for the moment.
 	The resulting $\mathbf{U}_{i+\frac{1}{2},L}^{n+\frac{1}{2}}$ and $\mathbf{U}_{i+\frac{1}{2},R}^{n+\frac{1}{2}}$ are then used as left and right states of a new Riemann problem.
 	The flux from this Riemann problem is again inserted into \autoref{eq:fv} giving the final value for $\mathbf{U}_i^{n+1}$.
-	The flux is not solved for analytically but numerically using the numerical scheme resulting in the Lax-Friedrichs flux.
+	The flux that are computed in both Riemann problems mentioned in this section are not solved for analytically but numerically using the conservative form of the Lax-Friedrichs scheme.
 	Given that the flux function is Lipschitz continuous, this scheme is conservative and consistent \cite{köppl2023dimension}.
-	In general it is first order accurate and stable for small enough step sizes (see \autoref{sec:cfl}) \cite{leveque1992numerical}.
+	In general it is first order accurate and stable for small enough step sizes (see \autoref{sec:cfl}). \cite{leveque1992numerical}
 	In the next section we will be addressing how to handle the source term $\mathbf{S}$ that we have ignored here.
 
 	\section{Time step, source term} \label{sec:fe}
 	In the previous section we have ignored the source term $\mathbf{S}$.
 	To account for the source term the following problem has to be solved:
-	Next the inhomogeneous part has to be solved:
 	\begin{equation}
 		\frac{d \mathbf{U}}{d t}=\mathbf{S}(\mathbf{U}) .
 	\end{equation}
