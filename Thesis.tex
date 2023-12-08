@@ -222,7 +222,7 @@ Through the pulmonary circulation the oxygen-poor blood is sent to the lungs whe
 Vessels carrying the blood away from the heart are referred to as arteries and the ones carrying the blood to the heart are referred to as veins.
 In both the systemic and the pulmonary circulation the oxygen exchange (from blood to organs or from lungs to blood respectively) take place within so called capillary vessels.
 Capillaries are very small vessels that connect arteries to veins. \cite{köppl2023dimension}
-From here on out our main focus will be on on the arteries of the systemic circulation since our simulation approach will assume the heart to be represented by pre-computed data and the effect of the capillary bed and the veins will be acounted for by a lumped parameter model (0D-model, \autoref{sssec:outl}).
+From here on out our main focus will be on on the arteries of the systemic circulation since our simulation approach will assume the heart to be represented by pre-computed data and the effect of the capillary bed and the veins will be accounted for by a lumped parameter model (0D-model, \autoref{sssec:outl}).
 In the next two subsections we will describe the main characteristics of the arterial walls and the blood flowing within.
 
 \section{Arterial Wall} \label{aw}
@@ -234,8 +234,8 @@ The tunica media is responsible for the elasticity of the artery.
 Arteries close to the heart have a tunica media that is mainly made up of elastic fibres and are referred to as elastic arteries while the tunica media of arteries farther away from the heart and of small arteries consist predominantly of muscle cells and are called muscular arteries.
 The elastic arteries also have a higher compliance.
  
-This means that elastic arteris are able to distended and increase their volume as a response to pressure applied to the inside of the arterial wall.
-Hence elastic arteries deform more under pressure than muscular arteries that are stiffer and don't distened as much when blood is pumped into them by the heart.
+This means that elastic arteries are able to distended and increase their volume as a response to pressure applied to the inside of the arterial wall.
+Hence elastic arteries deform more under pressure than muscular arteries that are stiffer and don't distend as much when blood is pumped into them by the heart.
 At the same time, usually the elastic arteries are larger than the muscular arteries and the size of arteries generally decreases as the distance to the heart increases.
 
 The compliance of the larger elastic arteries is responsible for transforming the pulsatile flow at the heart into a constant flow at the capillaries.
@@ -253,7 +253,7 @@ We will describe how boundary values are set using the Windkessel more closely i
 For further reference in the following chapters we will also introduce some notation.
 We call the radius of an artery in it's non-deformed state the lumen radius $r_0$ and refer to the reference vessel wall thickness by $h_0$ from here on out.
 Furthermore we denote the reference cross-section by $A_0 = \pi r_0^2$.
-In the next section we will discuss some simulation relevant properties of Blood./
+In the next section we will discuss some simulation relevant properties of Blood.
 
 \section{Blood} \label{b}
 Blood consists of red blood cells (Erythrocytes), white blood cells (Leukocytes), and platelets (Thrombocytes).
@@ -280,18 +280,18 @@ The assumption of blood being an incompressible Newtonian fluid will be importan
 
 \chapter{Modelling approach} \label{chap:1dm}
 In this chapter we will discuss the different approaches that can be taken when creating a model for a vascular simulation and which one we are going to be using in \autoref{sec:ma}.
-After that we will give a mathmatical description of the model we chose in \autoref{sec:sv}.
+After that we will give a mathematical description of the model we chose in \autoref{sec:sv}.
 
 \section{Modelling Approaches} \label{sec:ma}
-In this thesis we focus on simulating macrocirculation in arteries, i.e. cardiovascular networks consisting of the largest arteries of the human circulation.
+In this thesis we focus on simulating macro-circulation in arteries, i.e. cardiovascular networks consisting of the largest arteries of the human circulation.
 The length and diameters of these vessels are on the scale of meters.
 According with which accuracy the system is supposed to be represented different dimensions of models can be chosen.
 3D-models for instance can represent such quantities as turbulence or wall shear stresses.
 1D-models cannot represent these 3D quantities but can still compute pressure and flow along an artery at reasonable accuracy while requiring significantly less computation than a 3D model.
-Finally 0D models such as the Windkessel model can represent the approximate behaviour at outlets of a network where it would be too costly to simulate every vesssel individually with a 1d- or a 3D-model
+Finally 0D models such as the Windkessel model can represent the approximate behaviour at outlets of a network where it would be too costly to simulate every vessel individually with a 1d- or a 3D-model
 
 On one end of this spectrum (3D models) there is high accuracy but also high computational effort.
-On the other end (0D models) only very simplified strucures can be represented but at a considerably lower cost.
+On the other end (0D models) only very simplified structures can be represented but at a considerably lower cost.
 In practice it is therefore very common to couple such models, choosing the more demanding models for locations in the vascular network that require more attention to be simulated accurately or that simply are of special interest.
 This leads to 3D-1D-0D models where the junctions in the network are represented by 3D models, 1D models are used to simulate the flow within vessels, and the 0D models are used to compute the data at the outlets of the network.
 In the setting of this thesis the outlets are omitted vessels that are not included in the model due to not being of interest for these simulations and wanting to reduce computational effort.
@@ -710,7 +710,7 @@ In order to get a first approximation for the flux that needs to be computed the
 
 	\subsubsection{Inlets}\label{sssec:inlets}
 	Usually vessels that are at the edge of the network and that have an inlet that is not connected to another vessel are considered to be fed by the heart.
-	Here the inlet is set through precomputed data.
+	Here the inlet is set through pre-computed data.
 	This data either represents the pressure $P_L(t)$ or the volumetric flow $Q_L(t)$ being put out by the heart and is assigned in one of the following two ways
 	\begin{align}
 		P(0,t) &= P_L(t), &t \in [0,\infty) \\
