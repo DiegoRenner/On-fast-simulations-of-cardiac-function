@@ -27,6 +27,9 @@
 \setcounter{secnumdepth}{3}
 \usepackage{hyperref}
 
+% suppress hbadness in .bbl warning
+\usepackage{etoolbox}
+\apptocmd{\sloppy}{\hbadness 10000\relax}{}{}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -212,8 +215,8 @@ Finally, in \autoref{chap:resl} we validate this code and present the results pr
 
 \chapter{Cardiovascular System} \label{chap:cvs}
 This section serves as an overview of the cardiovascular system with a focus on the arteries of the systemic circulation. 
-Section \ref{mbb} will describe the main building blocks of the cardiovascular system and their relation to one another, section \ref{aw} will give the characteristics of the arterial walls, and section \ref{b} the characteristics of blood.
-\section{Main Building Blocks} \label{mbb}
+Section \ref{sec:mbb} will describe the main building blocks of the cardiovascular system and their relation to one another, section \ref{sec:aw} will give the characteristics of the arterial walls, and section \ref{b} the characteristics of blood.
+\section{Main Building Blocks} \label{sec:mbb}
 The cardiovascular system contains two major circulatory systems.
 These are the systemic and the pulmonary circulation. 
 Both are fed with blood pumped from the heart.
@@ -225,7 +228,7 @@ Capillaries are very small vessels that connect arteries to veins. \cite{köppl2
 From here on out our main focus will be on on the arteries of the systemic circulation since our simulation approach will assume the heart to be represented by pre-computed data and the effect of the capillary bed and the veins will be acounted for by a lumped parameter model (0D-model, \autoref{sssec:outl}).
 In the next two subsections we will describe the main characteristics of the arterial walls and the blood flowing within.
 
-\section{Arterial Wall} \label{aw}
+\section{Arterial Wall} \label{sec:aw}
 An arterial wall consists of three layers or tunicae: an inner, middle, and outer layer also referred to as intima, media, and adventita respectively.
 The tunica intima lines the inside of the artery. It is made up of a single layer of endothelial cells encased in a thin layer of elastin and collagen fibres (connective tissue). 
 On the outside of the artery the tunica adventita is made up of connective tissue as well which attaches the artery to surrounding connective tissue.
@@ -469,10 +472,10 @@ Inserting these fixed values for $\gamma$ and $\alpha$ into  \autoref{eq:1Deqs1}
 	\begin{aligned} 
 		\frac{\partial A}{\partial t} + \frac{\partial Q}{\partial z} &= 0, \\ 
 		\frac{\partial Q}{\partial t} + \frac{\partial}{\partial z}\left(\frac{Q^2}{A} \right) + \frac{A}{\rho} \frac{\partial P}{\partial z} &= -22 \frac{\mu}{\rho} \frac{Q}{A}.
-	\end{aligned} \label{1Deqs2}
+	\end{aligned} \label{1deqs2}
 \end{equation}
 where from here on out we have dropped the space and time dependence.
-We can rewrite equation \ref{1Deqs2} in it's conservative form by defining the following shorthand:
+We can rewrite equation \ref{1deqs2} in it's conservative form by defining the following shorthand:
 
 \begin{equation}
 	\mathbf{U} := 
@@ -716,47 +719,48 @@ In order to get a first approximation for the flux that needs to be computed the
 		Q(0,t) &= Q_L(t), &t \in [0,\infty).
 	\end{align}
 	If one of these quantities is given at a time $t_2$ and the other $u, A, c$, and $P$ can be computed using extrapolation of characteristics.
-	First off the Riemann invariants need to be computed at the first and second point of the space discretization for the current time step.
-	We use the notation for the space-time discretization previously introduced with approximations of quantities averaged over cell $i$ at time step $n$ being denoted by a lowered $i$ and raised $n$ index respectively.
-	At the first cell the two Riemann invariants read as
+	By Riemann's method of characteristics\cite{riemann1860fortpflanzung} the equations governing our 1D-model (\ref{eq:p_tot},\ref{eq:1deqs3}) imply that changes in pressure and velocity propagate in a backward and forward direction at the speeds $U-c$ and $U+c$.
+	These quantities are commonly referred to as Riemann invariants due to being constant along the characteristic curves \cite{sarra2003method}.
+	For a given state of our system $A$, $Q$ we denote the backward and forward Riemann invariants by
+	\begin{align}
+		W_1(A,Q) := U - c \\
+		W_2(A,Q) := U + c
+	\end{align}
+	with $c := \sqrt{\frac{\beta}{2\rho}\sqrt{A}}$.
+	We define discretized Riemann invariants at time-step $n$ in cell $i$ along the lines of the discretization introduced in \autoref{sec:fv}
+	\begin{align}
+		W_1(A_i^n,Q_i^n) := W_{1,i}^n &= u^n_0 - 4c^n_0\\
+		W_2(A_i^n,Q_i^n) := W_{2,i}^n &= u^n_0 + 4c^n_0
+	\end{align}
+	with $c^n_i := \sqrt{\frac{\beta_i}{2\rho}\sqrt{A_i^n}}$.
+	Therefore at the first and the second cell the two Riemann invariants read as
 	\begin{align}
 		W_{1,0}^n &= u^n_0 - 4c^n_0\\
-		W_{2,0}^n &= u^n_0 + 4c^n_0.
-	\end{align}
-	At the second point they are denoted by
-	\begin{align}
+		W_{2,0}^n &= u^n_0 + 4c^n_0\\
 		W_{1,1}^n &= u^n_1 - 4c^n_1\\
 		W_{2,1}^n &= u^n_1 - 4c^n_1.
 	\end{align}
-	We used $c_i^n$ is the wave speed that is computed as
-	\begin{equation}
-		c^n_i = \sqrt{\frac{\beta}{2\rho}\sqrt{A}}.
-	\end{equation}
 	If the input data is given in as a volumetric flow, the Riemann invariants at the next time step are computed via the following update formula:
-
 	\begin{align}
 		W_{1,0}^{n+1} &= W^n_{1,0} + (W^n_{1,1} - W^n_{1,0})(c^n_0-u^n_0) \frac{\Delta t}{\Delta x} \label{update1a}\\
 		W_{2,0}^{n+1} &= \frac{2Q^{n+1}_0}{A^n_0} - W^{n+1}_{1,0} \label{update2a}
 	\end{align}
 	where $Q^{n+1}_0$ is given through input data.
+	This equates to linearly extrapolating the Riemann invariants at the first andsecond cell to meet the backwards and the forwards travelling characteristic curve of the second and first cell respectively.
 	The missing input quantities are then computed from the new Riemann invariants as follows:
-
 	\begin{align}
 		u_0^{n+1} &= \frac{W_{1,0}^{n+1} + W_{2,0}^{n+1}}{2} \\
 		c_0^{n+1} &= \frac{W_{2,0}^{n+1} - W_{1,0}^{n+1}}{4} \\
 		A_0^{n+1} &= \frac{Q_0^{n+1}}{u_0^{n+1}} \\
 		P_0^{n+1} &= P_{ext} + \beta \left( \sqrt{\frac{A_0^{n+1}}{A_{0,0}}} - 1 \right). 
 	\end{align}
-	where $P_{ext}$ is user defined and $A_{0,0}$ is the reference cross-section at the start point $i=0$ of the vessel.
-	If the input data is given as a pressure wave, the Riemann invariants at the next time step are computed via the following update formula:
-
+	where $A_{0,0}$ is the reference cross-section at the cell $i=0$.
+	If the input data is given as a pressure wave, the Riemann invariants at the next time step are computed via the following update formula, again provided through a linear extrapolation:
 	\begin{align}
 		W_{1,0}^{n+1} &= W^n_{1,0} + (W^n_{1,1} - W^n_{1,0})(c^n_0-u^n_0) \frac{\Delta t}{\Delta x} \label{update1b}\\
 		W_{2,0}^{n+1} &= \frac{2Q^{n}_0}{A^n_0} - W^{n+1}_{1,0} \label{update2b}.
 	\end{align}
-
 	The missing input quantities are then computed from the new Riemann invariants as follows:
-
 	\begin{align}
 		u_0^{n+1} &= \frac{W_{1,0}^{n+1} + W_{2,0}^{n+1}}{2} \\
 		c_0^{n+1} &= \frac{W_{2,0}^{n+1} - W_{1,0}^{n+1}}{4} \\
@@ -766,39 +770,74 @@ In order to get a first approximation for the flux that needs to be computed the
 	where $P^{n+1}_0$ is given through input data.
 
 	\subsubsection{Outlets} \label{sssec:outl}
-	One of the most basic ways of setting outlet conditions is to use reflection coefficient to model how much of a wave leaves the vessel and how much gets reflective.
+	One of the most basic ways of setting outlet values is to use reflection coefficient to model how much of a wave leaves the vessel and how much gets reflected.
 	In cases where this doesn't provide enough accuracy Windkessel models are applied \cite {formaggia2010cardiovascular}.
+	These models are modeled after the function of a waterpump as described in \autoref{sec:aw} by considering an analogous electrical circuit.
 	We introduce here a reflective and a three-parameter Windkessel model.
-	A very basic method to compute the outlet boundary values is by considering the outlet to be reflective.
 
 	Reflection
 
-	In the general case this is done equivalently to the inlet boundary conditions through extrapolation of characteristics:
+	This is done equivalently to the inlet boundary conditions through linear extrapolation of characteristics:
 	\begin{align}
-		W_{2,N}^{n+1}&=W_{2,N}^n+(W_{2,N-1}^n-W_{2,N-1}^n) (u_N^n+c_N^n) \frac{\Delta t}{\Delta x}, \\
-		W_{1,N}^{n+1}&=W_{1,N}^0-R_t (W_{2,N}^{n+1}-W_{2,N}^0),
+		W_{2,N}^{n+1}&=W_{2,N}^n+(W_{2,N-1}^n-W_{2,N-1}^n) (u_N^n+c_N^n) \frac{\Delta t}{\Delta x}, \label{eq:refl1} \\
+		W_{1,N}^{n+1}&=W_{1,N}^0-R_t (W_{2,N}^{n+1}-W_{2,N}^0) \label{eq:refl2},
 	\end{align}
 	where $R_t \in [-1,1]$ is the reflection coefficient.
-	The simulation quantities are then computed from the Riemann invariants as follows
+	At $R_t = 0$ no reflection occurs.
+	It is noted that \autoref{eq:refl1} follows directly from linear extrpolation while \autoref{eq:refl2} is constructed in order to transfer some of the forward characteristic curve to the backward one in order to model a reflection.
+	The simulation quantities can becomputed from the Riemann invariants as follows
 	\begin{align}
 		u_N^{n+1} &= \frac{W_{1,N}^{n+1} + W_{2,N}^{n+1}}{2} \\
 		c_N^{n+1} &= \frac{W_{2,N}^{n+1} - W_{1,N}^{n+1}}{4} \\
 		Q_N^{n+1} &= A_N^n u_N^{n+1}.
 	\end{align}
-	A more accurate method of computing the outlet boundary values is using a Windkessel model.
+	A more accurate method of computing the outlet boundary values is uses a Windkessel model.
 
 
 	Windkessel
 
-	In the case of downstream vessels a three element Windkessel model is applied to simulate the perfusion as described in \cite{CiCP-4-317}.
-	Such models are referred to as lumped-parameter or 0D models due to the spatial dependency being integrated out.
+	The three element Windkessel model or RCR model is applied to simulate the perfusion as described in \cite{CiCP-4-317}.
+	Such models are referred to as lumped-parameter or 0D models due to the lack of a spatial dependency.
+	The concept behind this method of computing outlet values is the assumption of a state $A^*$, $Q^*$ at time-step $n+1$ that results from the two states $A_L$, $Q_L$ and $A_R$, $Q_R$ at time-step $n$ to the left and the right respectively.
+	The so called virtual state $A^*$, $Q^*$ therefore satisfies the following equations in it's Riemann invariants
+	\begin{align}
+		W_1(A^*,Q^*) = W_1(A_R,Q_R) \label{eq:vrmi1}\\
+		W_2(A^*,Q^*) = W_2(A_L,Q_L).\label{eq:vrmi2}
+	\end{align}
+	Considering a terminal resistance model the virtual state state has to satisfy
+	\begin{equation}
+		A^*U^* = \frac{P(A^*) - P_{ven}}{R} \label{eq:tr1}
+	\end{equation}
+	where the constant $P_ven$ represents the venous pressure and $R$ models the resistive load resulting from omitted arteries, the capillary bed, and the venous network.
+	Using \autoref{eq:p_tot} and \autoref{eq:vrmi2} gives
+	\begin{equation}
+		f(A^*) := R \left(U_L + 4c(A_L) \right) A^* - 4Rc(A^*)A^* - \frac{\beta}{A_0} \left( \sqrt{A^*} - \sqrt{A} \right) P_{ven} = 0.\label{eq:tr2}
+	\end{equation}
+	The compliance of the omitted vessels and the resistance of the capillary can be represented by an $CR_2$ system
+	\begin{equation}
+		C \frac{dP_C}{dt} = A^*U^* - \frac{P_C-P_ven}{R_2}
+	\end{equation}
+	where $C$ represents the compliance and $P_C$ is the pressure at sait compliance.
+	This equation can be discretized using an explicit Euler scheme in order to compute the values of $P_C$
+	\begin{equation}
+	P_C^n = P_C^{n-1} + \frac{\Delta t}{C} \left(A_LU_L - \frac{ \left( P_C^{n-1} - P_{ven} \right)}{R_2} \right). \label{eq:pc}
+	\end{equation}
+	In order for the wave exiting the vessel to arrive at the compliance without being reflected we couple the terminal resistance model with the $CR_2$ model.
+	This is done by setting $R=R_1$ and $P_{ven}=P_C$ in \autoref{eq:tr2}.
+	Since $A_L$, $U_L$ represent the state at the end oft the vessel and can therefore be set to $A_i^n$, $U_i^n$.
+	The \autoref{eq:tr1} coupled with \autoref{eq:pc} can be solved with a Newton solver\cite{atkinson1991introduction} in order to receive $A^*$ and $U^*$ is computed using \autoref{eq:p_tot}.
+	Finally $A_i^{n+1}$, $U_i^{n+1}$ are set to $A^*$, $U^*$ respectively. \cite{alastruey2008reduced}
+
+	The variables $R_1$, $C$, $R_2$ are parameters that have to be determined for each individual application and they are named after the RLC-circuit in analogy to which this algorithm was setup.
+	Different networks can have very different parameters and their derivation is not trivial \cite{köppl2023dimension}.
+	This is a prime example for the need of efficient calibration algorithms which this thesis aims to work towards by providing a differentiable solver.
+	In the next section we will go over how to set boundary values for junctions between vessels.
+
 	\begin{comment}
 		At capillary level, the pressure is assumed to be zero, i.e. $P_{\text {out }}=0$ and the coupling is performed by assuming that an intermediate state $\left(A^*, u^*\right)$ generates from $\left(A_l, u_l\right)$
 		45
 		D outlet) and $\left(A_r, u_r\right)$ (0D inlet) (Alastruey et al., 2008).
-	\end{comment}
 	In order to compute the output value through the Windkessel model we introduce a linearized version of the equations describing the blood flow that is computed by integrating out the spatial component
-	\begin{comment}
 		\begin{equation}
 			A^* u^*\left(1+\frac{R_1}{R_2}\right)+C_c R_1 \frac{\partial\left(A^* u^*\right)}{\partial t}=\frac{P_e-P_{\text {out }}}{R_2}+C_c \frac{\partial P_e}{\partial t}, \label{wk_eq1}
 		\end{equation}
@@ -818,15 +857,10 @@ In order to get a first approximation for the flux that needs to be computed the
 		The corresponding code can be found in 
 
 		src/boundary\_conditions.jl:169-216.
-	\end{comment}
 	\begin{align}
 		C\frac{d P_C^{n+1}}{d t}+Q_{M}^{n+1}-Q_M^{n+1}&=0, \label{eq:RLC1}\\
 		{L}{\frac{d Q_M^{n+1}}{d t}}+P_{M}^n-P_C^{n+1}&=-R_2 Q_{M}^{n+1} \label{eq:RLC2}.
 	\end{align}
-	The variables $R$, $L$, $C$ are parameters that have to be determined for each individual application and they are named after the RLC-circuit in analogy to which this algorithm was setup.
-	Different networks can have very different parameters and their derivation is not trivial \cite{köppl2023dimension}.
-	This is a prime example for the need of efficient calibration algorithms which this thesis aims to work towards by providing a differentiable solver.
-	We will derive a time-step algorithm in order to compute the value of $P_C^{n+1}$.
 	Introducing a finite difference for the derivatives in the equations \autoref{eq:RLC1} and \autoref{eq:RLC2} leads to
 	\begin{align}
 		C{\frac{P_C^{n+1}-P_C^{n}}{\Delta t}} &+ Q_M^{n+1}-Q_M^n = 0, \label{lin_disc1}\\ 
@@ -884,6 +918,7 @@ In order to get a first approximation for the flux that needs to be computed the
 		-\frac{\beta}{A_{0,M}}\left(\sqrt{A_M^{n+1}}-\sqrt{A_{0,M}}\right)+P_C^n = 0. \label{wk_eq3}
 	\end{multline}
 	This equation can be solved using a Newton solver.
+	\end{comment}
 
 	\subsubsection{Junctions} \label{sssec:junctions}
 	Three types of junctions are considered.
