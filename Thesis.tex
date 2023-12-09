@@ -236,7 +236,7 @@ In-between these two layers lies the thickest layer, the tunica media, which con
 The tunica media is responsible for the elasticity of the artery.
 Arteries close to the heart have a tunica media that is mainly made up of elastic fibres and are referred to as elastic arteries while the tunica media of arteries farther away from the heart and of small arteries consist predominantly of muscle cells and are called muscular arteries.
 The elastic arteries also have a higher compliance.
- 
+
 This means that elastic arteries are able to distended and increase their volume as a response to pressure applied to the inside of the arterial wall.
 Hence elastic arteries deform more under pressure than muscular arteries that are stiffer and don't distend as much when blood is pumped into them by the heart.
 At the same time, usually the elastic arteries are larger than the muscular arteries and the size of arteries generally decreases as the distance to the heart increases.
@@ -463,6 +463,7 @@ Combining \autoref{eq:pdef}-\autoref{eq:strain} with a term for the external pre
 	P(z;t) &= P_{ext}(z;t) + \beta \left( \sqrt{\frac{A(z;t)}{A_0(z)}}-1 \right),  \label{eq:p_tot}\\
 	\beta(z) &=  \frac{\sqrt{\pi} E h_0(z)}{(1-\nu^2) \sqrt{A_0(z)}}.
 \end{align}
+We refer to $\beta$ as the elasticity coefficeint from here on out.
 Comparison with experimental data shows that a plug-flow is a reasonable approximation of the velocity profile \cite{hunter1972numerical} \cite{smith2000generation} \cite{smith2002anatomically}.
 Therefore it is reasonable to set $\gamma = 9, \alpha = \frac{11}{10}$.
 Since the plug-flow velocity profile is relatively flat the average of $Q$ doesn't differ from the actual value anywhere along $r$.
@@ -719,18 +720,18 @@ In order to get a first approximation for the flux that needs to be computed the
 		Q(0,t) &= Q_L(t), &t \in [0,\infty).
 	\end{align}
 	If one of these quantities is given at a time $t_2$ and the other $u, A, c$, and $P$ can be computed using extrapolation of characteristics.
-	By Riemann's method of characteristics\cite{riemann1860fortpflanzung} the equations governing our 1D-model (\ref{eq:p_tot},\ref{eq:1deqs3}) imply that changes in pressure and velocity propagate in a backward and forward direction at the speeds $U-c$ and $U+c$.
+	By Riemann's method of characteristics\cite{riemann1860fortpflanzung} the equations governing our 1D-model (\ref{eq:p_tot},\ref{eq:1deqs3}) imply that changes in pressure and velocity propagate in the backward and forward direction at the speeds $U-c$ and $U+c$.
 	These quantities are commonly referred to as Riemann invariants due to being constant along the characteristic curves \cite{sarra2003method}.
 	For a given state of our system $A$, $Q$ we denote the backward and forward Riemann invariants by
 	\begin{align}
-		W_1(A,Q) := U - c \\
-		W_2(A,Q) := U + c
+		W_1(A,U) := U - c \\
+		W_2(A,U) := U + c
 	\end{align}
 	with $c := \sqrt{\frac{\beta}{2\rho}\sqrt{A}}$.
 	We define discretized Riemann invariants at time-step $n$ in cell $i$ along the lines of the discretization introduced in \autoref{sec:fv}
 	\begin{align}
-		W_1(A_i^n,Q_i^n) := W_{1,i}^n &= u^n_0 - 4c^n_0\\
-		W_2(A_i^n,Q_i^n) := W_{2,i}^n &= u^n_0 + 4c^n_0
+		W_{1,i}^n := W_1(A_i^n,U_i^n) &= u^n_i - 4c^n_i\\
+		W_{2,i}^n := W_2(A_i^n,U_i^n) &= u^n_i + 4c^n_i
 	\end{align}
 	with $c^n_i := \sqrt{\frac{\beta_i}{2\rho}\sqrt{A_i^n}}$.
 	Therefore at the first and the second cell the two Riemann invariants read as
@@ -738,7 +739,7 @@ In order to get a first approximation for the flux that needs to be computed the
 		W_{1,0}^n &= u^n_0 - 4c^n_0\\
 		W_{2,0}^n &= u^n_0 + 4c^n_0\\
 		W_{1,1}^n &= u^n_1 - 4c^n_1\\
-		W_{2,1}^n &= u^n_1 - 4c^n_1.
+		W_{2,1}^n &= u^n_1 + 4c^n_1.
 	\end{align}
 	If the input data is given in as a volumetric flow, the Riemann invariants at the next time step are computed via the following update formula:
 	\begin{align}
@@ -775,8 +776,7 @@ In order to get a first approximation for the flux that needs to be computed the
 	These models are modeled after the function of a waterpump as described in \autoref{sec:aw} by considering an analogous electrical circuit.
 	We introduce here a reflective and a three-parameter Windkessel model.
 
-	Reflection
-
+	\paragraph{Reflection} \label{par:refl}
 	This is done equivalently to the inlet boundary conditions through linear extrapolation of characteristics:
 	\begin{align}
 		W_{2,N}^{n+1}&=W_{2,N}^n+(W_{2,N-1}^n-W_{2,N-1}^n) (u_N^n+c_N^n) \frac{\Delta t}{\Delta x}, \label{eq:refl1} \\
@@ -793,16 +793,14 @@ In order to get a first approximation for the flux that needs to be computed the
 	\end{align}
 	A more accurate method of computing the outlet boundary values is uses a Windkessel model.
 
-
-	Windkessel
-
+	\paragraph{Windkessel} \label{par:wk}
 	The three element Windkessel model or RCR model is applied to simulate the perfusion as described in \cite{CiCP-4-317}.
 	Such models are referred to as lumped-parameter or 0D models due to the lack of a spatial dependency.
-	The concept behind this method of computing outlet values is the assumption of a state $A^*$, $Q^*$ at time-step $n+1$ that results from the two states $A_L$, $Q_L$ and $A_R$, $Q_R$ at time-step $n$ to the left and the right respectively.
-	The so called virtual state $A^*$, $Q^*$ therefore satisfies the following equations in it's Riemann invariants
+	The concept behind this method of computing outlet values is the assumption of a state $A^*$, $U^*$ at time-step $n+1$ that results from the two states $A_L$, $U_L$ and $A_R$, $U_R$ at time-step $n$ to the left and the right respectively.
+	The so called virtual state $A^*$, $U^*$ therefore satisfies the following equations in it's Riemann invariants
 	\begin{align}
-		W_1(A^*,Q^*) = W_1(A_R,Q_R) \label{eq:vrmi1}\\
-		W_2(A^*,Q^*) = W_2(A_L,Q_L).\label{eq:vrmi2}
+		W_1(A^*,U^*) = W_1(A_R,U_R) \label{eq:vrmi1}\\
+		W_2(A^*,U^*) = W_2(A_L,U_L). \label{eq:vrmi2}
 	\end{align}
 	Considering a terminal resistance model the virtual state state has to satisfy
 	\begin{equation}
@@ -820,7 +818,7 @@ In order to get a first approximation for the flux that needs to be computed the
 	where $C$ represents the compliance and $P_C$ is the pressure at sait compliance.
 	This equation can be discretized using an explicit Euler scheme in order to compute the values of $P_C$
 	\begin{equation}
-	P_C^n = P_C^{n-1} + \frac{\Delta t}{C} \left(A_LU_L - \frac{ \left( P_C^{n-1} - P_{ven} \right)}{R_2} \right). \label{eq:pc}
+		P_C^n = P_C^{n-1} + \frac{\Delta t}{C} \left(A_LU_L - \frac{ \left( P_C^{n-1} - P_{ven} \right)}{R_2} \right). \label{eq:pc}
 	\end{equation}
 	In order for the wave exiting the vessel to arrive at the compliance without being reflected we couple the terminal resistance model with the $CR_2$ model.
 	This is done by setting $R=R_1$ and $P_{ven}=P_C$ in \autoref{eq:tr2}.
@@ -837,7 +835,7 @@ In order to get a first approximation for the flux that needs to be computed the
 		At capillary level, the pressure is assumed to be zero, i.e. $P_{\text {out }}=0$ and the coupling is performed by assuming that an intermediate state $\left(A^*, u^*\right)$ generates from $\left(A_l, u_l\right)$
 		45
 		D outlet) and $\left(A_r, u_r\right)$ (0D inlet) (Alastruey et al., 2008).
-	In order to compute the output value through the Windkessel model we introduce a linearized version of the equations describing the blood flow that is computed by integrating out the spatial component
+		In order to compute the output value through the Windkessel model we introduce a linearized version of the equations describing the blood flow that is computed by integrating out the spatial component
 		\begin{equation}
 			A^* u^*\left(1+\frac{R_1}{R_2}\right)+C_c R_1 \frac{\partial\left(A^* u^*\right)}{\partial t}=\frac{P_e-P_{\text {out }}}{R_2}+C_c \frac{\partial P_e}{\partial t}, \label{wk_eq1}
 		\end{equation}
@@ -857,198 +855,221 @@ In order to get a first approximation for the flux that needs to be computed the
 		The corresponding code can be found in 
 
 		src/boundary\_conditions.jl:169-216.
-	\begin{align}
-		C\frac{d P_C^{n+1}}{d t}+Q_{M}^{n+1}-Q_M^{n+1}&=0, \label{eq:RLC1}\\
-		{L}{\frac{d Q_M^{n+1}}{d t}}+P_{M}^n-P_C^{n+1}&=-R_2 Q_{M}^{n+1} \label{eq:RLC2}.
-	\end{align}
-	Introducing a finite difference for the derivatives in the equations \autoref{eq:RLC1} and \autoref{eq:RLC2} leads to
-	\begin{align}
-		C{\frac{P_C^{n+1}-P_C^{n}}{\Delta t}} &+ Q_M^{n+1}-Q_M^n = 0, \label{lin_disc1}\\ 
-		L\frac{Q_M^{n+1}-Q_M^{n}}{\Delta t} &+ R_{2}Q_M^{n+1}+P_M^n-P_C^{n+1} = 0. \label{lin_disc2}
-	\end{align}
-	Using \ref{lin_disc2} to eliminate any occurrence of $Q_M^n$ \ref{lin_disc1} we get
-	\begin{align}
-		P_C^{n+1} = \left(R_2 + \frac{L}{\Delta t}\right) \left( - C \frac{P_C^{n+1} - P_C^{n}}{\Delta t} + Q_M^n\right)+ P_M^n - \frac{L}{\Delta t} Q_M^{n}
-	\end{align}
-	and then solving for $P_C^{n+1}$ gives
-	\begin{multline}
-		\left( 1+ \frac{C}{\Delta t}\left( R_2 + \frac{L}{\Delta t} \right) \right) P_C^{n+1} = \\
-		\left( R_2 + \frac{L}{\Delta t} \right) \left( \frac{C}{\Delta t} P_C^n + Q_M^n \right) + P_M^n - \frac{L}{\Delta t} Q_M^n.
-	\end{multline}
-	Simplifying the equation and regrouping the terms gives
-	\begin{equation}
-		\phi P_{C}^{n+1}=R_2 \left( \frac{C}{\Delta t}P_C^{n} + Q_M^n+\frac{1}{L+R_{2}\Delta t}\left(\Delta t P_M^n-L Q_M^{n}\right) \right),
-	\end{equation}
-	with 
-	\begin{equation}
-		\phi=\frac{R_{2}C}{\Delta t}{\bf+}\frac{R_{2}\Delta t}{L{+}R_{2}\Delta t}. \label{RCL}
-	\end{equation}
-	This gives us an update formula through which we can compute new values of $P_C$ at each step.
-	Since the inertia effect is negligible in the capillary bed we can set $L=0$ changing the update function for $P_C$ to 
-	\begin{equation}
-		\phi P_{C}^{n+1}=\frac{R_{2}C}{\Delta t}(P_{C})^{n}+R_{2} Q_M^n+P_M^n,
-	\end{equation}
-	with 
-	\begin{equation}
-		\phi = \frac{R_{2}C}{\Delta t} + 1. 
-	\end{equation}
-	Introducing the relation
-	\begin{equation}
-		Q_M^n={\frac{P_M^n-P_{\mathrm{C}}^{n}}{R_{1}}} \label{RCLR}
-	\end{equation}
-	turns our RCL-circuit into an RCLR-circuit.
-	Introducing the extra resistance prevents non-physical reflection of incoming waves.
-	We can rewrite \ref{RCLR} as 
-	\begin{equation}
-		Q_M^n={\frac{P_M^n-(P_{M})_{R C L R}}{R_{1}+{\frac{R_{2}}{\phi}}}}, 
-	\end{equation}
-	with 
-	\begin{equation}
-		\bigl(P_{M}\bigr)_{RCLR}=\bigl(P_{C}\bigr)^{n}-{\frac{R_{2}}{\phi}}Q_M^n.
-	\end{equation}
-	Inserting the tube law and simplifying we can derive a function whose roots correspond to the correct value for $A_M^{n+1}$
-	\begin{multline}
-		f(A_M^{n+1}) = \left(R_{1}+{\frac{R_{2}}{\phi}}\right)\left( \left(u_{M}^n+4c_{M}^n \right)A_M^{n+1}-4c_M^nA_M^{n+1} \right) \\
-		-{\frac{\beta}{A_{0,M}}}\Big(\sqrt{A_M^{n+1}}-\sqrt{A_{0,M}}\Big)+(P_{M}^n)_{R C L R} =0. \label{wk_newton}
-	\end{multline}
+		\begin{align}
+			C\frac{d P_C^{n+1}}{d t}+Q_{M}^{n+1}-Q_M^{n+1}&=0, \label{eq:RLC1}\\
+			{L}{\frac{d Q_M^{n+1}}{d t}}+P_{M}^n-P_C^{n+1}&=-R_2 Q_{M}^{n+1} \label{eq:RLC2}.
+		\end{align}
+		Introducing a finite difference for the derivatives in the equations \autoref{eq:RLC1} and \autoref{eq:RLC2} leads to
+		\begin{align}
+			C{\frac{P_C^{n+1}-P_C^{n}}{\Delta t}} &+ Q_M^{n+1}-Q_M^n = 0, \label{lin_disc1}\\ 
+			L\frac{Q_M^{n+1}-Q_M^{n}}{\Delta t} &+ R_{2}Q_M^{n+1}+P_M^n-P_C^{n+1} = 0. \label{lin_disc2}
+		\end{align}
+		Using \ref{lin_disc2} to eliminate any occurrence of $Q_M^n$ \ref{lin_disc1} we get
+		\begin{align}
+			P_C^{n+1} = \left(R_2 + \frac{L}{\Delta t}\right) \left( - C \frac{P_C^{n+1} - P_C^{n}}{\Delta t} + Q_M^n\right)+ P_M^n - \frac{L}{\Delta t} Q_M^{n}
+		\end{align}
+		and then solving for $P_C^{n+1}$ gives
+		\begin{multline}
+			\left( 1+ \frac{C}{\Delta t}\left( R_2 + \frac{L}{\Delta t} \right) \right) P_C^{n+1} = \\
+			\left( R_2 + \frac{L}{\Delta t} \right) \left( \frac{C}{\Delta t} P_C^n + Q_M^n \right) + P_M^n - \frac{L}{\Delta t} Q_M^n.
+		\end{multline}
+		Simplifying the equation and regrouping the terms gives
+		\begin{equation}
+			\phi P_{C}^{n+1}=R_2 \left( \frac{C}{\Delta t}P_C^{n} + Q_M^n+\frac{1}{L+R_{2}\Delta t}\left(\Delta t P_M^n-L Q_M^{n}\right) \right),
+		\end{equation}
+		with 
+		\begin{equation}
+			\phi=\frac{R_{2}C}{\Delta t}{\bf+}\frac{R_{2}\Delta t}{L{+}R_{2}\Delta t}. \label{RCL}
+		\end{equation}
+		This gives us an update formula through which we can compute new values of $P_C$ at each step.
+		Since the inertia effect is negligible in the capillary bed we can set $L=0$ changing the update function for $P_C$ to 
+		\begin{equation}
+			\phi P_{C}^{n+1}=\frac{R_{2}C}{\Delta t}(P_{C})^{n}+R_{2} Q_M^n+P_M^n,
+		\end{equation}
+		with 
+		\begin{equation}
+			\phi = \frac{R_{2}C}{\Delta t} + 1. 
+		\end{equation}
+		Introducing the relation
+		\begin{equation}
+			Q_M^n={\frac{P_M^n-P_{\mathrm{C}}^{n}}{R_{1}}} \label{RCLR}
+		\end{equation}
+		turns our RCL-circuit into an RCLR-circuit.
+		Introducing the extra resistance prevents non-physical reflection of incoming waves.
+		We can rewrite \ref{RCLR} as 
+		\begin{equation}
+			Q_M^n={\frac{P_M^n-(P_{M})_{R C L R}}{R_{1}+{\frac{R_{2}}{\phi}}}}, 
+		\end{equation}
+		with 
+		\begin{equation}
+			\bigl(P_{M}\bigr)_{RCLR}=\bigl(P_{C}\bigr)^{n}-{\frac{R_{2}}{\phi}}Q_M^n.
+		\end{equation}
+		Inserting the tube law and simplifying we can derive a function whose roots correspond to the correct value for $A_M^{n+1}$
+		\begin{multline}
+			f(A_M^{n+1}) = \left(R_{1}+{\frac{R_{2}}{\phi}}\right)\left( \left(u_{M}^n+4c_{M}^n \right)A_M^{n+1}-4c_M^nA_M^{n+1} \right) \\
+			-{\frac{\beta}{A_{0,M}}}\Big(\sqrt{A_M^{n+1}}-\sqrt{A_{0,M}}\Big)+(P_{M}^n)_{R C L R} =0. \label{wk_newton}
+		\end{multline}
 
-	Finally we can simplify \ref{wk_newton} by writing out $(P_{M})_{RCLR}$ and once more using that the outgoing Riemann invariant at the end of the vessel is equal to the incoming one of our intermediate state giving us
-	\begin{multline}
-		f\left(A_M^{n+1}\right) = A_M^{n+1} R_1\left(u_M^n+4 c_M^n\right)-4 A_M^{n+1} R_1 c_M^n\\
-		-\frac{\beta}{A_{0,M}}\left(\sqrt{A_M^{n+1}}-\sqrt{A_{0,M}}\right)+P_C^n = 0. \label{wk_eq3}
-	\end{multline}
-	This equation can be solved using a Newton solver.
+		Finally we can simplify \ref{wk_newton} by writing out $(P_{M})_{RCLR}$ and once more using that the outgoing Riemann invariant at the end of the vessel is equal to the incoming one of our intermediate state giving us
+		\begin{multline}
+			f\left(A_M^{n+1}\right) = A_M^{n+1} R_1\left(u_M^n+4 c_M^n\right)-4 A_M^{n+1} R_1 c_M^n\\
+			-\frac{\beta}{A_{0,M}}\left(\sqrt{A_M^{n+1}}-\sqrt{A_{0,M}}\right)+P_C^n = 0. \label{wk_eq3}
+		\end{multline}
+		This equation can be solved using a Newton solver.
 	\end{comment}
 
 	\subsubsection{Junctions} \label{sssec:junctions}
 	Three types of junctions are considered.
 	Conjunctions: joining two vessels, bifurcations: splitting one vessel into two, and anastomosis: joining two vessels into one.
-	\paragraph{Conjunctions} \label{par:conjunctions}
-	For all types of junctions three types of equations are taken into account. 
-	Extrapolation of characteristics, conservation of mass and total pressure conservation.
-	For the conjunctions this leads to
-	$$
-	W_1^*=u_1+4 c_1
-	$$
-	and 
-	$$
-	W_2^*=u_2-4 c_2
-	$$
-	where $W_{1,2}^*$ denote extrapolated characteristics. 
-	The extrapolation can either be done linearly, as it was done when setting boundary conditions, or constantly as it seems to be done in the code. 
-	The conservation of mass gives
-	$$A_1 u_1-A_2 u_2=0,$$
-	and for the conservation of total pressure
-	$$P_{t_1}=P_{t_2}.$$
+	We will describe the governing equations of the juntion types in the next three paragraphs. 
 
+	\paragraph{Conjunctions} \label{par:conjunctions}
+	A conjunction is the outlet of a vessel connected to the inlet of another vessel.
+	For all types of junctions three types of equations are taken into account. 
+	Conservation of mass, pressure conservation, and extrapolation of characteristics.
+	For the conjunctions the conservation of mass leads to 
+	\begin{equation}
+		A_{1,N}^{n+1} u_{1,N}^{n+1} - A_{2,0}^{n+1} u_{2,0}^{n+1}=0
+	\end{equation}
+	where $A_{1,N}^{n+1}$, $u_{1,N}^{n+1}$ and $A_{2,0}^{n+1}$, $u_{2,0}^{n+1}$ are the cross-section and the velocity at the outlet of the first vessel and the inlet of the second vessel respectively.
+	The pressure conservation is given by 
+	\begin{multline}
+		\beta_{1,N} \left( \frac{\sqrt{A_{1,N}^{n+1}}}{\sqrt{A_{0,1,N}}}-1\right)+\frac{1}{2} \rho \left( u_{1,N}^{n+1} \right) ^2 \\
+		-\beta_{2,0} \left( \frac{\sqrt{A_{2,0}^{n+1}}}{\sqrt{A_{0,2,0}}}-1\right)+\frac{1}{2} \rho \left( u_{2,0}^{n+1} \right)=0
+	\end{multline}
+	where $\beta_{1,N}$, $A_{0,1,N}$ and $\beta_{2,N}$, $A_{0,2,0}$ are the elasticity coefficient and the cross-section at the outlet of the first vessel and the inlet of the second vessel respectively.
+	The first and the second term represent the pressure coming from the arterial wall.
+	The second and the third term describe the kinetic pressure setmming from the fluid itself.
+	Finally, analogously as in \autoref{sssec:outl}, we introduce the virtual state $A^*$, $U^*$ that generates from the the two states $A_L$, $U_L$ and $A_R$, $U_R$
+	\begin{align}
+		W_1^* := W_1(A^*,U^*) = W_1(A_R,U_R) = W_1(A_{2,0}^{n+1}, U_{2,0}^{n+1}) \\
+		W_2^* := W_2(A^*,U^*) = W_2(A_L,U_L) = W_1(A_{1,N}^{n+1}, U_{1,N}^{n+1}).
+	\end{align}
+	This also equates to 
+	\begin{align}
+		W_1^* = u_{2,0}^{n+1} + 4c_{2,0}^{n+1} = u_{2,0}^{n+1} + 4k_{2,0} \left( A_{2,0}^{n+1} \right)^{\frac{1}{4}} \\
+		W_2^* = u_{1,N}^{n+1} + 4c_{1,N}^{n+1} = u_{1,N}^{n+1} + 4k_{1,N} \left( A_{2,0}^{n+1} \right)^{\frac{1}{4}}.
+	\end{align}
+	where $k_{l,i} := \sqrt{\frac{\beta_{l,i}}{2\rho}}$ for $l \in \{1,2\}$, $i \in \{0,1,...N\}$.
 	This leads to the system of equations:
 	$$
-	\mathbf{f}_c=\left\{f_{c_i}\right\}=\left\{\begin{array}{l}
-			q_{c_1}+4 k_1 q_{c_3}-W_1^*=0 \\
-			q_{c_2}-4 k_2 q_{c_4}-W_2^*=0 \\
-			q_{c_1} q_{c_3}^4-q_{c_2} q_{c_4}^4=0 \\
-			\beta_1\left(\frac{q_{c_3}^2}{A_{01}^{1 / 2}}-1\right)+\frac{1}{2} \rho q_{c_1}^2-\beta_2\left(\frac{q_{c_4}^2}{A_{02}^{1 / 2}}-1\right)-\frac{1}{2} \rho q_{c_2}^2=0
-	\end{array}\right.
+	\mathbf{f}(\mathbf{q_c}) := \left[\begin{array}{c}
+			q_{c_1}+4 k_{1,N} q_{c_3}-W_{1,N}^* \\
+			q_{c_2}-4 k_{2,0} q_{c_4}-W_{2,0}^* \\
+			q_{c_1} q_{c_3}^4-q_{c_2} q_{c_4}^4 \\
+			\beta_1\left(\frac{q_{c_3}^2}{A_{0,1,N}^{1 / 2}}-1\right)+\frac{1}{2} \rho q_{c_1}^2-\beta_2\left(\frac{q_{c_4}^2}{A_{0,2,0}^{1 / 2}}-1\right)-\frac{1}{2} \rho q_{c_2}^2
+	\end{array}\right] \equiv 0
 	$$
 	where we have introduced the following notation in order to more easily write this system in a matrix-vector form
-	$$
-	\begin{aligned}
-		\mathbf{q}_c&=\left\{q_{c_i}\right\}=\left[\begin{array}{llll}
-				u_1, & u_2, & A_1^{1 / 4}, & A_2^{1 / 4}
+	\begin{align}
+		\mathbf{q}_c&=\left[\begin{array}{llll}
+				u_{1,N}^{n+1}, & u_{2,0}^{n+1}, & \left( A_{1,N}^{n+1}\right)^{1 / 4}, & \left( A_{2,0}^{n+1} \right)^{1 / 4}
 		\end{array}\right]^T,\  i=1, \ldots, 4. 
-			\end{aligned}
-			$$
-
-			The following shorthand notations have been introduced as well $c_i=k_i A_i^{1 / 4},$  $k_i=\sqrt{\frac{3}{2} \gamma_i}$.
+	\end{align}
 			The system is solved iteratively using the Newton method
+			\begin{align}
+				\mathbf{J}_c \cdot \delta \mathbf{q}_c^m &= -\mathbf{f}_c\left(\mathbf{q}_c^m\right) \\
+				\mathbf{q}_c^{m+1} &= \mathbf{q}_c^m+\delta \mathbf{q}_c^m
+			\end{align}
+			where $\mathbf{J}_c$ is the Jacobian
+$$\mathbf{J}_{c}=\left[\begin{array}{c c c c}{{{1}}}&{{0}}&{{{4}k_{1,N}}}&{{0}}\\ {{0}}&{{{1}}}&{{0}}&{{-4k_{2,0}}}\\ {{q_{c3}^{4}}}&{{-q_{c4}^{4}}}&{{4q_{c3}q_{3}^{3}}}&{{-4q_{c4}q_{c}^{3}}}\\ {{q_{c1}^{4}}}&{{-\rho q_{c2}}}&{{2\beta_{1}\frac{q_{c}}{A_{0,1,N}^{1/2}}}}&{{-2\beta_{2}\frac{q_{4}}{A_{0,2,N}^{42}}}}\end{array}\right].$$
 
-			$$
-			\left\{\begin{array}{l}
-					\mathbf{J}_c \cdot \delta \mathbf{q}_c^n=-\mathbf{f}_c\left(\mathbf{q}_c^n\right) \\
-					\mathbf{q}_c^{n+1}=\mathbf{q}_c^n+\delta \mathbf{q}_c^n
-			\end{array}\right.
-			$$
+The quantities $W_{1,N}^*$ and $W_{2,0}^*$ in $\mathbf{f}$ are computed from the updated $\mathbf{q_c}$ at every iteration.
+The initial condition for the Newton solver is set by
+	\begin{align}
+		\mathbf{q}_c^0&=\left[\begin{array}{llll}
+				u_{1,N}^{n}, & u_{2,0}^{n}, & \left( A_{1,N}^{n}\right)^{1 / 4}, & \left( A_{2,0}^{n} \right)^{1 / 4}
+		\end{array}\right]^T,\  i=1, \ldots, 4. 
+	\end{align}
+It is noted that the Jacobian only needs to be evaluated at $\mathbf{q_c}^0$ and can be reused at each iteration.
+This reduces the computational cost and is commonly referred to as a type of frozen Newoton method. \cite{jin2010class,amat2013maximum,amat2018two}
+In the next section we will be describing how to compute boundary values at bifurcations.
 
-			Where $\mathbf{J}_c$ is the Jacobian
-$$\mathbf{J}_{c}=\left[\begin{array}{c c c c}{{{1}}}&{{0}}&{{{4}k_{1}}}&{{0}}\\ {{0}}&{{{1}}}&{{0}}&{{-4k_{2}}}\\ {{q_{c3}^{4}}}&{{-q_{c4}^{4}}}&{{4q_{c3}q_{3}^{3}}}&{{-4q_{c4}q_{c}^{3}}}\\ {{q_{c1}^{4}}}&{{-\rho q_{c2}}}&{{2\beta_{1}\frac{q_{c}}{A_{01}^{1/2}}}}&{{-2\beta_{2}\frac{q_{4}}{A_{02}^{42}}}}\end{array}\right].$$
-
-The Jacobian depends on $\mathbf{q}_c^n$ and would have to be updated at every iteration of the Newton method but in this code a modified Newton method also known as frozen Newton is applied wherein the Jacobian is initialized with the initial value of $\mathbf{q}_c$ and then not updated any more throughout further computations.
 \paragraph{Bifurcations} \label{par:bifurcations}
-For bifurcations the same conservation laws are applied.
+A bifurcation is a junction where on vessel outlet connects to two vessel inlets.
+For bifurcations the same conservation laws are applied as for the conjunction, i.e conservation of mass, conservation of pressure, and compatibility of the characteristic curves.
 This lead to the following system of equations:
-$$
-\mathbf{f}_c=\left\{f_{c_i}\right\}=\left\{\begin{array}{l}
-		q_{c_1}+4 k_1 q_{c_4}-W_1^*=0 \\
-		q_{c_2}-4 k_2 q_{c_5}-W_2^*=0 \\
-		q_{c_3}-4 k_2 q_{c_6}-W_3^*=0 \\
+\begin{equation}
+	\mathbf{f}(\mathbf{q_c})=\left\{\begin{array}{l}
+		q_{c_1}+4 k_{1,N} q_{c_4}-W_{1,N}^*=0 \\
+		q_{c_2}-4 k_{2,0} q_{c_5}-W_{2,0}^*=0 \\
+		q_{c_3}-4 k_{2,0} q_{c_6}-W_{3,0}^*=0 \\
 		q_{c_1} q_{c_4}^4-q_{c_2} q_{c_5}^4-q_{c_3} q_{c_6}^4=0 \\
-		\beta_1\left(\frac{q_{c_4}^2}{A_{01}^{1 / 2}}-1\right)-\beta_2\left(\frac{q_{c_5}^2}{A_{02}^{1 / 2}}-1\right)=0 \\
-		\beta_1\left(\frac{q_{c_4}^2}{A_{01}^{1 / 2}}-1\right)-\beta_3\left(\frac{q_{c_6}^2}{A_{03}^{1 / 2}}-1\right)=0 
+		\beta_1\left(\frac{q_{c_4}^2}{A_{0,1,N}^{1 / 2}}-1\right)-\beta_2\left(\frac{q_{c_5}^2}{A_{0,2,0}^{1 / 2}}-1\right)=0 \\
+		\beta_1\left(\frac{q_{c_4}^2}{A_{0,1,N}^{1 / 2}}-1\right)-\beta_3\left(\frac{q_{c_6}^2}{A_{0,3,0}^{1 / 2}}-1\right)=0 
 \end{array}\right. \label{syseq_bif}
-$$
+\end{equation}
 with the same shorthand notation as used when describing the Conjunctions and the following vector of variables
-$$
-\begin{aligned}
-	\mathbf{q}_c=\left\{q_{c_i}\right\}=\left[\begin{array}{llllll}
-			u_1, & u_2, & u_3, & A_1^{1 / 4}, & A_2^{1 / 4}, & A_3^{1 / 4}
-	\end{array}\right], \ i=1, \ldots, 6. 
-\end{aligned}
-$$
-
-Once again the frozen Newton method is applied to solve the system.
+\begin{multline}
+	\mathbf{q}_c=\left[\begin{array}{llllll}
+			u_{1,N}^{n+1}, & u_{2,0}^{n+1}, & u_{3,0}^{n+1}, & \left(A_{1,N}^{n+1}\right)^{\frac{1}{4}}, & \left(A_{2,0}^{n+1}\right)^{\frac{1}{4}}, & \left(A_{3,0}^{n+1}\right)^{\frac{1}{4}}
+	\end{array}\right], \\
+	i=1, \ldots, 6. 
+\end{multline}
+In analogy to the cconjunction the frozen Newton method is applied to solve the system.
 The Jacobian here reads as
-$$\mathbf{J}_{c}=\left[\begin{array}{c c c c c c}
-		1&0&0&4k_1&0&0\\
-		0&1&0&0&-4k_2&0\\
-		0&0&1&0&0&-4k_3\\
+\begin{equation}
+\mathbf{J}_{c}=\left[\begin{array}{c c c c c c}
+		1&0&0&4k_{1,N}&0&0\\
+		0&1&0&0&-4k_{2,0}&0\\
+		0&0&1&0&0&-4k_{3,0}\\
 		q_{c_4}^4 & -q_{c_5}^4 & -q_{c_6}^4 & 4q_{c_1}q_{c_4}^3 & -4q_{c_2}q_{c_5}^3 & -4q_{c_3}q_{c_6}^3 \\
-		0 & 0 & 0 & 2\beta_1\frac{q_{c_4}}{A_{01}^{\frac{1}{2}}} & -2\beta_2\frac{q_{c_5}}{A_{02}^{\frac{1}{2}}} & 0\\
-		0 & 0 & 0 & 2\beta_1\frac{q_{c_4}}{A_{01}^{\frac{1}{2}}} & -2\beta_3\frac{q_{c_6}}{A_{03}^{\frac{1}{2}}} & 0\\
+		0 & 0 & 0 & 2\beta_1\frac{q_{c_4}}{A_{0,1,N}^{\frac{1}{2}}} & -2\beta_2\frac{q_{c_5}}{A_{0,2,0}^{\frac{1}{2}}} & 0\\
+		0 & 0 & 0 & 2\beta_1\frac{q_{c_4}}{A_{0,1,N}^{\frac{1}{2}}} & -2\beta_3\frac{q_{c_6}}{A_{0,3,0}^{\frac{1}{2}}} & 0\\
 	\end{array} 
 \right].
-$$
-
+\end{equation}
 In \ref{syseq_bif} the kinetic energy terms $\frac{1}{2} \rho u^2$ are neglected.
 According to \cite{Formaggia2003OnedimensionalMF} this can be done since it's contribution to total pressure is small compared to the other terms.
-\paragraph{Anastomosis} \label{par:anastomosis}
-For the Anastomosis applying the extrapolation of characteristics, conservation of mass, and pressure conservation leads to the system of equations
-$$
-\mathbf{f}_c=\left\{f_{c_i}\right\}=\left\{\begin{array}{l}
-		q_{c_1}+4 k_1 q_{c_4}-W_1^*=0 \\
-		q_{c_2}+4 k_2 q_{c_5}-W_2^*=0 \\
-		q_{c_3}-4 k_2 q_{c_6}-W_3^*=0 \\
-		q_{c_1} q_{c_4}^4+q_{c_2} q_{c_5}^4-q_{c_3} q_{c_6}^4=0 \\
-		\beta_1\left(\frac{q_{c_4}^2}{A_{01}^{1 / 2}}-1\right)-\beta_3\left(\frac{q_{c_6}^2}{A_{03}^{1 / 2}}-1\right)=0 \\
-		\beta_2\left(\frac{q_{c_5}^2}{A_{02}^{1 / 2}}-1\right)-\beta_3\left(\frac{q_{c_6}^2}{A_{03}^{1 / 2}}-1\right)=0
-\end{array}\right.
-$$
+In the next section we will show how the boundary values for an anastomosis are set.
 
-With the same vector of variables as for the Bifurcations.
+\paragraph{Anastomosis} \label{par:anastomosis}
+An anastomosis describes two vessel outlets connectinng to a single vessel inlet.
+For the Anastomosis applying the extrapolation of characteristics, conservation of mass, and pressure conservation leads to the following system of equations
+\begin{equation}
+\mathbf{f}_c=\left\{f_{c_i}\right\}=\left\{\begin{array}{l}
+		q_{c_1}+4 k_{1,N} q_{c_4}-W_{1,N}^*=0 \\
+		q_{c_2}+4 k_{2,N} q_{c_5}-W_{2,N}^*=0 \\
+		q_{c_3}-4 k_{2,0} q_{c_6}-W_{3,0}^*=0 \\
+		q_{c_1} q_{c_4}^4+q_{c_2} q_{c_5}^4-q_{c_3} q_{c_6}^4=0 \\
+		\beta_1\left(\frac{q_{c_4}^2}{A_{0,1,N}^{1 / 2}}-1\right)-\beta_3\left(\frac{q_{c_6}^2}{A_{0,3,0}^{1 / 2}}-1\right)=0 \\
+		\beta_2\left(\frac{q_{c_5}^2}{A_{0,2,N}^{1 / 2}}-1\right)-\beta_3\left(\frac{q_{c_6}^2}{A_{0,3,0}^{1 / 2}}-1\right)=0
+\end{array}\right.
+\end{equation}
+Reusing the shorthand notation introduced when describing the Conjunctions and the following vector of variables
+\begin{multline}
+	\mathbf{q}_c=\left[\begin{array}{llllll}
+			u_{1,N}^{n+1}, & u_{2,N}^{n+1}, & u_{3,0}^{n+1}, & \left(A_{1,N}^{n+1}\right)^{\frac{1}{4}}, & \left(A_{2,N}^{n+1}\right)^{\frac{1}{4}}, & \left(A_{3,0}^{n+1}\right)^{\frac{1}{4}}
+	\end{array}\right], \\
+	i=1, \ldots, 6. 
+\end{multline}
 The Jacobian used when solving the system with the frozen Newton method here is
-$$\mathbf{J}_{c}=\left[\begin{array}{c c c c c c}
-		1&0&0&4k_1&0&0\\
-		0&1&0&0&4k_2&0\\
-		0&0&1&0&0&-4k_3\\
+\begin{equation}
+	\mathbf{J}_{c}=\left[\begin{array}{c c c c c c}
+		1&0&0&4k_{1,N}&0&0\\
+		0&1&0&0&4k_{2,N}&0\\
+		0&0&1&0&0&-4k_{3,0}\\
 		q_{c_4}^4 & q_{c_5}^4 & -q_{c_6}^4 & 4q_{c_1}q_{c_4}^3 & 4q_{c_2}q_{c_5}^3 & -4q_{c_3}q_{c_6}^3 \\
-		0 & 0 & 0 & 2\beta_1\frac{q_{c_4}}{A_{01}^{\frac{1}{2}}} & 0 & -2\beta_3\frac{q_{c_6}}{A_{03}^{\frac{1}{2}}} \\
-		0 & 0 & 0 & 0 & 2\beta_2\frac{q_{c_5}}{A_{02}^{\frac{1}{2}}} &  -2\beta_3\frac{q_{c_6}}{A_{03}^{\frac{1}{2}}} \\
+		0 & 0 & 0 & 2\beta_1\frac{q_{c_4}}{A_{0,1,N}^{\frac{1}{2}}} & 0 & -2\beta_3\frac{q_{c_6}}{A_{0,3,0}^{\frac{1}{2}}} \\
+		0 & 0 & 0 & 0 & 2\beta_2\frac{q_{c_5}}{A_{0,2,N}^{\frac{1}{2}}} &  -2\beta_3\frac{q_{c_6}}{A_{0,3,0}^{\frac{1}{2}}} \\
 	\end{array} 
 \right].
-$$
-
+\end{equation}
 As in the case of Bifurcations the kinetic energy terms in the pressure conservation equations are neglected.
+In the following last section of this chapter we will describe how to determine time-step sizes to ensure stability for the numerical scheme introduced in \autoref{sec:fv} and \autoref{sec:muscl}.
 
 \section{CFL Condition} \label{sec:cfl}
-
-The CFL condition is set so that the information travelling along a characteristic curve is only affect neighbouring cells. 
-Since the numerical scheme only takes neighbouring cells into account doing otherwise would result in numerical error stacking up.
-Usually $\Delta x$ is given by the user leaving $\Delta t$ to be determined.
+The CFL condition is set so that the information travelling along a characteristic curve only affects neighbouring cells. 
+Since the numerical scheme (\autoref{sec:fv},\autoref{sec:muscl}) only takes neighbouring cells into account doing otherwise would result in numerical errors stacking up.
+The $\Delta x$ from the space discretization is set according at how high a resolution the solution needs to be computed.
+Given this constraint $\Delta t$ can be determined.
 Taking into account the aforementioned condition of preventing the characteristic curves from reaching beyond the neighbouring cell within $\Delta t$ leads to the following equation:
 \begin{equation}
-	\Delta t \leq C_{CFL} \frac{\Delta x}{S_{max}},\hspace{10pt}  C_{CFL} \in (0,1).
+	\Delta t \leq C_{CFL} \frac{\Delta x}{S_{max}},\hspace{10pt}  C_{CFL} \in (0,1)
 \end{equation}
-where $S_{max} = \max_{x \in [0,L], v \in V} | u_v(x) + c_v(x) |$ and V is the set of all vessels in the simulation.  
-
+where $S_{max} = \max_{x \in [0,L], v \in V} | u_v(x) + c_v(x) |$ and $V$ is the set of all vessels in the simulation.  
+In our case $\Delta x$ was chosen to be at least $10^{-3}m$ and $C_CFL$ was set to $0.9$.
+In the next chapter we will go over issues that can occur and methods to be used when implementing our previously described numerical methods in JAX.
 
 \chapter{Implementation} \label{chap:impl}
 Since differentiability was a priority in the implementation of this model the library JAX which is available as a package in Python was used.
