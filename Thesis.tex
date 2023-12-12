@@ -216,7 +216,7 @@ Finally, in \autoref{chap:resl} we validate this code and present the results pr
 
 \chapter{Cardiovascular System} \label{chap:cvs}
 This section serves as an overview of the cardiovascular system with a focus on the arteries of the systemic circulation. 
-Section \ref{sec:mbb} will describe the main building blocks of the cardiovascular system and their relation to one another, section \ref{sec:aw} will give the characteristics of the arterial walls, and section \ref{b} the characteristics of blood.
+Section \ref{sec:mbb} will describe the main building blocks of the cardiovascular system and their relation to one another, section \ref{sec:aw} will give the characteristics of the arterial walls, and section \ref{sec:b} the characteristics of blood.
 \section{Main Building Blocks} \label{sec:mbb}
 The cardiovascular system contains two major circulatory systems.
 These are the systemic and the pulmonary circulation. 
@@ -227,6 +227,7 @@ Vessels carrying the blood away from the heart are referred to as arteries and t
 In both the systemic and the pulmonary circulation the oxygen exchange (from blood to organs or from lungs to blood respectively) take place within so called capillary vessels.
 Capillaries are very small vessels that connect arteries to veins. \cite{köppl2023dimension}
 From here on out our main focus will be on on the arteries of the systemic circulation since our simulation approach will assume the heart to be represented by pre-computed data and the effect of the capillary bed and the veins will be accounted for by a lumped parameter model (0D-model, \autoref{sssec:outl}).
+We also define the notation for $T$ as the duration of one cardiac cycle (the time between the beginnings of two heartbeats following eachother).
 In the next two subsections we will describe the main characteristics of the arterial walls and the blood flowing within.
 
 \section{Arterial Wall} \label{sec:aw}
@@ -257,9 +258,9 @@ We will describe how boundary values are set using the Windkessel more closely i
 For further reference in the following chapters we will also introduce some notation.
 We call the radius of an artery in it's non-deformed state the lumen radius $r_0$ and refer to the reference vessel wall thickness by $h_0$ from here on out.
 Furthermore we denote the reference cross-section by $A_0 = \pi r_0^2$.
-In the next section we will discuss some simulation relevant properties of Blood.
+In the next section we will discuss some simulation relevant properties of blood.
 
-\section{Blood} \label{b}
+\section{Blood} \label{sec:b}
 Blood consists of red blood cells (Erythrocytes), white blood cells (Leukocytes), and platelets (Thrombocytes).
 The Erythrocytes make up about 97\% of the cellular volume.
 They are flexible, can bind to one another, and their micro-structure determines the blood mechanical properties.
@@ -277,7 +278,7 @@ We denote the shear rate by $D$. \cite{köppl2023dimension}
 The blood dynamic viscosity $\mu$ decreases hyperbolically with the shear rate $D$.
 At about $D > 100s^{-1}$ the viscosity stays constant for common haematocrit values.
 
-In larger arteries the average shear rate close to the walls is above the $100s^1$ threshold. \cite{MCDbook}
+In larger arteries the average shear rate close to the walls is above the $100s^{-1}$ threshold. \cite{MCDbook}
 Therefore, the blood's viscosity is often considered constant and it can roughly be viewed as Newtonian fluid for the sake of simplicity \cite{fung1996biomechanics,guyton2006textbook,MCDbook,pedley_1980,zamir2000physics,zamir2006physics}. 
 The blood density $\rho$ is considered constant within the range of $1050 \pm 10 \text{ kg}\cdot\text{m}^{-3}$, i.e. blood can be considered an incompressible fluid \cite{PMID:2658951,kenner1977continuous,helmig1997multiphase}.
 The assumption of blood being an incompressible Newtonian fluid will be important when constructing the underlying model for our cardiovascular solver in \autoref{sec:sv}. In the next chapter we will start building this model with a discussion on the choice of dimensionality when modelling.
@@ -316,7 +317,7 @@ In cylindrical coordinates these conservation laws read
 														&- \frac{1}{\rho (z,r,\phi; t)} \nabla P(z,r,\phi; t) + \mathbf{F}(z,r,\phi; t), \label{eq:mass} \\
 														&z \in \mathbb{R}, \ r \in \mathbb{R}_{\geq 0}, \ \phi \in [0, 2\pi), \ \nabla = \left[\frac{\partial}{\partial z}, \frac{1}{r}\frac{\partial}{\partial r}r, \frac{1}{r}\frac{\partial}{\partial \phi}  \right].
 \end{align}
-Here $\rho$ and $\mu$ are the blood density and viscosity mentioned in section \ref{b}, 
+Here $\rho$ and $\mu$ are the blood density and viscosity mentioned in section \ref{sec:b}, 
 \begin{equation}
 	\mathbf{u}(z,r,\phi; t) = \left[ u_z(z,r,\phi; t), u_r(z,r,\phi; t), u_\phi (z,r,\phi; t) \right]^T
 \end{equation}
@@ -325,7 +326,7 @@ is the velocity field, $P$ is the pressure, and $\mathbf{F}$ is any force acting
 Usually the NSE are considered to be made up of \autoref{eq:cont} and \autoref{eq:mass} as well as the energy equation.
 In our case the energy equation can be omitted due to us considering an incompressible Newtonian fluid and therefore there not being any temperature gradients in the fluid and there being no heat flux by conduction.
 Furthermore we also assume that heat generated by friction is negligible and that there are no heat sources.
-Finally wall displacement should be small enough for the work to be done by it on the fluid to be negligible. (reference?)
+Finally wall displacement should be small enough for the work to be done by it on the fluid to be negligible. (TODO:reference)
 We consider a vessel to be an axisymmetric tube along the $z$ axis in a cylindrical coordinate system $\left(z,r,\phi\right)$.
 Under the following assumptions the 3D-Navier-Stokes equations can be reduced to a 1D-model:
 
@@ -728,7 +729,7 @@ In order to get a first approximation for the flux that needs to be computed the
 		W_1(A,u) := u - c \\
 		W_2(A,u) := u + c
 	\end{align}
-	with $c := \sqrt{\frac{\beta}{2\rho}\sqrt{A}}$.
+	with the wave speed $c(A) := \sqrt{\frac{\beta}{2\rho}\sqrt{A}}$.
 	We define discretized Riemann invariants at time-step $n$ in cell $i$ along the lines of the discretization introduced in \autoref{sec:fv}
 	\begin{align}
 		W_{1,i}^n := W_1(A_i^n,u_i^n) &= u^n_i - 4c^n_i\\
@@ -803,20 +804,28 @@ In order to get a first approximation for the flux that needs to be computed the
 		W_1(A^*,u^*) = W_1(A_R,u_R) \label{eq:vrmi1}\\
 		W_2(A^*,u^*) = W_2(A_L,u_L). \label{eq:vrmi2}
 	\end{align}
-	Considering a terminal resistance model the virtual state state has to satisfy
+	Considering a terminal resistance model the virtual state has to satisfy
 	\begin{equation}
 		A^*u^* = \frac{P(A^*) - P_{ven}}{R} \label{eq:tr1}
 	\end{equation}
-	where the constant $P_ven$ represents the venous pressure and $R$ models the resistive load resulting from omitted arteries, the capillary bed, and the venous network.
-	Using \autoref{eq:p_tot} and \autoref{eq:vrmi2} gives
+	where the constant $P_{ven}$ represents the venous pressure and $R$ models the resistive load resulting from omitted arteries, the capillary bed, and the venous network.
+	The venous pressure in a healthy patient is only $8-12$ mmHg \cite{klingensmith2008washington}.
+	In our simulation it was therefore usually set to $0$.
+	Inserting \autoref{eq:p_tot} and \autoref{eq:vrmi2} into \autoref{eq:tr1} gives
 	\begin{equation}
-		f(A^*) := R \left(u_L + 4c(A_L) \right) A^* - 4Rc(A^*)A^* - \frac{\beta}{A_0} \left( \sqrt{A^*} - \sqrt{A} \right) P_{ven} = 0.\label{eq:tr2}
+		f(A^*) := R \left(u_L + 4c(A_L) \right) A^* - 4Rc(A^*)A^* - \frac{\beta}{A_0} \left( \sqrt{A^*} - \sqrt{A} \right) P_{ven} = 0\label{eq:tr2}
 	\end{equation}
-	The compliance of the omitted vessels and the resistance of the capillary can be represented by an $CR_2$ system
+	where the wave speed $c$ of a cross section $A$ is defined as in \autoref{sssec:inlets}.
+	An additional term $P_{ext}$ for modelling exterior tissue pressure can be added yielding
 	\begin{equation}
-		C \frac{dP_C}{dt} = A^*u^* - \frac{P_C-P_ven}{R_2}
+		f(A^*) := R \left(u_L + 4c(A_L) \right) A^* - 4Rc(A^*)A^* - \frac{\beta}{A_0} \left( \sqrt{A^*} - \sqrt{A} \right) P_{ven} - P_{ext} = 0.\label{eq:tr3}
 	\end{equation}
-	where $C$ represents the compliance and $P_C$ is the pressure at sait compliance.
+
+	The compliance of the omitted vessels and the resistance of the capillaries can be represented by a $CR_2$ system
+	\begin{equation}
+		C \frac{dP_C}{dt} = A^*u^* - \frac{P_C-P_{ven}}{R_2}
+	\end{equation}
+	where $C$ represents the compliance and $P_C$ is the pressure at said compliance.
 	This equation can be discretized using an explicit Euler scheme in order to compute the values of $P_C$
 	\begin{equation}
 		P_C^n = P_C^{n-1} + \frac{\Delta t}{C} \left(A_Lu_L - \frac{ \left( P_C^{n-1} - P_{ven} \right)}{R_2} \right). \label{eq:pc}
@@ -824,11 +833,12 @@ In order to get a first approximation for the flux that needs to be computed the
 	In order for the wave exiting the vessel to arrive at the compliance without being reflected we couple the terminal resistance model with the $CR_2$ model.
 	This is done by setting $R=R_1$ and $P_{ven}=P_C$ in \autoref{eq:tr2}.
 	Since $A_L$, $u_L$ represent the state at the end oft the vessel and can therefore be set to $A_i^n$, $u_i^n$.
-	The \autoref{eq:tr1} coupled with \autoref{eq:pc} can be solved with a Newton solver\cite{atkinson1991introduction} in order to receive $A^*$ and $u^*$ is computed using \autoref{eq:p_tot}.
+	The \autoref{eq:tr1} coupled with \autoref{eq:pc} can be solved with a Newton solver\cite{atkinson1991introduction} in order to receive $A^*$.
+	Using \autoref{eq:p_tot}, \autoref{eq:tr1} and the computed value for $A^*$ we can compute $u^*$.
 	Finally $A_i^{n+1}$, $u_i^{n+1}$ are set to $A^*$, $u^*$ respectively. \cite{alastruey2008reduced}
 
-	The variables $R_1$, $C$, $R_2$ are parameters that have to be determined for each individual application and they are named after the RLC-circuit in analogy to which this algorithm was setup.
-	Different networks can have very different parameters and their derivation is not trivial \cite{köppl2023dimension}.
+	The variables $R_1$, $C$, $R_2$ are parameters that have to be determined for each individual application and they are named after their analogous components in electrical circuit modelling by which this algorithm was constructed.
+	Different networks can have very different parameters and their accurate computation is not trivial \cite{köppl2023dimension}.
 	This is a prime example for the need of efficient calibration algorithms which this thesis aims to work towards by providing a differentiable solver.
 	In the next section we will go over how to set boundary values for junctions between vessels.
 
@@ -948,7 +958,7 @@ In order to get a first approximation for the flux that needs to be computed the
 	\end{align}
 	This also equates to 
 	\begin{align}
-		W_1^* = u_{2,0}^{n+1} + 4c_{2,0}^{n+1} = u_{2,0}^{n+1} + 4k_{2,0} \left( A_{2,0}^{n+1} \right)^{\frac{1}{4}} \\
+		W_1^* = u_{2,0}^{n+1} + 4c_{2,0}^{n+1} = u_{2,0}^{n+1} + 4k_{2,0} \left( A_{2,0}^{n+1} \right)^{\frac{1}{4}}, \\
 		W_2^* = u_{1,N}^{n+1} + 4c_{1,N}^{n+1} = u_{1,N}^{n+1} + 4k_{1,N} \left( A_{2,0}^{n+1} \right)^{\frac{1}{4}}.
 	\end{align}
 	where $k_{l,i} := \sqrt{\frac{\beta_{l,i}}{2\rho}}$ for $l \in \{1,2\}$, $i \in \{0,1,...N\}$.
@@ -1005,11 +1015,12 @@ In order to get a first approximation for the flux that needs to be computed the
 					\end{equation}
 					with the same shorthand notation as used when describing the Conjunctions and the following vector of variables
 					\begin{multline}
-						\mathbf{q}:=\{q\}_{k=1}^6 = \left[\begin{array}{lll}
+						\mathbf{q}:=\{q\}_{k=1}^6 = \left[
+							\begin{array}{lll}
 								u_{1,N}^{n+1}, & u_{2,0}^{n+1}, & u_{3,0}^{n+1},
 						\end{array} \right. \\
 						\left. \begin{array} {lll}    \left(A_{1,N}^{n+1}\right)^{\frac{1}{4}}, & \left(A_{2,0}^{n+1}\right)^{\frac{1}{4}}, & \left(A_{3,0}^{n+1}\right)^{\frac{1}{4}}
-						\end{array}\right]^T.
+						\end{array}\right].
 							\end{multline}
 							In analogy to the cconjunction the frozen Newton method is applied to solve the system.
 							The Jacobian here reads as
@@ -1076,7 +1087,7 @@ In order to get a first approximation for the flux that needs to be computed the
 								\Delta t \leq C_{CFL} \frac{\Delta x}{S_{max}},\hspace{10pt}  C_{CFL} \in (0,1)
 							\end{equation}
 							where $S_{max} = \max_{x \in [0,L], v \in V} | u_v(x) + c_v(x) |$ and $V$ is the set of all vessels in the simulation.  
-							In our case $\Delta x$ was chosen to be at least $10^{-3}m$ and $C_CFL$ was set to $0.9$.
+							In our case $\Delta x$ was chosen to be at least $10^{-3}m$ and $C_{CFL}$ was set to $0.9$.
 							In the next chapter we will go over issues that can occur and methods to be used when implementing our previously described numerical methods in JAX.
 
 							\chapter{Implementation} \label{chap:impl}
@@ -1153,33 +1164,39 @@ In order to get a first approximation for the flux that needs to be computed the
 
 							\section{Code Structure} \label{sec:cs}
 							The code structure is denoted in pseudo-code in \autoref{lst:pc}.
-							Before the simulation is ran the simulation data needs to be initialized.
-							This is done through hard coded functions that set initial values such as described in \autoref{sssec:inlets} and from values read from the file \emph{<path\_to\_network\_configuration>.yml}.
-							This is denoted on line \ref{ln:init} in the pseudo-code.
-							Thereafter a while loop is initiated within which at each iteration an entire cardiac cycle is computed.
-							Each cardiac cycle is itself described by a while-loop that computes the next time step (line \ref{ln:cfl}) as in \autoref{sec:cfl}, updates boundary values (line \ref{ln:bv}) as in \autoref{ssec:boundary_values}, executes the MUSCL solver described in \autoref{sec:muscl} over all vessels (line \ref{ln:muscl}), saves the pressure at the centre of each vessel for each individual time-step (line \ref{ln:svp}), and finally increases the time by the time-step that was just computed (line \ref{ln:updt}).
+							The whole simulation is contained in the function run\_simulation that takes the arguments config\_filename and $J$, the maximum number of time steps to take before terminating a simulation if it hasn't finished yet.
+							Before the simulation is run the simulation data needs to be initialized.
+							This is done through hard coded functions that set initial values such as described in \autoref{ssec:initial_conditions} and from values read from the file \emph{<path/to/network\_configuration>.yml}.
+							The steps to initialize out network are denoted on lines \ref{ln:init_start} through \ref{ln:init_end} in the pseudo-code.
+							Specifically we set initial data ($u(z;0)$, $A(z;0)$, $Q(z;0)$, \autoref{ssec:initial_conditions}) for each vessel, inlet data ($P(0;t)$ or $Q(0;t)$, \autoref{sssec:inlets}) at all inlets, outlet parameters ($R_t$, $R_1$, $C$, $R_2$, \autoref{sssec:outl}) for outlet vessels, mesh sizes ($\Delta x$, \autoref{sec:fv}) and parameters ($\beta$, $P_{ext}$, \autoref{sec:sv}) for each vessel, and global parameters ($\rho$, $T$, $C_{CFL}$, $N$, \autoref{sec:b},\autoref{sec:cfl}, where $N$ stands for the number of vessels in the network).
+							Then we generate the $J \times N$ matrix P\_t that will be used to store the pressure value at the center of each vessel throughout one cardiac cycle.
+							Thereafter a while loop is initiated in lines \ref{ln:whout1} and \ref{ln:whout2} within which at each iteration an entire cardiac cycle of length $T$ is computed.
+							In this while loop we first set the time $t$ at which we want to simulate the system to $0$ in line \ref{ln:t0} and then we store a copy the simulation data in \ref{ln:cp} so we can compare the two after storing the results from the upcoming solver in the new copy.
+
+							Each cardiac cycle is itself described by a while-loop that computes the next time step (line \ref{ln:cfl}) using the $C_{CFL}$ parameter as in \autoref{sec:cfl}, updates boundary values (line \ref{ln:bv}) as in \autoref{ssec:boundary_values} by using either a reflective model with the parameter $R_t$ ot a Windkessel model using the parameters $R_1$, $C$, $R_2$, executes the MUSCL solver described in \autoref{sec:muscl} over all vessels (line \ref{ln:muscl}) advancing $\mathbf{U}_i^{n}$ to $\mathbf{U}_i^{n+1}$ $\forall i \in \{1,...,M\}$, saves the pressure at the centre of each vessel for each individual time-step (line \ref{ln:svp}), and finally increases the time by the time-step that was just computed (line \ref{ln:updt}).
 							After computing a cardiac cycle the saved pressures are compared to the ones from the previous cardiac cycle at each vessel and the old simulation data and pressure values are overwritten by the new ones (line \ref{ln:conv} - \ref{ln:ow2}).
 							Cardiac cycles are computed until the greatest euclidean norm of the pressure difference within a vessel compared to itself in the previous cardiac cycle is smaller than $0.1$ mmHg which is expressed by the line \ref{ln:conv}.
 							This is in accordance with the comment made in \autoref{ssec:initial_conditions} about a steady state needing to be reached in order to get rid negative effects from imprecisely set initial conditions.
-\begin{lstlisting}[language=Python, caption=code structure in pseudocode, label=lst:pc, escapechar=|]
-converged = False
+							\begin{lstlisting}[language=Python, caption=code structure in pseudocode, label=lst:pc, escapechar=|]
+								def runSimulation(config_filename, J)
+								config = loadConfig(config_filename) |\label{ln:init_start}|
+								simulation_data = buildArterialNetwork(config) |\label{ln:init_end}|
 
-configuration_filename = "<path_to_network_configuration>.yml" |\label{ln:init}|
-simulation_data = initialize_simulation_data()
-P_t = [0]
-while not converged:
-	t = 0
-	simulation_data_new = simulation_data
-	P_t_new = [0]
-	while t < cardiac_period:
-		dt = compute_dt(simulation_data) |\label{ln:cfl}|
-		simulation_data_new = set_boundary_values(simulation_data_new, dt) |\label{ln:bv}|
-		simulation_data_new = muscl_solver(simulation_data_new, dt) |\label{ln:muscl}|
-		P_t_new = save_pressure(simulation_data_new,P_t_new) |\label{ln:svp}|
-		t = t + dt |\label{ln:updt}|
-	converged = check_convergence(P_t, P_t_new) |\label{ln:conv}|
-	simulation_data = simulation_data_new |\label{ln:ow1}|
-	P_t = P_t_new |\label{ln:ow2}|
+								P_t = [0]*J |\label{ln:pt}|
+
+								converged = False |\label{ln:whout1}|
+								while not converged: |\label{ln:whout2}|
+								t = 0 |\label{ln:t0}|
+								simulation_data_new = simulation_data |\label{ln:cp}|
+								while t < cardiac_period:
+								dt = compute_dt(simulation_data) |\label{ln:cfl}|
+								simulation_data_new = set_boundary_values(simulation_data_new, dt) |\label{ln:bv}|
+								simulation_data_new = muscl_solver(simulation_data_new, dt) |\label{ln:muscl}|
+								P_t_new = save_pressure(simulation_data_new,P_t_new) |\label{ln:svp}|
+								t = t + dt |\label{ln:updt}|
+								converged = check_convergence(P_t, P_t_new) |\label{ln:conv}|
+								simulation_data = simulation_data_new |\label{ln:ow1}|
+								P_t = P_t_new |\label{ln:ow2}|
 						\end{lstlisting}
 						It is noted that the computation of the boundary conditions in line \ref{ln:bv} requires a for loop.
 						This for loop is constructed using the JAX \emph{fori\_loop} as discussed in \autoref{sec:al} in order to improve scaling of the compile time.
