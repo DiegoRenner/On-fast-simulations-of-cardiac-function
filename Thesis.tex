@@ -138,6 +138,7 @@ The significance of cardiovascular disease and it's research stems from it being
 Worldwide it leads to 17.3 million deaths per year as of 2015.
 This number is projected to increase by the year 2030 to more than 23.6 million. \cite{update2015heart}
 In Europe cardiovascular disease was responsible for close to one third (32.7\%) of all deaths in the year 2020 \cite{Coelho2020}.
+Cardiovascular systems have been well studied, from analytical solutions of simplified models
 In order to tackle the complexity of the meaningful task of modelling cardiovascular systems numerical modelling has become prevalent \cite{formaggia2009multiscale,quarteroni2016geometric,black2020p14,el2018investigating,qureshi2014numerical,reichold2009vascular}.
 The general issue described up until now, with regards to the difficulty of personalizing treatments, is also relevant when considering the cardiovascular system.
 
@@ -952,14 +953,14 @@ In order to get a first approximation for the flux that needs to be computed the
 	\end{align}
 	where $k_{l,i} := \sqrt{\frac{\beta_{l,i}}{2\rho}}$ for $l \in \{1,2\}$, $i \in \{0,1,...N\}$.
 	This leads to the system of equations:
-	$$
+	\begin{equation}
 	\mathbf{f}(\mathbf{q}) := \left[\begin{array}{c}
 			q_{1}+4 k_{1,N} q_{3}-W_{1,N}^* \\
 			q_{2}-4 k_{2,0} q_{4}-W_{2,0}^* \\
 			q_{1} q_{3}^4-q_{2} q_{4}^4 \\
 			\beta_1\left(\frac{q_{3}^2}{A_{0,1,N}^{1 / 2}}-1\right)+\frac{1}{2} \rho q_{1}^2-\beta_2\left(\frac{q_{4}^2}{A_{0,2,0}^{1 / 2}}-1\right)-\frac{1}{2} \rho q_{2}^2
 	\end{array}\right] \equiv 0
-	$$
+\end{equation}
 	where we have introduced the following notation in order to more easily write this system in a matrix-vector form
 	\begin{align}
 		\mathbf{q}&:= \{q\}_{k=1}^4 = \left[\begin{array}{llll}
