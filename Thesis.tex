@@ -125,12 +125,12 @@ What has therefore become the method of choice to address the issue of personali
 There are two main ways of achieving the goal of calibrating a simulation for an individual
 \begin{enumerate}
 	\item A "classical" approach, where the inverse problem is solved using Markov-Chain-Monte-Carlo \cite{melis2017gaussian}, or Kalman filters \cite{manganotti2022modeling}.
-	\item A Deep-Learning approach where the calibration is avoided all together in favour of learning the model from data. \cite{kissas2020machine,arzani2022machine}
+	\item A deep-learning approach where the calibration is avoided all together in favour of learning the model from data. \cite{kissas2020machine,arzani2022machine}
 \end{enumerate}
-The reason Deep-Learning techniques were attempted is due to the fact that the "classical" approaches are very inefficient.
+The reason deep-learning techniques were attempted is due to the fact that the "classical" approaches are very inefficient.
 This is because the derivatives are often hard to determine for the attempted simulations so the algorithms of choice for solving the inverse problem are gradient-free. 
 Moreover due to the models being very sensitive to their parameters and there being ambiguous solutions \cite{nolte2022inverse,quick2001infinite} these gradient-free algorithms have to be run at very small step sizes. \cite{taylor2009patient,tuccio2022parameter,marsden2014optimization,mineroff2019optimization,bozkurt2022patient}
-The ability to easily take gradients of one of these models with respect to it's parameters would greatly improve the process of personalizing it without loosing the interpretability as would be the case when using a Deep-Learning algorithm.
+The ability to easily take gradients of one of these models with respect to it's parameters would greatly improve the process of personalizing it without loosing the interpretability as would be the case when using a deep-learning algorithm.
 
 Due to the complexity of the cardiovascular system and the significance of cardiovascular disease globally the mathematical and numerical modelling of haemodynamics has gained a lot of traction over recent years.
 Two of the main factors for this complexity are the multi-scale and multi-physics nature of the cardiovascular system that arises from vessels of strongly varying sizes and not much data being available for certain parts of these models to go off of \cite{quarteroni2016geometric}.
