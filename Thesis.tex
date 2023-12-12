@@ -499,7 +499,7 @@ We can rewrite equation \ref{1deqs2} in it's conservative form by defining the f
 	\mathbf{S} \left( \mathbf{U} \right) := 
 	\begin{bmatrix}
 		0 \\
-		-\frac{1}{\rho} \left( \frac{\partial P}{\partial A_0} \frac{\partial A_0}{\partial z} + \frac{\partial P}{\partial \beta} \frac{\partial \beta}{\partial z} + 22\mu\frac{u}{A} \right)
+		-\frac{A}{\rho} \left( \frac{\partial P}{\partial A_0} \frac{\partial A_0}{\partial z} + \frac{\partial P}{\partial \beta} \frac{\partial \beta}{\partial z} + 22\mu\frac{u}{A} \right)
 	\end{bmatrix}
 \end{equation}
 
@@ -954,13 +954,13 @@ In order to get a first approximation for the flux that needs to be computed the
 	where $k_{l,i} := \sqrt{\frac{\beta_{l,i}}{2\rho}}$ for $l \in \{1,2\}$, $i \in \{0,1,...N\}$.
 	This leads to the system of equations:
 	\begin{equation}
-	\mathbf{f}(\mathbf{q}) := \left[\begin{array}{c}
-			q_{1}+4 k_{1,N} q_{3}-W_{1,N}^* \\
-			q_{2}-4 k_{2,0} q_{4}-W_{2,0}^* \\
-			q_{1} q_{3}^4-q_{2} q_{4}^4 \\
-			\beta_1\left(\frac{q_{3}^2}{A_{0,1,N}^{1 / 2}}-1\right)+\frac{1}{2} \rho q_{1}^2-\beta_2\left(\frac{q_{4}^2}{A_{0,2,0}^{1 / 2}}-1\right)-\frac{1}{2} \rho q_{2}^2
-	\end{array}\right] \equiv 0
-\end{equation}
+		\mathbf{f}(\mathbf{q}) := \left[\begin{array}{c}
+				q_{1}+4 k_{1,N} q_{3}-W_{1,N}^* \\
+				q_{2}-4 k_{2,0} q_{4}-W_{2,0}^* \\
+				q_{1} q_{3}^4-q_{2} q_{4}^4 \\
+				\beta_1\left(\frac{q_{3}^2}{A_{0,1,N}^{1 / 2}}-1\right)+\frac{1}{2} \rho q_{1}^2-\beta_2\left(\frac{q_{4}^2}{A_{0,2,0}^{1 / 2}}-1\right)-\frac{1}{2} \rho q_{2}^2
+		\end{array}\right] \equiv 0
+	\end{equation}
 	where we have introduced the following notation in order to more easily write this system in a matrix-vector form
 	\begin{align}
 		\mathbf{q}&:= \{q\}_{k=1}^4 = \left[\begin{array}{llll}
@@ -1044,7 +1044,7 @@ In order to get a first approximation for the flux that needs to be computed the
 							Reusing the shorthand notation introduced when describing the Conjunctions and the following vector of variables
 							\begin{multline}
 								\mathbf{q}:=\{q\}_{k=1}^6=\left[
-								\begin{array}{lll}
+									\begin{array}{lll}
 										u_{1,N}^{n+1}, & u_{2,N}^{n+1}, & u_{3,0}^{n+1}, 
 								\end{array} \right. \\
 								\left. \begin{array}{lll}
