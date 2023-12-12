@@ -1171,41 +1171,41 @@ In order to get a first approximation for the flux that needs to be computed the
 							Specifically we set initial data ($u(z;0)$, $A(z;0)$, $Q(z;0)$, \autoref{ssec:initial_conditions}) for each vessel, inlet data ($P(0;t)$ or $Q(0;t)$, \autoref{sssec:inlets}) at all inlets, outlet parameters ($R_t$, $R_1$, $C$, $R_2$, \autoref{sssec:outl}) for outlet vessels, mesh sizes ($\Delta x$, \autoref{sec:fv}) and parameters ($\beta$, $P_{ext}$, \autoref{sec:sv}) for each vessel, and global parameters ($\rho$, $T$, $C_{CFL}$, $N$, \autoref{sec:b},\autoref{sec:cfl}, where $N$ stands for the number of vessels in the network).
 							Then we generate the $J \times N$ matrix P\_t that will be used to store the pressure value at the center of each vessel throughout one cardiac cycle.
 							Thereafter a while loop is initiated in lines \ref{ln:whout1} and \ref{ln:whout2} within which at each iteration an entire cardiac cycle of length $T$ is computed.
-							In this while loop we first set the time $t$ at which we want to simulate the system to $0$ in line \ref{ln:t0} and then we store a copy the simulation data in \ref{ln:cp} so we can compare the two after storing the results from the upcoming solver in the new copy.
+							In this while loop we first set the time $t$ at which we want to simulate the system to $0$ in line \ref{ln:t0} and then we store a copy of the pressure data \ref{ln:cp} so we can compare the two after storing the results from the upcoming solver in the new copy.
 
 							Each cardiac cycle is itself described by a while-loop that computes the next time step (line \ref{ln:cfl}) using the $C_{CFL}$ parameter as in \autoref{sec:cfl}, updates boundary values (line \ref{ln:bv}) as in \autoref{ssec:boundary_values} by using either a reflective model with the parameter $R_t$ ot a Windkessel model using the parameters $R_1$, $C$, $R_2$, executes the MUSCL solver described in \autoref{sec:muscl} over all vessels (line \ref{ln:muscl}) advancing $\mathbf{U}_i^{n}$ to $\mathbf{U}_i^{n+1}$ $\forall i \in \{1,...,M\}$, saves the pressure at the centre of each vessel for each individual time-step (line \ref{ln:svp}), and finally increases the time by the time-step that was just computed (line \ref{ln:updt}).
-							After computing a cardiac cycle the saved pressures are compared to the ones from the previous cardiac cycle at each vessel and the old simulation data and pressure values are overwritten by the new ones (line \ref{ln:conv} - \ref{ln:ow2}).
-							Cardiac cycles are computed until the greatest euclidean norm of the pressure difference within a vessel compared to itself in the previous cardiac cycle is smaller than $0.1$ mmHg which is expressed by the line \ref{ln:conv}.
+							After computing a cardiac cycle the saved pressures are compared to the ones from the previous cardiac cycle at each vessel and the old pressure values are overwritten by the new ones (line \ref{ln:conv} - \ref{ln:ow2}).
+							Cardiac cycles are computed until the pressure differences in each vessel are smaller than $0.1$ mmHg in the euclidean norm which is expressed by the line \ref{ln:conv}.
 							This is in accordance with the comment made in \autoref{ssec:initial_conditions} about a steady state needing to be reached in order to get rid negative effects from imprecisely set initial conditions.
-							\begin{lstlisting}[language=Python, caption=code structure in pseudocode, label=lst:pc, escapechar=|]
-								def runSimulation(config_filename, J)
-								config = loadConfig(config_filename) |\label{ln:init_start}|
-								simulation_data = buildArterialNetwork(config) |\label{ln:init_end}|
+\begin{lstlisting}[language=Python, caption=code structure in pseudocode, label=lst:pc, escapechar=|]
+def runSimulation(config_filename, J)
+	config = loadConfig(config_filename) |\label{ln:init_start}|
+	simulation_data = buildArterialNetwork(config) |\label{ln:init_end}|
 
-								P_t = [0]*J |\label{ln:pt}|
+	P_t = [0] |\label{ln:pt}|
 
-								converged = False |\label{ln:whout1}|
-								while not converged: |\label{ln:whout2}|
-								t = 0 |\label{ln:t0}|
-								simulation_data_new = simulation_data |\label{ln:cp}|
-								while t < cardiac_period:
-								dt = compute_dt(simulation_data) |\label{ln:cfl}|
-								simulation_data_new = set_boundary_values(simulation_data_new, dt) |\label{ln:bv}|
-								simulation_data_new = muscl_solver(simulation_data_new, dt) |\label{ln:muscl}|
-								P_t_new = save_pressure(simulation_data_new,P_t_new) |\label{ln:svp}|
-								t = t + dt |\label{ln:updt}|
-								converged = check_convergence(P_t, P_t_new) |\label{ln:conv}|
-								simulation_data = simulation_data_new |\label{ln:ow1}|
-								P_t = P_t_new |\label{ln:ow2}|
+	converged = False |\label{ln:whout1}|
+	while not converged: |\label{ln:whout2}|
+		t = 0 |\label{ln:t0}|
+		P_t_temp = P_t |\label{ln:cp}|
+		while t < T:
+			dt = computeDt(simulation_data) |\label{ln:cfl}|
+			simulation_data = setBoundaryValues(simulation_data_new, dt) |\label{ln:bv}|
+			simulation_data = muscl(simulation_data, dt) |\label{ln:muscl}|
+			t = t + dt |\label{ln:updt}|
+			if t >= T
+				P_t = savePressure(simulation_data) |\label{ln:svp}|
+		P_t = P_t_new |\label{ln:ow2}|
+		converged = checkConv(P_t, P_t_temp) |\label{ln:conv}|
 						\end{lstlisting}
 						It is noted that the computation of the boundary conditions in line \ref{ln:bv} requires a for loop.
-						This for loop is constructed using the JAX \emph{fori\_loop} as discussed in \autoref{sec:al} in order to improve scaling of the compile time.
-						The same goes for the two while loops mentioned in \autoref{lst:pc} and their JAX equivalent \emph{while\_loop}
+						This for loop is constructed using the JAX \emph{fori\_loop} as discussed in \autoref{sec:al} in order to the improve scaling of the compile time.
+						The same goes for the two while loops mentioned in \autoref{lst:pc} and their JAX equivalent \emph{while\_loop}.
 						The effect of avoiding built-in python loops can be seen in \autoref{sec:sc}.
 						On the other hand the need for loops has been completely avoided when executing the MUSCL solver on all vessel (line \ref{ln:muscl}).
 						This was done by applying padding (\autoref{sec:pdd}) and masking (\autoref{sec:msk}) allowing for JAX to better optimize this code section and leverage GPU resources more effectively as opposed to an implementation using loops.
 						Finally what is denoted in \autoref{lst:pc} by \emph{simulation\_data} consists of multiple 2D-arrays containing global constants, vessel constants, and simulation quantities.
-						This is less accessible than for instance having a class that describes a vessel but allows for more efficient data movement and to more easily adhere to JAX's requirements when using their loop construct or their optimizations overall.
+						While is less accessible than for instance having a class that describes a vessel it allows for more efficient data movement and to more easily adhere to JAX's requirements when using their loop constructs or their optimizations overall.
 						More details on the code as well as instructions on how to parse model configuration from different sources and run said models can be found in \autoref{app:doc}.
 
 
