@@ -227,7 +227,7 @@ Vessels carrying the blood away from the heart are referred to as arteries and t
 In both the systemic and the pulmonary circulation the oxygen exchange (from blood to organs or from lungs to blood respectively) take place within so called capillary vessels.
 Capillaries are very small vessels that connect arteries to veins. \cite{köppl2023dimension}
 From here on out our main focus will be on on the arteries of the systemic circulation since our simulation approach will assume the heart to be represented by pre-computed data and the effect of the capillary bed and the veins will be accounted for by a lumped parameter model (0D-model, \autoref{sssec:outl}).
-We also define the notation for $T$ as the duration of one cardiac cycle (the time between the beginnings of two heartbeats following eachother).
+We also define the notation for $T$ as the duration of one cardiac cycle (the time between the beginnings of two heartbeats following each other).
 In the next two subsections we will describe the main characteristics of the arterial walls and the blood flowing within.
 
 \section{Arterial Wall} \label{sec:aw}
@@ -469,7 +469,7 @@ Combining \autoref{eq:pdef}-\autoref{eq:strain} with a term for the external pre
 	P(z;t) &= P_{ext}(z;t) + \beta \left( \sqrt{\frac{A(z;t)}{A_0(z)}}-1 \right),  \label{eq:p_tot}\\
 	\beta(z) &=  \frac{\sqrt{\pi} E h_0(z)}{(1-\nu^2) \sqrt{A_0(z)}}.
 \end{align}
-We refer to $\beta$ as the elasticity coefficeint from here on out.
+We refer to $\beta$ as the elasticity coefficient from here on out.
 Comparison with experimental data shows that a plug-flow is a reasonable approximation of the velocity profile \cite{hunter1972numerical} \cite{smith2000generation} \cite{smith2002anatomically}.
 Therefore it is reasonable to set $\gamma = 9, \alpha = \frac{11}{10}$.
 Since the plug-flow velocity profile is relatively flat the average of $Q$ doesn't differ from the actual value anywhere along $r$.
@@ -753,7 +753,7 @@ In order to get a first approximation for the flux that needs to be computed the
 		W_{2,0}^{n+1} &= \frac{2Q^{n+1}_0}{A^n_0} - W^{n+1}_{1,0} \label{update2a}
 	\end{align}
 	where $Q^{n+1}_0$ is given through input data.
-	This equates to linearly extrapolating the Riemann invariants at the first andsecond cell to meet the backwards and the forwards travelling characteristic curve of the second and first cell respectively.
+	This equates to linearly extrapolating the Riemann invariants at the first and second cell to meet the backwards and the forwards travelling characteristic curve of the second and first cell respectively.
 	The missing input quantities are then computed from the new Riemann invariants as follows:
 	\begin{align}
 		u_0^{n+1} &= \frac{W_{1,0}^{n+1} + W_{2,0}^{n+1}}{2} \\
@@ -779,7 +779,7 @@ In order to get a first approximation for the flux that needs to be computed the
 	\subsubsection{Outlets} \label{sssec:outl}
 	One of the most basic ways of setting outlet values is to use reflection coefficient to model how much of a wave leaves the vessel and how much gets reflected.
 	In cases where this doesn't provide enough accuracy Windkessel models are applied \cite {formaggia2010cardiovascular}.
-	These models are modeled after the function of a waterpump as described in \autoref{sec:aw} by considering an analogous electrical circuit.
+	These models are constructed after the function of a water pump as described in \autoref{sec:aw} by considering an analogous electrical circuit.
 	We introduce here a reflective and a three-parameter Windkessel model.
 
 	\paragraph{Reflection} \label{par:refl}
@@ -790,8 +790,8 @@ In order to get a first approximation for the flux that needs to be computed the
 	\end{align}
 	where $R_t \in [-1,1]$ is the reflection coefficient.
 	At $R_t = 0$ no reflection occurs.
-	It is noted that \autoref{eq:refl1} follows directly from linear extrpolation while \autoref{eq:refl2} is constructed in order to transfer some of the forward characteristic curve to the backward one in order to model a reflection.
-	The simulation quantities can becomputed from the Riemann invariants as follows
+	It is noted that \autoref{eq:refl1} follows directly from linear extrapolation while \autoref{eq:refl2} is constructed in order to transfer some of the forward characteristic curve to the backward one in order to model a reflection.
+	The simulation quantities can be computed from the Riemann invariants as follows
 	\begin{align}
 		u_N^{n+1} &= \frac{W_{1,N}^{n+1} + W_{2,N}^{n+1}}{2} \\
 		c_N^{n+1} &= \frac{W_{2,N}^{n+1} - W_{1,N}^{n+1}}{4} \\
@@ -936,7 +936,7 @@ In order to get a first approximation for the flux that needs to be computed the
 	\subsubsection{Junctions} \label{sssec:junctions}
 	Three types of junctions are considered.
 	Conjunctions: joining two vessels, bifurcations: splitting one vessel into two, and anastomosis: joining two vessels into one.
-	We will describe the governing equations of the juntion types in the next three paragraphs. 
+	We will describe the governing equations of the junction types in the next three paragraphs. 
 
 	\paragraph{Conjunctions} \label{par:conjunctions}
 	A conjunction is the outlet of a vessel connected to the inlet of another vessel.
@@ -954,8 +954,8 @@ In order to get a first approximation for the flux that needs to be computed the
 	\end{multline}
 	where $\beta_{1,N}$, $A_{0,1,N}$ and $\beta_{2,N}$, $A_{0,2,0}$ are the elasticity coefficient and the cross-section at the outlet of the first vessel and the inlet of the second vessel respectively.
 	The first and the second term represent the pressure coming from the arterial wall.
-	The second and the third term describe the kinetic pressure setmming from the fluid itself.
-	Finally, analogously as in \autoref{sssec:outl}, we introduce the virtual state $A^*$, $u^*$ that generates from the the two states $A_L$, $u_L$ and $A_R$, $u_R$
+	The second and the third term describe the kinetic pressure stemming from the fluid itself.
+	Finally, analogously as in \autoref{sssec:outl}, we introduce the virtual state $A^*$, $u^*$ that generates from the two states $A_L$, $u_L$ and $A_R$, $u_R$
 	\begin{align}
 		W_1^* := W_1(A^*,u^*) = W_1(A_R,u_R) = W_1(A_{2,0}^{n+1}, u_{2,0}^{n+1}) \\
 		W_2^* := W_2(A^*,u^*) = W_2(A_L,u_L) = W_1(A_{1,N}^{n+1}, u_{1,N}^{n+1}).
@@ -1000,12 +1000,12 @@ In order to get a first approximation for the flux that needs to be computed the
 				\end{array}\right]^T.
 					\end{align}
 					It is noted that the Jacobian only needs to be evaluated at $\mathbf{q}^0$ and can be reused at each iteration.
-					This reduces the computational cost and is commonly referred to as a type of frozen Newoton method. \cite{jin2010class,amat2013maximum,amat2018two}
+					This reduces the computational cost and is commonly referred to as a type of frozen Newton method. \cite{jin2010class,amat2013maximum,amat2018two}
 					In the next section we will be describing how to compute boundary values at bifurcations.
 
 					\paragraph{Bifurcations} \label{par:bifurcations}
 					A bifurcation is a junction where on vessel outlet connects to two vessel inlets.
-					For bifurcations the same conservation laws are applied as for the conjunction, i.e conservation of mass, conservation of pressure, and compatibility of the characteristic curves.
+					For bifurcations the same conservation laws are applied as for the conjunction, i.e. conservation of mass, conservation of pressure, and compatibility of the characteristic curves.
 					This lead to the following system of equations:
 					\begin{equation}
 						\mathbf{f}(\mathbf{q}):=\left[\begin{array}{c}
@@ -1026,7 +1026,7 @@ In order to get a first approximation for the flux that needs to be computed the
 						\left. \begin{array} {lll}    \left(A_{1,N}^{n+1}\right)^{\frac{1}{4}}, & \left(A_{2,0}^{n+1}\right)^{\frac{1}{4}}, & \left(A_{3,0}^{n+1}\right)^{\frac{1}{4}}
 						\end{array}\right].
 							\end{multline}
-							In analogy to the cconjunction the frozen Newton method is applied to solve the system.
+							In analogy to the conjunction the frozen Newton method is applied to solve the system.
 							The Jacobian here reads as
 							\begin{equation}
 								\mathbf{J}:=\left[\begin{array}{c c c c c c}
@@ -1044,7 +1044,7 @@ In order to get a first approximation for the flux that needs to be computed the
 							In the next section we will show how the boundary values for an anastomosis are set.
 
 							\paragraph{Anastomosis} \label{par:anastomosis}
-							An anastomosis describes two vessel outlets connectinng to a single vessel inlet.
+							An anastomosis describes two vessel outlets connecting to a single vessel inlet.
 							For the Anastomosis applying the extrapolation of characteristics, conservation of mass, and pressure conservation leads to the following system of equations
 							\begin{equation}
 								\mathbf{f}(\mathbf{q}):=\left[\begin{array}{c}
@@ -1173,11 +1173,11 @@ In order to get a first approximation for the flux that needs to be computed the
 							This is done through hard coded functions that set initial values such as described in \autoref{ssec:initial_conditions} and from values read from the file \emph{<path/to/network\_configuration>.yml}.
 							The steps to initialize out network are denoted on lines \ref{ln:init_start} through \ref{ln:init_end} in the pseudo-code.
 							Specifically we set initial data ($u(z;0)$, $A(z;0)$, $Q(z;0)$, \autoref{ssec:initial_conditions}) for each vessel, inlet data ($P(0;t)$ or $Q(0;t)$, \autoref{sssec:inlets}) at all inlets, outlet parameters ($R_t$, $R_1$, $C$, $R_2$, \autoref{sssec:outl}) for outlet vessels, mesh sizes ($\Delta x$, \autoref{sec:fv}) and parameters ($\beta$, $P_{ext}$, \autoref{sec:sv}) for each vessel, and global parameters ($\rho$, $T$, $C_{CFL}$, $N$, \autoref{sec:b},\autoref{sec:cfl}, where $N$ stands for the number of vessels in the network).
-							Then we generate the $J \times N$ matrix P\_t that will be used to store the pressure value at the center of each vessel throughout one cardiac cycle.
+							Then we generate the $J \times N$ matrix P\_t that will be used to store the pressure value at the centre of each vessel throughout one cardiac cycle.
 							Thereafter a while loop is initiated in lines \ref{ln:whout1} and \ref{ln:whout2} within which at each iteration an entire cardiac cycle of length $T$ is computed.
 							In this while loop we first set the time $t$ at which we want to simulate the system to $0$ in line \ref{ln:t0} and then we store a copy of the pressure data \ref{ln:cp} so we can compare the two after storing the results from the upcoming solver in the new copy.
 
-							Each cardiac cycle is itself described by a while-loop that computes the next time step (line \ref{ln:cfl}) using the $C_{CFL}$ parameter as in \autoref{sec:cfl}, updates boundary values (line \ref{ln:bv}) as in \autoref{ssec:boundary_values} by using either a reflective model with the parameter $R_t$ ot a Windkessel model using the parameters $R_1$, $C$, $R_2$, executes the MUSCL solver described in \autoref{sec:muscl} over all vessels (line \ref{ln:muscl}) advancing $\mathbf{U}_i^{n}$ to $\mathbf{U}_i^{n+1}$ $\forall i \in \{1,...,M\}$, saves the pressure at the centre of each vessel for each individual time-step (line \ref{ln:svp}), and finally increases the time by the time-step that was just computed (line \ref{ln:updt}).
+							Each cardiac cycle is itself described by a while-loop that computes the next time step (line \ref{ln:cfl}) using the $C_{CFL}$ parameter as in \autoref{sec:cfl}, updates boundary values (line \ref{ln:bv}) as in \autoref{ssec:boundary_values} by using either a reflective model with the parameter $R_t$ or a Windkessel model using the parameters $R_1$, $C$, $R_2$, executes the MUSCL solver described in \autoref{sec:muscl} over all vessels (line \ref{ln:muscl}) advancing $\mathbf{U}_i^{n}$ to $\mathbf{U}_i^{n+1}$ $\forall i \in \{1,...,M\}$, saves the pressure at the centre of each vessel for each individual time-step (line \ref{ln:svp}), and finally increases the time by the time-step that was just computed (line \ref{ln:updt}).
 							After computing a cardiac cycle the saved pressures are compared to the ones from the previous cardiac cycle at each vessel and the old pressure values are overwritten by the new ones (line \ref{ln:conv} - \ref{ln:ow2}).
 							Cardiac cycles are computed until the pressure differences in each vessel are smaller than $0.1$ mmHg in the euclidean norm which is expressed by the line \ref{ln:conv}.
 							This is in accordance with the comment made in \autoref{ssec:initial_conditions} about a steady state needing to be reached in order to get rid negative effects from imprecisely set initial conditions.
@@ -1220,7 +1220,7 @@ def runSimulation(config_filename, J)
 						In \autoref{sec:sc} we will talk about scaling with respect to compile time and run time of our code.
 						Finally in \autoref{sec:pi} we describe an example of the code performing parameter inference.
 
-						\section{Validation}
+					\section{Validation} \label{sec:val}
 						In order to validate our code we compared to the 1D-haemodynamics solver openBF\cite{openBF} that was written and validated in the course of the thesis \cite{melis2017gaussian}.
 						This code was written in the julia programming language\cite{julia}.
 						We chose four models that will be introduced more closely in \autoref{sec:da}.
@@ -1234,10 +1234,10 @@ def runSimulation(config_filename, J)
 							}
 							\includegraphics[width=0.4\columnwidth]{figures/0053_H_CERE_H_basilar_artery_IV_P.eps}
 							\includegraphics[width=0.4\columnwidth]{figures/adan56_common_hepatic_P.eps}
-							\caption{Our code and the openBF code produce close to the same output. In the 0007\_H\_AO\_H and the 0029\_H\_ABAO\_H networks this even leads to the plot of the data from our code being almost completey obfuscated by the openBF data.}
+							\caption{Our code and the openBF code produce close to the same output. In the 0007\_H\_AO\_H and the 0029\_H\_ABAO\_H networks this even leads to the plot of the data from our code being almost completely obfuscated by the openBF data.}
 							\label{fig:val}
 \end{figure}
-The plots show that for each model there is barely any difference in the ouput of the two vascular simulations.
+The plots show that for each model there is barely any difference in the output of the two vascular simulations.
 Furthermore there is less than $1\%$ relative error between openBF's and our implementation which validates our codes correctness.
 
 \section{Different Anatomies} \label{sec:da}
@@ -1440,6 +1440,39 @@ Therefore it is reasonable to assume that there will be outliers when comparing 
 \section{Parameter Inference} \label{sec:pi}
 
 \chapter{Conclusion/ Future Work}
+To conclude this work we state the goal that this thesis set out to accomplish, the methods applied and the result thereof.
+Finally we will give an outlook on future work that is enabled do to our contribution.
+The goal of this thesis was to write a differentiable 1D-haemodynamics solver.
+The underlying motivation thereof being the need for cardiovascular simulations in medicine, specifically in personalized medicine.
+The aim of having the solver be differentiable is to enable efficient parameter inference and sensitivity analysis.
+
+The construction of a differentiable solver was successful and was achieved using well established methods such as the reduction of the 3D-NSE to their 1D equivalent in \autoref{sec:sv} and the solving of these equations using the MUSCL numerical method in \autoref{sec:muscl}.
+The differentiability specifically results from the implementation in JAX.
+We could demonstrate that our code reproduces the results from previous work and does so while the execution time scales linearly w.r.t. the number of vessels and the compilation time is near constant over different network constellations (\autoref{sec:val}, \autoref{sec:sc}).(TODO: add comparison to julia and GPU execution and mention here)
+Furthermore we showed that our solver can produce physiologically realistic results on models that were produced from 3D geometries \autoref{sec:da}.
+Regarding parameter inference we could demonstrate it's feasibility on a toy problem (TODO: change to reflect results from parameter inference).
+
+While the main goal of making a differentiable 1D-haemodynamics solver was achieved there are still issues that need to be addressed.
+First off there may be potential to improve execution times on GPUs, especially the solving of junctions. 
+This consists of solving many small linear systems which is not a workload that offers it self readily to GPU optimization.
+Reformulating this part of the solver, perhaps in the form of one large sparse system may lend itself better to execution on the GPU.
+It is also possible that the advantages of computing on a GPU could only be leveraged for very large systems or when running many simulations simultaneously.
+This would have to be explored more closely.
+
+Furthermore we provided a differentiable solver which enables more efficient parameter inference however to apply this successfully to personalised medicine requires a lot of testing and tuning of the parameter inference process and would be aided heavily by a sensitivity analysis.
+Extensive parameter inference and sensitivity analysis hasn't been included in this work due to time constraints but the provided model would lend itself readily to such tasks.
+We consider the parameters of the Windkessel model to be a favourable target for such future work since they depend heavily on many physiological factor and there is no straightforward method of determining them for a given vascular network.
+
+The computing of parameters for an individual is one task where the differentiability of our code could be leveraged.
+Another way of applying the solver we have produced would be to learn laws governing the behaviour of our vascular simulator.
+This is especially useful when considering laws that are not well understood and that are based off of an empirical understanding of the underlying phenomenon.
+This leads to there being no conclusive correct way to model something within the simulator.
+A prime example for this is the tube law, here described by \autoref{eq:p_tot}.
+While there is a lot of literature suggesting and comparing different methods of computing the tube law there is no method that is considered to be the best or even fundamentally correct \cite{gomez2017analysis}.
+It would therefore be interesting to use data to infer this law and compare the results to the values obtained by using one of the given models from the literature.
+
+In general we believe this work offers fruitful ground for future contributions, be it through producing an even faster and more GPU friendly differentiable solver or using the existing solver to learn parameters and underlying laws.
+
 
 
 % This displays the bibliography for all cited external documents. All references have to be defined in the file references.bib and can then be cited from within this document.
