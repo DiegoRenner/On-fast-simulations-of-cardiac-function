@@ -311,12 +311,16 @@ Incorporating 3D models in this work would have added additional complexity with
 \section{1D Model} \label{sec:sv}
 Within a vessel we consider the conservation of mass and momentum in cylindrical coordinates, that hold for any fluid, to be satisfied.
 In cylindrical coordinates these conservation laws read
-\begin{align}
-	\frac{\partial \rho (z,r,\phi; t)}{\partial t} &+ \nabla \cdot \rho (z,r,\phi; t)\mathbf{u}(z,r,\phi; t) = 0, \label{eq:cont}\\
-	\frac{\partial \mathbf{u}(z,r,\phi; t)}{\partial t} &+ \left( \mathbf{u}(z,r,\phi; t) \cdot \nabla \right) \mathbf{u}(z,r,\phi; t) - \frac{\mu}{\rho(z,r,\phi; t)} \nabla^2 \mathbf{u}(z,r,\phi; t) = \\
-														&- \frac{1}{\rho (z,r,\phi; t)} \nabla P(z,r,\phi; t) + \mathbf{F}(z,r,\phi; t), \label{eq:mass} \\
-														&z \in \mathbb{R}, \ r \in \mathbb{R}_{\geq 0}, \ \phi \in [0, 2\pi), \ \nabla = \left[\frac{\partial}{\partial z}, \frac{1}{r}\frac{\partial}{\partial r}r, \frac{1}{r}\frac{\partial}{\partial \phi}  \right].
-\end{align}
+\begin{equation}
+	\frac{\partial \rho (z,r,\phi; t)}{\partial t} + \nabla \cdot \rho (z,r,\phi; t)\mathbf{u}(z,r,\phi; t) = 0, \label{eq:cont}
+\end{equation}
+\begin{multline}
+	\frac{\partial \mathbf{u}(z,r,\phi; t)}{\partial t} + \left( \mathbf{u}(z,r,\phi; t) \cdot \nabla \right) \mathbf{u}(z,r,\phi; t) - \frac{\mu}{\rho(z,r,\phi; t)} \nabla^2 \mathbf{u}(z,r,\phi; t) = \\
+														- \frac{1}{\rho (z,r,\phi; t)} \nabla P(z,r,\phi; t) + \mathbf{F}(z,r,\phi; t), \label{eq:mass} 
+\end{multline}
+\begin{equation}
+	z \in \mathbb{R}, \ r \in \mathbb{R}_{\geq 0}, \ \phi \in [0, 2\pi), \ \nabla = \left[\frac{\partial}{\partial z}, \frac{1}{r}\frac{\partial}{\partial r}r, \frac{1}{r}\frac{\partial}{\partial \phi}  \right].
+\end{equation}
 Here $\rho$ and $\mu$ are the blood density and viscosity mentioned in section \ref{sec:b}, 
 \begin{equation}
 	\mathbf{u}(z,r,\phi; t) = \left[ u_z(z,r,\phi; t), u_r(z,r,\phi; t), u_\phi (z,r,\phi; t) \right]^T
