@@ -295,7 +295,7 @@ The assumption of blood being an incompressible Newtonian fluid will be importan
 In this chapter we will discuss the different approaches that can be taken when creating a model for a vascular simulation and which one we are going to be using in \autoref{sec:ma}.
 After that we will give a mathematical description of the model we chose in \autoref{sec:sv}.
 
-\section{Modelling Approaches} \label{sec:ma}
+\section{Different Modelling Approaches} \label{sec:ma}
 In this thesis we focus on simulating macro-circulation in arteries, i.e. cardiovascular networks consisting of the largest arteries of the human circulation.
 The length and diameters of these vessels are on the scale of meters.
 According with which accuracy the system is supposed to be represented different dimensions of models can be chosen.
@@ -327,11 +327,11 @@ In cylindrical coordinates these conservation laws read
 														- \frac{1}{\rho (z,r,\phi; t)} \nabla P(z,r,\phi; t) + \mathbf{F}(z,r,\phi; t), \label{eq:mass} 
 \end{multline}
 \begin{equation}
-	z \in \mathbb{R}, \ r \in \mathbb{R}_{\geq 0}, \ \phi \in [0, 2\pi), \ \nabla = \left[\frac{\partial}{\partial z}, \frac{1}{r}\frac{\partial}{\partial r}r, \frac{1}{r}\frac{\partial}{\partial \phi}  \right].
+	z \in \mathbb{R}, \ r \in \mathbb{R}_{\geq 0}, \ \phi \in [0, 2\pi), \ \nabla := \left[\frac{\partial}{\partial z}, \frac{1}{r}\frac{\partial}{\partial r}r, \frac{1}{r}\frac{\partial}{\partial \phi}  \right].
 \end{equation}
 Here $\rho$ and $\mu$ are the blood density and viscosity mentioned in section \ref{sec:b}, 
 \begin{equation}
-	\mathbf{u}(z,r,\phi; t) = \left[ u_z(z,r,\phi; t), u_r(z,r,\phi; t), u_\phi (z,r,\phi; t) \right]^T
+	\mathbf{u}(z,r,\phi; t) := \left[ u_z(z,r,\phi; t), u_r(z,r,\phi; t), u_\phi (z,r,\phi; t) \right]^T
 \end{equation}
 is the velocity field, $P$ is the pressure, and $\mathbf{F}$ is any force acting on the fluid system.
 \autoref{eq:cont} is also referred to as the continuity equation \cite{anderson2011ebook}.
@@ -343,12 +343,12 @@ We consider a vessel to be an axisymmetric tube along the $z$ axis in a cylindri
 Under the following assumptions the 3D-Navier-Stokes equations can be reduced to a 1D-model:
 
 \begin{enumerate}
-	\item vessels are narrow, long, and circular,
-	\item vessels are straight and have linearly elastic compliant walls, 
-	\item vessel walls can be displaced slightly in radial direction but not in longitudinal direction,
-	\item blood is an incompressible Newtonian fluid and it's properties do not vary over a cross-section.
+	\item blood is an incompressible Newtonian fluid and it's properties do not vary over a cross-section. \label{it:fld} 
+	\item vessel walls can be displaced slightly in radial direction but not in longitudinal direction, \label{it:displ} 
+	\item vessels are narrow, long, and circular, \label{it:nlc}
+	\item vessels are straight and have linearly elastic compliant walls, \label{it:lec}
 \end{enumerate}
-In order to make this reduction we first apply the assumption that $\rho$ is constant in the continuity equation and expand the momentum equation in it's components
+In order to make this reduction we first apply the assumption that $\rho$ is constant (\autoref{it:fld}) in the continuity equation and expand the momentum equation in it's components
 \begin{equation}
 	\frac{\partial u_z}{\partial z} + \frac{1}{r} \frac{\partial (ru_r)}{\partial r} + \frac{1}{r}\frac{\partial u_\phi}{\partial \phi} = 0, 
 \end{equation}
@@ -367,7 +367,7 @@ In order to make this reduction we first apply the assumption that $\rho$ is con
 Here we have dropped the explicit dependence on time and space variables in favour of readability.
 Since the model is considered to be axisymmetric we set $v_\phi=0$ and ignore derivatives in this direction.
 This means we can drop \autoref{eq:momp}.
-The remaining three variables read
+The remaining three equations read
 \begin{equation}
 	\frac{\partial u_z}{\partial z} + \frac{1}{r} \frac{\partial (r u_r)}{\partial r} = 0, \label{eq:cont1}
 \end{equation}
@@ -379,44 +379,44 @@ The remaining three variables read
 \end{equation}
 In order to simplify the equations we introduce typical velocities $U_z$ and $U_r$ and define the non-dimensional quantities as:
 \begin{equation}
-	\tilde{r} = \frac{r}{r_0}, \ \tilde{z} = \frac{z}{l_0}, \ \tilde{t} = t \frac{U_z}{l_0}, \ \tilde{u}_z = \frac{u_z}{U_z}, \ \tilde{u}_r = \frac{u_r}{U_r}, \ \tilde{P} = \frac{P}{\rho U_z^2}, \ \epsilon = \frac{U_r}{U_z}.
+	\tilde{r} := \frac{r}{r_0}, \ \tilde{z} := \frac{z}{l_0}, \ \tilde{t} := t \frac{U_z}{l_0}, \ \tilde{u}_z := \frac{u_z}{U_z}, \ \tilde{u}_r := \frac{u_r}{U_r}, \ \tilde{P} := \frac{P}{\rho U_z^2}, \ \epsilon := \frac{U_r}{U_z}.
 \end{equation}
 We note that in a laminar flow the maximum value of $U_r$ is the radial velocity of the arterial wall.
-As we assume that these walls can only be displaced slightly $U_r$ can be assumed to be small and therefore $\epsilon << 1$. \cite{womersley1957elastic}
+As we assume that these walls can only be displaced slightly (\autoref{it:displ}) $U_r$ can be assumed to be small and therefore $\epsilon << 1$. \cite{womersley1957elastic}
 Inserting the non-dimensional into \autoref{eq:cont1} - \autoref{eq:momr} and dropping the terms of order $\epsilon^2$ or higher yields
 \begin{equation}
 	\frac{\partial (\tilde{r} \tilde{u}_r)}{\partial \tilde{r}} + \frac{\partial (\tilde{r} \tilde{u}_z)}{\partial\tilde{z}} = 0, \label{eq:cont2}
 \end{equation}
 \begin{equation}
-	\tilde{r} \frac{\partial \tilde{u}_z}{\partial \tilde{t}} + \frac{ \partial (\tilde{r} \tilde{u}_z^2)}{\partial \tilde{z}} + \frac{ \partial (\tilde{r} \tilde{u}_z \tilde{u}_r)}{\partial \tilde{r}} + \tilde{r} \frac{\partial \tilde{P}}{\partial \tilde{z}} = \frac{\mu}{\rho} \frac{l_0}{U_z r_0^2} \frac{\partial}{\partial \tilde{r}} \left( \tilde{r} \frac{\partial \tilde{u}_z}{\partial \tilde{r}} \right) \label{eq:momz}
+	\tilde{r} \frac{\partial \tilde{u}_z}{\partial \tilde{t}} + \frac{ \partial (\tilde{r} \tilde{u}_z^2)}{\partial \tilde{z}} + \frac{ \partial (\tilde{r} \tilde{u}_z \tilde{u}_r)}{\partial \tilde{r}} + \tilde{r} \frac{\partial \tilde{P}}{\partial \tilde{z}} = \frac{\mu}{\rho} \frac{l_0}{U_z r_0^2} \frac{\partial}{\partial \tilde{r}} \left( \tilde{r} \frac{\partial \tilde{u}_z}{\partial \tilde{r}} \right), \label{eq:momz}
 \end{equation}
 \begin{equation}
-	\frac{\partial \tilde{P}}{\tilde{r}} = 0
+	\frac{\partial \tilde{P}}{\tilde{r}} = 0.
 \end{equation}
-Introducing the non-dimensional vessel inner radius $\hat r$ the averaged velocity over the cross-section
+Introducing the non-dimensional vessel inner radius $\hat r$ the averaged velocity over the circular (\autoref{it:nlc}) cross-section
 \begin{equation}
-	\hat{u} := \frac{1}{\hat{r}^2} \int_0^{\hat{r}} 2 \tilde{u}_z \tilde{r} d\tilde{r}
+	\hat{u} := \frac{1}{\hat{r}^2} \int_0^{\hat{r}} 2 \tilde{u}_z \tilde{r} d\tilde{r},
 \end{equation}
 and the Coriolis' coefficient
 \begin{equation}
-	\alpha := \frac{1}{\hat{r}^2 \hat{u}} \int_0^{\hat{r}} 2 \tilde{u}_z^2 \tilde{r} d\tilde{r}
+	\alpha := \frac{1}{\hat{r}^2 \hat{u}} \int_0^{\hat{r}} 2 \tilde{u}_z^2 \tilde{r} d\tilde{r},
 \end{equation}
 can be defined.
 The Coriolis' coefficient is the correction parameter that stems from the fact that our new momentum equation no longer expresses the conservation of momentum but actually the conservation of the momentum averaged over the radial component.\cite{article10002407}
-Using these definitions and applying the no-slip boundary condition while assuming negligible longitudinal wall displacement
+Using these definitions and applying the no-slip boundary condition while assuming negligible longitudinal wall displacement (\autoref{it:displ})
 \begin{equation}
-	\tilde{u}_r|_{\tilde{r}=\hat{r}} = \frac{\partial \hat{r}}{\partial \tilde{t}}
+	\tilde{u}_r|_{\tilde{r}=\hat{r}} = \frac{\partial \hat{r}}{\partial \tilde{t}},
 \end{equation}
 the equations \autoref{eq:cont2} and \autoref{eq:momz} read
 \begin{equation}
-	\hat{r} \frac{\partial \hat{r}}{\partial \tilde{t}} + \frac{1}{2}\frac{\partial}{\partial \tilde{z}} \left(  \hat{u}\hat{r}^2 \right) = 0 \label{eq:cont3}
+	\hat{r} \frac{\partial \hat{r}}{\partial \tilde{t}} + \frac{1}{2}\frac{\partial}{\partial \tilde{z}} \left(  \hat{u}\hat{r}^2 \right) = 0, \label{eq:cont3}
 \end{equation}
 \begin{equation}
 	\frac{(\partial \hat{r}^2 \hat{u})}{\partial \tilde{t}} + \frac{\partial \left( \alpha \hat{r}^2 \hat{u}^2 \right)}{\partial \tilde{z}} + \hat{r}^2 \frac{\partial \tilde{P}}{\partial \tilde{z}} = 2\frac{\mu}{\rho} \frac{l_0}{U_z r_0^2} \hat{r} \frac{\partial \tilde{u}_z}{\partial \tilde{z}} |_{\hat{r}}.\label{eq:momz1}
 \end{equation}
 After reintroducing a dimensional axial velocity in terms of the dimensional inner vessel radius $\bar{r}$
 \begin{equation}
-	u := U_z \hat{u} = \frac{1}{\bar{r}^2} \int_0^{\bar{r}} 2su_zds
+	u := U_z \hat{u} = \frac{1}{\bar{r}^2} \int_0^{\bar{r}} 2su_zds,
 \end{equation}
 we can also write the Coriolis' coefficient in terms of dimensional variables
 \begin{equation}
@@ -424,31 +424,34 @@ we can also write the Coriolis' coefficient in terms of dimensional variables
 \end{equation}
 In dimensional variables the continuity equation (\autoref{eq:cont3}) and the $z$-momentum equation (\autoref{eq:momz1}) are
 \begin{equation}
-	\frac{\partial \bar{r}^2}{\partial t} + \frac{\partial (\bar{r}^2 u^2)}{\partial z} = 0
+	\frac{\partial \bar{r}^2}{\partial t} + \frac{\partial (\bar{r}^2 u^2)}{\partial z} = 0,
 \end{equation}
 \begin{equation}
 	\frac{\partial (\bar{r}^2 u)}{\partial t} + \frac{\partial (\alpha \bar{r}^2 u^2) }{\partial z} + \frac{\bar{r}^2}{\rho} \frac{\partial P}{\partial z} = 2 \frac{\mu}{\rho} \bar{r} \frac{\partial u_z}{\partial r} |_{\bar{r}}.
 \end{equation}
-In terms of the cross-section $A := \pi \bar{r}^2$ and the volumetric flow-rate $Q := Au$ the 1D NSE equations finally read
+In terms of the cross-section $A := \pi \bar{r}^2$ (\autoref{it:nlc}) and the volumetric flow-rate $Q := Au$ the 1D NSE equations finally read
 \begin{equation}
-	\begin{aligned} 
-		\frac{\partial A(z;t)}{\partial t} + \frac{\partial Q(z;t)}{\partial z} &= 0, \\ 
-		\frac{\partial Q(z;t)}{\partial t} + \frac{\partial}{\partial z}\left(\alpha(z;t) \frac{Q(z;t)^2}{A(z;t)} \right) + \frac{A(z;t)}{\rho(z;t)} \frac{\partial P(z;t)}{\partial z} &= \\
-		-2 \frac{\mu}{\rho(z;t)} ( \gamma &+ 2 ) \frac{Q(z;t)}{A(z;t)}, \\
-		z \in [0,l],\ & t \in \mathbb{R}_{\geq 0}, 
-	\end{aligned} \label{eq:1Deqs1}
+		\frac{\partial A(z;t)}{\partial t} + \frac{\partial Q(z;t)}{\partial z} = 0, \label{eq:1deqs1}
+\end{equation}
+\begin{multline}
+		\frac{\partial Q(z;t)}{\partial t} + \frac{\partial}{\partial z}\left(\alpha(z;t) \frac{Q(z;t)^2}{A(z;t)} \right) + \frac{A(z;t)}{\rho(z;t)} \frac{\partial P(z;t)}{\partial z} = \\
+		-2 \frac{\mu}{\rho(z;t)} ( \gamma + 2 ) \frac{Q(z;t)}{A(z;t)}, \label{eq:1deqs2}
+\end{multline}
+\begin{equation}
+		z \in [0,l],\  t \in \mathbb{R}_{\geq 0}, 
 \end{equation}
 where we have reintroduced the time and space dependence for clarity.
 Here $\gamma$ is the velocity profile parameter that determines the velocity profile by a common parametric approximation 
 \begin{equation}
-	u_z(z,r;t) = \frac{\gamma + 2}{\gamma} u(z;t) \left[ 1 - \left( \frac{r}{\bar{r}(z;t)} \right) \right].
+	u_z(z,r;t) := \frac{\gamma + 2}{\gamma} u(z;t) \left[ 1 - \left( \frac{r}{\bar{r}(z;t)} \right) \right].
 \end{equation}
 For this velocity profile the Coriolis coefficient is
 \begin{equation}
-	\alpha = \frac{\gamma + 2}{\gamma + 1}
+	\alpha = \frac{\gamma + 2}{\gamma + 1}.
 \end{equation}
-For $\gamma=2, \alpha = \frac{4}{3}$ this gives a plug flow, a rather flat velocity profile that decays rapidly at the artery walls.
-For $\gamma=9, \alpha = \frac{11}{10} $ we get a hyperbolic velocity profile and hence a Poiseuille-like flow. (plot?)\cite{köppl2023dimension} \cite{barnard1966theory}
+For $\gamma=2$, $\alpha = \frac{4}{3}$ this gives a plug flow, a rather flat velocity profile that decays rapidly at the artery walls.
+For $\gamma=9$, $\alpha = \frac{11}{10} $ we get a hyperbolic velocity profile and hence a Poiseuille-like flow. (TODO:plot?)\cite{köppl2023dimension} \cite{barnard1966theory}
+
 We want to determine the variables $Q, A,$ and $P$.
 Until now we've considered the two equations of mass and momentum conservation determining $Q$ and $A$.
 In order to determine $P$ we therefore need another equation, a so called tube law.
@@ -456,33 +459,33 @@ There are many different ways to model the pressure $P$ within a deforming tube 
 For a full comparison of a wide range of such models we refer to \cite{gomez2017analysis}.
 In the model used in this work the pressure $P$ is given by the external pressure $P_{ext}$ stemming from surrounding tissue as well as the pressure from the deformation of the vessel:
 \begin{equation}
-	P_{def}(z;t) = \frac{h_0(z) \sigma(z;t)}{r_0(z;t)}. \label{eq:pdef}
+	P_{def}(z;t) := \frac{h_0(z) \sigma(z;t)}{r_0(z;t)}, \label{eq:pdef}
 \end{equation}
 given by the Young-Laplace law \cite{laplace1805traité} \cite{young1804essay}.
 Here $\sigma$ is the stress which describes the internal forces that neighbouring particles of the continuous material exert on each other.
-Assuming linear elasticity and using Hooke's law \cite{hooke1678lectures} we arrive at:
+Assuming linear elasticity (\autoref{it:lec}) and using Hooke's law \cite{hooke1678lectures} we arrive at
 \begin{equation}
-	\sigma(z;t) = \epsilon(z;t) E \label{eq:stress}
+	\sigma(z;t) := \epsilon(z;t) E \label{eq:stress},
 \end{equation}
 where $E$ describes the stiffness of the elastic material and is called Young's modulus.
 $\epsilon$ is the stress and gives the deformation of the material.
-Assuming an isotropic, homogeneous, and incompressible arterial wall, an axisymmetric deformation, and circular cross-sections that are independent of each other it $\epsilon$ is given by:
+Assuming an isotropic, homogeneous, and incompressible arterial wall, an axisymmetric deformation, and circular cross-sections (\autoref{it:nlc}) that are independent of each other $\epsilon$ is given by:
 \begin{equation}
-	\epsilon(z;t) = \frac{r(z;t)-r_0(z;t)}{ (1-\nu^2) r_0(z;t)}. \label{eq:strain}
+	\epsilon(z;t) := \frac{r(z;t)-r_0(z;t)}{ (1-\nu^2) r_0(z;t)}. \label{eq:strain}
 \end{equation}
 $\nu$ is the elasticity parameter or the Poisson's ratio.
 It is the ratio of transverse contraction to longitudinal extension strain in the direction of the stretching force.
 Combining \autoref{eq:pdef}-\autoref{eq:strain} with a term for the external pressure $P_{ext}$ we get \cite{sherwin2003one} \cite{sherwin2003computational}: 
 \begin{align}
-	P(z;t) &= P_{ext}(z;t) + \beta \left( \sqrt{\frac{A(z;t)}{A_0(z)}}-1 \right),  \label{eq:p_tot}\\
-	\beta(z) &=  \frac{\sqrt{\pi} E h_0(z)}{(1-\nu^2) \sqrt{A_0(z)}}.
+	P(z;t) &:= P_{ext}(z;t) + \beta \left( \sqrt{\frac{A(z;t)}{A_0(z)}}-1 \right),  \label{eq:p_tot}\\
+	\beta(z) &:=  \frac{\sqrt{\pi} E h_0(z)}{(1-\nu^2) \sqrt{A_0(z)}}.
 \end{align}
 We refer to $\beta$ as the elasticity coefficient from here on out.
 Comparison with experimental data shows that a plug-flow is a reasonable approximation of the velocity profile \cite{hunter1972numerical} \cite{smith2000generation} \cite{smith2002anatomically}.
 Therefore it is reasonable to set $\gamma = 9, \alpha = \frac{11}{10}$.
 Since the plug-flow velocity profile is relatively flat the average of $Q$ doesn't differ from the actual value anywhere along $r$.
-Therefore we can also set the Coriolis' coefficient $\alpha$ (correction parameter) to $\alpha = 1$. \cite{formaggia2010cardiovascular}
-Inserting these fixed values for $\gamma$ and $\alpha$ into  \autoref{eq:1Deqs1} leads to 
+Therefore we can also set the Coriolis' coefficient $\alpha$ (averaging correction parameter) to $\alpha = 1$. \cite{formaggia2010cardiovascular}
+Inserting these fixed values for $\gamma$ and $\alpha$ into \autoref{eq:1deqs1} and \autoref{eq:1deqs2} leads to 
 \begin{equation}
 	\begin{aligned} 
 		\frac{\partial A}{\partial t} + \frac{\partial Q}{\partial z} &= 0, \\ 
@@ -497,7 +500,7 @@ We can rewrite equation \ref{1deqs2} in it's conservative form by defining the f
 	\begin{bmatrix}
 		A \\
 		Q
-	\end{bmatrix}
+	\end{bmatrix},
 \end{equation}
 
 \begin{equation}
@@ -505,7 +508,7 @@ We can rewrite equation \ref{1deqs2} in it's conservative form by defining the f
 	\begin{bmatrix}
 		Q \\
 		\alpha \frac{Q^2}{A} + \int_{A_0}^{A} \frac{a}{\rho}\frac{\partial P}{\partial a} da
-	\end{bmatrix}
+	\end{bmatrix},
 \end{equation}
 
 \begin{equation}
@@ -513,7 +516,7 @@ We can rewrite equation \ref{1deqs2} in it's conservative form by defining the f
 	\begin{bmatrix}
 		0 \\
 		-\frac{A}{\rho} \left( \frac{\partial P}{\partial A_0} \frac{\partial A_0}{\partial z} + \frac{\partial P}{\partial \beta} \frac{\partial \beta}{\partial z} + 22\mu\frac{u}{A} \right)
-	\end{bmatrix}
+	\end{bmatrix},
 \end{equation}
 
 \begin{equation}
@@ -524,15 +527,16 @@ We can rewrite equation \ref{1deqs2} in it's conservative form by defining the f
 The conservative form then reads:
 \begin{equation}
 	\begin{aligned}
-		\frac{\partial \mathbf{U}}{\partial t} + \frac{\partial \mathbf{F} \left( \mathbf{U} \right)}{\partial z} &= \mathbf{S} \left( \mathbf{U} \right), \ t>0, \ z \in \left[ 0,l \right] \\
-		\mathbf{U} \left( z;0 \right) &= \mathbf{U}_0 \left( z \right), \ z \in \left[ 0,l \right] \\
-		\mathbf{U} \left( 0;t \right) &= \mathbf{U}_L \left( t \right), \ t>0\\
-		\mathbf{U} \left( l;t \right) &= \mathbf{U}_R \left( t \right), \ t>0
+		\frac{\partial \mathbf{U}}{\partial t} + \frac{\partial \mathbf{F} \left( \mathbf{U} \right)}{\partial z} &= \mathbf{S} \left( \mathbf{U} \right), \ t>0, \ z \in \left[ 0,l \right], \\
+		\mathbf{U} \left( z;0 \right) &= \mathbf{U}_0 \left( z \right), \ z \in \left[ 0,l \right], \\
+		\mathbf{U} \left( 0;t \right) &= \mathbf{U}_L \left( t \right), \ t>0,\\
+		\mathbf{U} \left( l;t \right) &= \mathbf{U}_R \left( t \right), \ t>0,
 	\end{aligned} \label{eq:1deqs3}
 \end{equation}
 where we have added initial values $\mathbf{U}_0$ and boundary conditions $\mathbf{U}_L$ and $\mathbf{U}_R$ so that equation \ref{eq:1deqs3} now yields a well posed problem.\cite{formaggia2010cardiovascular}
 This concludes the description of the 1D-model for a single artery.
-The explicit setting of the aforementioned initial conditions and boundary values will be described in \autoref{sec:icbc} after introducing our numerical methods and the used notation in the next chapter.
+The explicit setting of the aforementioned initial conditions and boundary values needs to be modelled as well.
+However we will dress this in \autoref{sec:icbc} of the next chapter after introducing our numerical methods and some notations that will make it easier to describe the assigning of initial conditions and boundary values.
 
 
 
@@ -555,7 +559,7 @@ This method was used in \cite{streeter1963pulsatile,bodley1971non,parker1990forw
 A finite difference scheme was applied by \cite{smith2002anatomically,elad1991numerical,elad1991numerical,pontrelli2003numerical,reymond2009validation}.
 The finite volume and the finite element methods have become more prevalent in recent years.
 The advantage of the FV solver over the FD solver is that they can treat discontinuities \cite{toro2001shock}, i.e. they can deal with potential large gradients occurring in the solution \cite{shu1988efficient,harten1997uniformly}.
-In the case of our simulation these might occur when assigning boundary values and therefore a FV method woud be beneficial.
+In the case of our simulation these might occur when assigning boundary values and therefore a FV method word be beneficial.
 The finite volume method was applied by \cite{melis2017gaussian,brook1999numerical,brook2002model} and the finite element method has been used in \cite{sherwin2003one,sherwin2003computational,formaggia2001coupling,wan2002one,porenta1986finite,rooz1982finite,bessems2008experimental}
 While higher accuracy and faster convergence can technically be achieved by a FE method, there are applications in venous systems where FE schemes do not converge.
 There is also increasing complexity involved when implementing models that are based on the method of characteristics all the way up to finite element methods.
