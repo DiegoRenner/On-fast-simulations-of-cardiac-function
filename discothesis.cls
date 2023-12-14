@@ -190,17 +190,18 @@
       }%
    \renewcommand\newblock{\par}}%
 }
-%kai \ExecuteOptions{letterpaper,10pt,twoside,onecolumn,final,openright}
+%\ExecuteOptions{letterpaper,10pt,twoside,onecolumn,final,openright}
 %\ExecuteOptions{a4paper,11pt,oneside,onecolumn,final,openany,reqno}
 \ExecuteOptions{a4paper,11pt,twoside,onecolumn,final,openright}%,reqno}	%kai
 \ProcessOptions
 
-\newcommand\keywords[1]{\gdef\@keywords{#1}}	   %kai
-\newcommand\categories[1]{\gdef\@categories{#1}}   %kai
-\newcommand\supervisors[1]{\gdef\@supervisors{#1}} %kai
-\newcommand\email[1]{\gdef \@email{#1}}            % tobias
-\newcommand\institute[1]{\gdef \@institute{#1}}    % tobias
-\newcommand\thesistype[1]{\gdef \@thesistype{#1}}  % tobias
+\newcommand\keywords[1]{\gdef\@keywords{#1}}	   
+\newcommand\categories[1]{\gdef\@categories{#1}}   
+\newcommand\supervisors[1]{\gdef\@supervisors{#1}} 
+\newcommand\cosupervisors[1]{\gdef\@cosupervisors{#1}} 
+\newcommand\email[1]{\gdef \@email{#1}}            
+\newcommand\institute[1]{\gdef \@institute{#1}}    
+\newcommand\thesistype[1]{\gdef \@thesistype{#1}}  
 \newcommand\logo[1]{\gdef\@logo{#1}} % tobias
 
 \logo{}
@@ -336,7 +337,10 @@
 
 		\vfill
 		\begin{center}
-			\textbf{Supervisors:} \\[2pt] \@supervisors
+			\textbf{Supervisor:} \\[2pt] \@supervisors
+		\end{center}
+		\begin{center}
+			\textbf{Co-supervisors:} \\[2pt] \@cosupervisors
 		\end{center}
 
 		\vspace{0.2cm}
