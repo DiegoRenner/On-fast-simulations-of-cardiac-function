@@ -466,7 +466,7 @@ There are many different ways to model the pressure $P$ within a deforming tube 
 For a full comparison of a wide range of such models we refer to \cite{gomez2017analysis}.
 In the model used in this work the pressure $P$ is given by the external pressure $P_{ext}$ stemming from surrounding tissue as well as the pressure from the deformation of the vessel:
 \begin{equation}
-	P_{def}(z;t) := \frac{h_0(z) \sigma(z;t)}{r_0(z;t)}, \label{eq:pdef}
+	P_{def}(z;t) := \frac{h_0(z) \sigma(z;t)}{r(z;t)}, \label{eq:pdef}
 \end{equation}
 given by the Young-Laplace law \cite{laplace1805traité} \cite{young1804essay}.
 Here $\sigma$ is the stress which describes the internal forces that neighbouring particles of the continuous material exert on each other.
@@ -514,7 +514,7 @@ We can rewrite equation \ref{1deqs2} in it's conservative form by defining the f
 	\mathbf{F} \left( \mathbf{U} \right) := 
 	\begin{bmatrix}
 		Q \\
-		\alpha \frac{Q^2}{A} + \int_{A_0}^{A} \frac{a}{\rho}\frac{\partial P}{\partial a} da
+		\frac{Q^2}{A} + \frac{\beta A^{\frac{3}{2}}}{3\rho\sqrt{A_0}}
 	\end{bmatrix},
 \end{equation}
 
@@ -522,15 +522,10 @@ We can rewrite equation \ref{1deqs2} in it's conservative form by defining the f
 	\mathbf{S} \left( \mathbf{U} \right) := 
 	\begin{bmatrix}
 		0 \\
-		-\frac{A}{\rho} \left( \frac{\partial P}{\partial A_0} \frac{\partial A_0}{\partial z} + \frac{\partial P}{\partial \beta} \frac{\partial \beta}{\partial z} + 22\mu\frac{u}{A} \right)
+	-22\frac{\mu}{\rho}\frac{Q}{A} 
 	\end{bmatrix},
 \end{equation}
-
-\begin{equation}
-	\gamma := \frac{\beta}{3\rho\sqrt{A_0}}.
-\end{equation}
-
-
+where we have inserted \autoref{eq:p_tot} for $P$.
 The conservative form then reads:
 \begin{equation}
 	\begin{aligned}
@@ -695,6 +690,7 @@ In order to get a first approximation for the flux that needs to be computed the
 	The flux that are computed in both Riemann problems mentioned in this section are not solved for analytically but numerically using the conservative form of the Lax-Friedrichs scheme.
 	Given that the flux function is Lipschitz continuous, this scheme is conservative and consistent \cite{köppl2023dimension}.
 	In general it is first order accurate and stable for small enough step sizes (see \autoref{sec:cfl}). \cite{leveque1992numerical}
+	In order to be compatible with the next section we denote the computed approximation for $\mathbf{U}$ at timestep $n+1$ by $\bar{\mathbf{U}}^{n+1}$.
 	In the next section we will be addressing how to handle the source term $\mathbf{S}$ that we have ignored here.
 
 	\section{Time step, source term} \label{sec:fe}
@@ -703,11 +699,11 @@ In order to get a first approximation for the flux that needs to be computed the
 	\begin{equation}
 		\frac{d \mathbf{U}}{d t}=\mathbf{S}(\mathbf{U}) .
 	\end{equation}
-	This is done here by using the forward Euler method
+	This is done here by using the forward Euler method \cite{köppl2023dimension}
 	\begin{equation}
-		\mathbf{U}^{n+1}=\mathbf{U}^n + \Delta t \mathbf{S}\left(t^n, \mathbf{U}^n\right).
+		\mathbf{U}^{n+1}=\bar{\mathbf{U}}^{n+1} + \Delta t \mathbf{S}\left(\bar{\mathbf{U}}^{n+1}\right).
 	\end{equation}
-	TODO: justification, adjust notation for to reflect MUSCL step.
+
 
 
 	\section{Initial Conditions and Boundary Values} \label{sec:icbc}
