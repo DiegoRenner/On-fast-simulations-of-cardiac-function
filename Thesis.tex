@@ -1197,10 +1197,10 @@ In order to get a first approximation for the flux that needs to be computed the
 
 							Each cardiac cycle is itself described by a while-loop that computes the next time step (line \ref{ln:cfl}) using the $C_{CFL}$ parameter as in \autoref{sec:cfl}, updates boundary values (line \ref{ln:bv}) as in \autoref{ssec:boundary_values} by using either a reflective model with the parameter $R_t$ or a Windkessel model using the parameters $R_1$, $C$, $R_2$, executes the MUSCL solver described in \autoref{sec:muscl} over all vessels (line \ref{ln:muscl}) advancing $\mathbf{U}_i^{n}$ to $\mathbf{U}_i^{n+1}$ $\forall i \in \{1,...,M\}$, saves the pressure at the centre of each vessel for each individual time-step (line \ref{ln:svp}), and finally increases the time by the time-step that was just computed (line \ref{ln:updt}) and the time-step counter by $1$ (line \ref{ln:updi}).
 							This while loop also contains a condition that will exit the loop if more than $J$ time-steps have been computed for the current cardiac cycle.
-							After computing a cardiac cycle the saved pressures are compared to the ones from the previous cardiac cycle at each vessel and the old pressure values are overwritten by the new ones (line \ref{ln:ow2} - \ref{ln:conv}).
+							After computing a cardiac cycle, the saved pressures are compared to the ones from the previous cardiac cycle at each vessel in line \ref{ln:conv}.
 							Cardiac cycles are computed until the pressure differences in each vessel are smaller than $0.1$ mmHg in the euclidean norm which is expressed by line \ref{ln:conv}.
 							This is in accordance with the comment made in \autoref{ssec:initial_conditions} about a steady state needing to be reached in order to get rid of negative effects from imprecisely set initial conditions.
-\begin{lstlisting}[language=Python, caption=code structure in pseudocode, label=lst:pc, escapechar=|]
+\begin{lstlisting}[language=Python, caption=The code structure of an entire simulation is given here in pseudocode. Each line is detailed throughout this section., label=lst:pc, escapechar=|]
 def runSimulation(config_filename, J)
 	config = loadConfig(config_filename) |\label{ln:init_start}|
 	simulation_data = buildArterialNetwork(config) |\label{ln:init_end}|
@@ -1216,12 +1216,11 @@ def runSimulation(config_filename, J)
 			dt = computeDt(simulation_data) |\label{ln:cfl}|
 			simulation_data = setBoundaryValues(simulation_data, dt) |\label{ln:bv}|
 			simulation_data = muscl(simulation_data, dt) |\label{ln:muscl}|
-			P_t = savePressure(simulation_data) |\label{ln:svp}|
+			P_t[i,:] = savePressure(simulation_data) |\label{ln:svp}|
 			t = t + dt |\label{ln:updt}|
 			i = i + 1 |\label{ln:updi}|
 			if i >= J
 				break
-		P_t = P_t_new |\label{ln:ow2}|
 		converged = checkConv(P_t, P_t_temp) |\label{ln:conv}|
 						\end{lstlisting}
 						It is noted that the computation of the boundary conditions in line \ref{ln:bv} requires a for loop.
