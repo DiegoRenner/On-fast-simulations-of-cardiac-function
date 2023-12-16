@@ -159,7 +159,7 @@ The general issue described up until now, with regards to the difficulty of pers
 
 Therefore, the goal of this work is to provide a fast, differentiable cardiovascular simulation.
 This is a step towards enabling efficient and interpretable model calibration to be applied in personalised medicine.
-In order to be differentiable the haemodynamics solver written in the course of this thesis was written using the JAX library \cite{jax}.
+In order to be differentiable the haemodynamics solver written in the course of this thesis was written using the JAX library \cite{jax123}.
 On top of differentiability, JAX also offers device agnostic execution.
 That is, JAX optimizes the written code to take advantage of parallelization and other advantages of modern hardware regardless of being executed on a CPU, GPU or TPU.
 The optimization for GPU execution is especially useful since it allows for data parallelization, i.e. batch executions of the code on a single device.
@@ -294,7 +294,7 @@ The blood dynamic viscosity $\mu$ decreases hyperbolically with the shear rate $
 At about $D > 100s^{-1}$ the viscosity stays constant for common haematocrit values.
 
 In larger arteries the average shear rate close to the walls is above the $100s^{-1}$ threshold. \cite{MCDbook}
-Therefore, the blood's viscosity is often considered constant and it can roughly be viewed as Newtonian fluid for the sake of simplicity \cite{fung1996biomechanics,guyton2006textbook,MCDbook,pedley_1980,zamir2000physics,zamir2006physics}. 
+Therefore, the blood's viscosity is often considered constant and it can roughly be viewed as Newtonian fluid for the sake of simplicity \cite{fung2013biomechanics,guyton2006textbook,MCDbook,pedley_1980,zamir2000physics,zamir2006physics}. 
 The blood density $\rho$ is considered constant within the range of $1050 \pm 10 \text{ kg}\cdot\text{m}^{-3}$, i.e. blood can be considered an incompressible fluid \cite{PMID:2658951,kenner1977continuous,helmig1997multiphase}.
 The assumption of blood being an incompressible Newtonian fluid will be important when constructing the underlying model for our cardiovascular solver in \autoref{sec:sv}. In the next chapter we will start building this model with a discussion on the choice of dimensionality when modelling.
 
@@ -468,7 +468,7 @@ In the model used in this work the pressure $P$ is given by the external pressur
 \begin{equation}
 	P_{def}(z;t) := \frac{h_0(z) \sigma(z;t)}{\pi r(z;t)}, \label{eq:pdef}
 \end{equation}
-given by the Young-Laplace law \cite{laplace1805traité} \cite{young1804essay}.
+given by the Young-Laplace law \cite{comte1799traite} \cite{thomas1805essay}.
 Here $\sigma$ is the stress which describes the internal forces that neighbouring particles of the continuous material exert on each other.
 Assuming linear elasticity (\autoref{it:lec}) and using Hooke's law \cite{hooke1678lectures} we arrive at
 \begin{equation}
@@ -1380,7 +1380,7 @@ The corresponding table containing the vessel names and their label is \autoref{
 \end{figure}
 \begin{table}[H]
 	\begin{center}
-		\begin{tabular}{|c|l|}
+	\begin{tabular}{|c|l|}
 			\hline
 			Legend & Vessel Name\\
 			\hline
