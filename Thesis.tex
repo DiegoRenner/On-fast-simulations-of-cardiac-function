@@ -133,7 +133,7 @@ Such computational models aim to simulate a patients individual physiology in or
 This is especially useful when the computed biomarkers can be connected via first principals to the outcome of a disease.
 Here we mention again local vascular pressure and hypertension as a prime example.
 However simulating such quantities accurately depends heavily on a high number of personalised parameters, leading to a similar problem as described initially: needing to access difficult to measure or unobtainable data for a specific patient.
-An attempt to avoid the problem of having to know these values is using population averaged means.
+An attempt to avoid the problem of having to know these values for each individual is using population averaged means.
 This however defeats the purpose of personalised medicine.
 What has therefore become the method of choice to address the issue of personalised medicine using computational models is to build simulators that output the values of some desired biomarkers and to then try and solve the inverse problem of fitting the parameters of the simulator to a specific patient.
 
@@ -143,7 +143,7 @@ There are two main ways of achieving the goal of calibrating a simulation for an
 	\item A deep-learning approach where the calibration is avoided all together in favour of learning the model from data \cite{kissas2020machine,arzani2022machine}.
 \end{enumerate}
 The reason deep-learning techniques were attempted is due to the fact that the "classical" approaches are very inefficient.
-This in part because derivatives are often hard to determine for the attempted simulations so the algorithms of choice for solving the inverse problem are gradient-free. 
+This is in part because derivatives are often hard to determine for the attempted simulations so the algorithms of choice for solving the inverse problem are gradient-free. 
 Moreover due to the models being very sensitive to their parameters and there being ambiguous solutions \cite{nolte2022inverse,quick2001infinite} these gradient-free algorithms have to be run at very small step sizes. \cite{taylor2009patient,tuccio2022parameter,marsden2014optimization,mineroff2019optimization,bozkurt2022patient}
 The ability to easily take gradients of one of these models with respect to it's parameters would greatly improve the process of personalising it without loosing the interpretability as would be the case when using a deep-learning algorithm.
 Personalised medicine could specifically be aided by using gradients to more efficiently infer parameters or perform sensitivity analysis.
@@ -155,9 +155,9 @@ The significance of cardiovascular disease and it's research stems from it being
 Worldwide it lead to 17.3 million deaths per year as of 2015.
 This number is projected to increase by the year 2030 to more than 23.6 million. \cite{update2015heart}
 In Europe cardiovascular disease was responsible for close to one third (32.7\%) of all deaths in the year 2020 \cite{Coelho2020}.
-Cardiovascular systems have been well studied, from analytical solutions of simplified models to approximations of complex systems.
+Therefore cardiovascular systems have been well studied, from analytical solutions of simplified models to approximations of complex systems.
 In order to tackle this complexity of the meaningful task of modelling cardiovascular systems numerical modelling has become prevalent \cite{formaggia2009multiscale,quarteroni2016geometric,black2020p14,el2018investigating,qureshi2014numerical,reichold2009vascular}.
-The issue of needing access to hard to obtain biomarkers and the pitfalls of the existing simulations providing such biomarkers hold as well in the case of cardiovascular diseases.
+The issue of needing access to hard to obtain biomarkers and the pitfalls of the existing simulations providing such biomarkers hold as well in the case of cardiovascular disease.
 
 Therefore, the goal of this work is to provide a fast, differentiable cardiovascular simulation.
 This is a step towards enabling efficient and interpretable model calibration to be applied in personalised medicine.
@@ -168,14 +168,14 @@ The optimization for GPU execution is especially useful since it allows for data
 This means multiple models for different patients could be optimized simultaneously on a single GPU.
 Next to the advantages brought about by the implementation in JAX, the implementation of the code in Python makes the solver accessible for future work.
 We also provide the written code as is in an open-source manner hoping to aid progress in the field overall. 
-In order to provide this code there were many modelling assumptions to be made before attempting to implement a solver.
+In order to write this code there were many modelling assumptions to be made before attempting to implement the solver.
 
-For this thesis we chose a coupled 0D-1D model where the 0D part is used to compute boundary conditions for certain outlets of the 1D cardiovascular network.
-While failing to capture complex flow patterns and wall shear stress as opposed to a 3D model the 1D model can still simulate pulse wave transmission and systemic wave reflection effects.
-Clearly 1D models also offer a big advantage in execution time as opposed to 3D models. \cite{shi2011review,pfaller2020using,arzani2022machine} 
-Finally, before starting out by giving a description the cardiovascular system, we provide an outlook on the content of this thesis in the following paragraph.
+For this thesis we chose a coupled 0D-1D model where the 0D-component is used to compute boundary conditions for certain outlets of the 1D-cardiovascular network.
+While failing to capture complex flow patterns and wall shear stress as opposed to a 3D-model the 1D-model can still simulate pulse wave transmission and systemic wave reflection effects.
+Clearly 1D-models also offer a big advantage in execution time as opposed to 3D-models. \cite{shi2011review,pfaller2020using,arzani2022machine} 
+Finally, before starting out by giving a description of the cardiovascular system as a baseline for our understanding when desrcribing the modelling approach, we provide an outlook on the content of this thesis in the following paragraph.
 
-In \autoref{chap:cvs} we will provide a basic understanding of the cardiovascular system which will serve as a foundation for describing the cardiovascular simulation throughout this work.
+In \autoref{chap:cvs} we will provide a description of the cardiovascular system which will serve as a foundation for describing the cardiovascular simulation throughout this work.
 Thereafter, in \autoref{chap:1dm} we will describe the underlying 1D-model that we used to simulate blood flow in a single vessel.
 In \autoref{chap:nm} we explain how to solve this model numerically and how to couple multiple such models in order to simulate a cardiovascular network.
 Then, in \autoref{chap:impl}  we will describe key factors of how we implemented the numerical algorithms that solve our 1D-model.
@@ -286,9 +286,7 @@ Blood consists of red blood cells (Erythrocytes), white blood cells (Leukocytes)
 The Erythrocytes make up about 97\% of the cellular volume.
 They are flexible, can bind to one another, and their micro-structure determines the blood mechanical properties.
 The volume occupied by red blood cells in respect to the total blood volume is called the haematocrit value.
-At different age, altitude, health, and bodily activity the haematocrit value varies.
-
-Shear stress on a cross section of a material is defined as 
+At different age, altitude, health, and bodily activity the haematocrit value varies. We want to relate the haematocrit value with the blood dynamic viscosity and the so called shear rate in order to determine if blood can be considered a Newtonian fluid. In order to do so we first introduce the shear stress
 \begin{equation}
 	\tau = \frac{F}{A}
 \end{equation}
@@ -298,9 +296,10 @@ This angle can be assigned an angular velocity and is referred to as the shear r
 We denote the shear rate by $D$. \cite{köppl2023dimension}
 The blood dynamic viscosity $\mu$ decreases hyperbolically with the shear rate $D$.
 At about $D > 100s^{-1}$ the viscosity stays constant for common haematocrit values.
-
 In larger arteries the average shear rate close to the walls is above the $100s^{-1}$ threshold. \cite{MCDbook}
-Therefore, the blood's viscosity is often considered constant and it can roughly be viewed as Newtonian fluid for the sake of simplicity \cite{fung2013biomechanics,guyton2006textbook,MCDbook,pedley_1980,zamir2000physics,zamir2006physics}. 
+Therefore, the blood's viscosity is often considered constant and it can roughly be viewed as a Newtonian fluid for the sake of simplicity \cite{fung2013biomechanics,guyton2006textbook,MCDbook,pedley_1980,zamir2000physics,zamir2006physics}. 
+Another important property of a fluid when attempting to model it is it's compressibility. 
+
 The blood density $\rho$ is considered constant within the range of $1050 \pm 10 \text{ kg}\cdot\text{m}^{-3}$, i.e. blood can be considered an incompressible fluid \cite{PMID:2658951,kenner1977continuous,helmig1997multiphase}.
 The assumption of blood being an incompressible Newtonian fluid will be important when constructing the underlying model for our cardiovascular solver in \autoref{sec:sv}. In the next chapter we will start building this model with a discussion on the choice of dimensionality when modelling.
 
@@ -311,23 +310,23 @@ After that we will give a mathematical description of the model we chose in \aut
 \section{Different Modelling Approaches} \label{sec:ma}
 In this thesis we focus on simulating macro-circulation in arteries, i.e. cardiovascular networks consisting of the largest arteries of the human circulation.
 The length and diameters of these vessels are on the scale of meters.
-According with which accuracy the system is supposed to be represented different dimensions of models can be chosen.
+According with which accuracy the system is supposed to be represented models of different dimensionality can be chosen.
 3D-models for instance can represent such quantities as turbulence or wall shear stresses.
-1D-models cannot represent these 3D quantities but can still compute pressure and flow along an artery at reasonable accuracy while requiring significantly less computation than a 3D model.
-Finally 0D models such as the Windkessel model can represent the approximate behaviour at outlets of a network where it would be too costly to simulate every vessel individually with a 1D- or a 3D-model
+1D-models cannot represent these 3D-quantities but can still compute pressure and flow along an artery at reasonable accuracy while requiring significantly less computation than a 3D-model.
+Finally, 0D-models such as the Windkessel model can represent the approximate behaviour of ensembles of vessels and are often used to simulate the outlets of a network modelled in higher dimensions, where it would be too costly to simulate every vessel individually at the increased accuracy.
 
-On one end of this spectrum (3D models) there is high accuracy but also high computational effort.
-On the other end (0D models) only very simplified structures can be represented but at a considerably lower cost.
+On one end of this spectrum (3D-models) there is high accuracy but also high computational effort.
+On the other end (0D-models) only very simplified structures can be represented but at a considerably lower cost.
 In practice it is therefore very common to couple such models, choosing the more demanding models for locations in the vascular network that require more attention to be simulated accurately or that simply are of special interest.
-This leads to 3D-1D-0D models where the junctions in the network are represented by 3D models, 1D models are used to simulate the flow within vessels, and the 0D models are used to compute the data at the outlets of the network.
+This leads to 3D-1D-0D models where the junctions in the network are represented by 3D-models, 1D-models are used to simulate the flow within vessels, and the 0D models are used to compute the data at the outlets of the network.
 In the setting of this thesis the outlets are omitted vessels that are not included in the model due to not being of interest for these simulations and wanting to reduce computational effort.
 
 Another important distinction between types of models are open and closed models.
 In closed models the Windkessel models at the outlets are connected back to the inlet of the system.
-In open models the inlet is fed by some sort of input data and the Windkessel models only serve to compute boundary conditions at the outlets.
+In open models the inlet is fed by some sort of input data and the Windkessel models only serve to compute boundary conditions at the outlets.\cite{köppl2023dimension}
 The model presented here will be an open model for the sake of simplicity.
 A further simplification was to only consider a 1D-0D model since the main goal of this work was to produce a fast differentiable solver.
-Incorporating 3D models in this work would have added additional complexity without providing benefits in terms of speed and reasoning w.r.t. differentiability. \cite{köppl2023dimension}
+Incorporating 3D-models in this work would have added additional complexity without providing benefits in terms of speed and reasoning w.r.t. differentiability. 
 
 \section{1D Model} \label{sec:sv}
 Within a vessel we consider the conservation of mass and momentum in cylindrical coordinates, that hold for any fluid, to be satisfied.
@@ -348,18 +347,21 @@ Here $\rho$ and $\mu$ are the blood density and viscosity mentioned in section \
 \end{equation}
 is the velocity field, $P$ is the pressure, and $\mathbf{F}$ is any force acting on the fluid system.
 \autoref{eq:cont} is also referred to as the continuity equation \cite{anderson2011ebook}.
-Usually the NSE are considered to be made up of \autoref{eq:cont} and \autoref{eq:mass} as well as the energy equation.
+Usually the Navier-Stokes equations (NSE) are considered to be made up of \autoref{eq:cont} and \autoref{eq:mass} as well as the energy equation.
 In our case the energy equation can be omitted due to us considering an incompressible Newtonian fluid and therefore there not being any temperature gradients in the fluid and there being no heat flux by conduction.
-Furthermore we also assume that heat generated by friction is negligible and that there are no heat sources.
-Finally wall displacement should be small enough for the work to be done by it on the fluid to be negligible. 
+Furthermore, we also assume that heat generated by friction is negligible and that there are no heat sources.
+Finally, wall displacement will be considered small enough for the work to be done by it on the fluid to be negligible. 
+For these reasons the energy equation can be omitted in our model.
+We will also make further assumptions on vessel geometry and material properties.
+
 We consider a vessel to be an axisymmetric tube along the $z$ axis in a cylindrical coordinate system $\left(z,r,\phi\right)$.
 Under the following assumptions the 3D-Navier-Stokes equations can be reduced to a 1D-model:
 
 \begin{enumerate}
-	\item blood is an incompressible Newtonian fluid and it's properties do not vary over a cross-section. \label{it:fld} 
-	\item vessel walls can be displaced slightly in radial direction but not in longitudinal direction, \label{it:displ} 
-	\item vessels are narrow, long, and circular, \label{it:nlc}
-	\item vessels are straight and have linearly elastic compliant walls, \label{it:lec}
+	\item Blood is an incompressible Newtonian fluid and it's properties do not vary over a cross-section. \label{it:fld} 
+	\item Vessel walls can be displaced slightly in radial direction but not in longitudinal direction, \label{it:displ} 
+	\item Vessels are narrow, long, and circular, \label{it:nlc}
+	\item Vessels are straight and have linearly elastic compliant walls, \label{it:lec}
 \end{enumerate}
 In order to make this reduction we first apply the assumption that $\rho$ is constant (\autoref{it:fld}) in the continuity equation and expand the momentum equation in it's components
 \begin{equation}
@@ -395,7 +397,7 @@ In order to simplify the equations we introduce typical velocities $U_z$ and $U_
 	\tilde{r} := \frac{r}{r_0}, \ \tilde{z} := \frac{z}{l_0}, \ \tilde{t} := t \frac{U_z}{l_0}, \ \tilde{u}_z := \frac{u_z}{U_z}, \ \tilde{u}_r := \frac{u_r}{U_r}, \ \tilde{P} := \frac{P}{\rho U_z^2}, \ \epsilon := \frac{U_r}{U_z}.
 \end{equation}
 We note that in a laminar flow the maximum value of $U_r$ is the radial velocity of the arterial wall.
-As we assume that these walls can only be displaced slightly (\autoref{it:displ}) $U_r$ can be assumed to be small and therefore $\epsilon << 1$. \cite{womersley1957elastic}
+As we assume that these walls can only be displaced slightly (\autoref{it:displ}), $U_r$ can be assumed to be small and therefore $\epsilon << 1$. \cite{womersley1957elastic}
 Inserting the non-dimensional into \autoref{eq:cont1} - \autoref{eq:momr} and dropping the terms of order $\epsilon^2$ or higher yields
 \begin{equation}
 	\frac{\partial (\tilde{r} \tilde{u}_r)}{\partial \tilde{r}} + \frac{\partial (\tilde{r} \tilde{u}_z)}{\partial\tilde{z}} = 0, \label{eq:cont2}
@@ -406,7 +408,7 @@ Inserting the non-dimensional into \autoref{eq:cont1} - \autoref{eq:momr} and dr
 \begin{equation}
 	\frac{\partial \tilde{P}}{\tilde{r}} = 0.
 \end{equation}
-Introducing the non-dimensional vessel inner radius $\hat r$ the averaged velocity over the circular (\autoref{it:nlc}) cross-section
+Introducing the non-dimensional vessel inner radius $\hat r$, the averaged velocity over the circular (\autoref{it:nlc}) cross-section
 \begin{equation}
 	\hat{u} := \frac{1}{\hat{r}^2} \int_0^{\hat{r}} 2 \tilde{u}_z \tilde{r} d\tilde{r},
 \end{equation}
@@ -442,7 +444,7 @@ In dimensional variables the continuity equation (\autoref{eq:cont3}) and the $z
 \begin{equation}
 	\frac{\partial (\bar{r}^2 u)}{\partial t} + \frac{\partial (\alpha \bar{r}^2 u^2) }{\partial z} + \frac{\bar{r}^2}{\rho} \frac{\partial P}{\partial z} = 2 \frac{\mu}{\rho} \bar{r} \frac{\partial u_z}{\partial r} |_{\bar{r}}.
 \end{equation}
-In terms of the cross-section $A := \pi \bar{r}^2$ (\autoref{it:nlc}) and the volumetric flow-rate $Q := Au$ the 1D NSE equations finally read
+In terms of the cross-section $A := \pi \bar{r}^2$ (\autoref{it:nlc}) and the volumetric flow-rate $Q := Au$ the 1D-NSE finally read
 \begin{equation}
 		\frac{\partial A(z;t)}{\partial t} + \frac{\partial Q(z;t)}{\partial z} = 0, \label{eq:1deqs1}
 \end{equation}
@@ -453,7 +455,7 @@ In terms of the cross-section $A := \pi \bar{r}^2$ (\autoref{it:nlc}) and the vo
 \begin{equation}
 		z \in [0,l],\  t \in \mathbb{R}_{\geq 0}, 
 \end{equation}
-where we have reintroduced the time and space dependence for clarity.
+where we have reintroduced the time and space dependency for clarity.
 Here $\gamma$ is the velocity profile parameter that determines the velocity profile by a common parametric approximation 
 \begin{equation}
 	u_z(z,r;t) := \frac{\gamma + 2}{\gamma} u(z;t) \left[ 1 - \left( \frac{r}{\bar{r}(z;t)} \right) \right].
@@ -486,7 +488,7 @@ Assuming an isotropic, homogeneous, and incompressible arterial wall, an axisymm
 \begin{equation}
 	\epsilon(z;t) := \frac{r(z;t)-r_0(z;t)}{ (1-\nu^2) r_0(z;t)}. \label{eq:strain}
 \end{equation}
-$\nu$ is the elasticity parameter or Poisson's ratio.
+In this definition, $\nu$ is the elasticity parameter or Poisson's ratio.
 It is the ratio of transverse contraction to longitudinal extension strain in the direction of the stretching force.
 Combining \autoref{eq:pdef}-\autoref{eq:strain} with a term for the external pressure $P_{ext}$ we get \cite{sherwin2003one} \cite{sherwin2003computational}: 
 \begin{align}
@@ -589,7 +591,7 @@ The space discretization is defined as follows:
 \end{align}
 For the time discretization a time-step series is defined
 \begin{align}
-	0 < t^1 < t^2 < t^3 < ...
+	0 < t^1 < t^2 < t^3 < ...\ ,
 \end{align}
 where the explicit computation of the values of $t^n$, $n \in \mathbb{N}$  will be given in \autoref{sec:cfl}.
 The balance equation on the infinitesimal control volume 
@@ -599,10 +601,10 @@ The balance equation on the infinitesimal control volume
 	&\tilde{t} > 0,
 \end{align}
 for a hyperbolic law in it's conservation form \cite{guinot2012wave} (e.g. \autoref{eq:1deqs3}) is given by
-\begin{align}
-	\int_{\tilde{z}}^{\tilde{z} + \delta z} \mathbf{U} (z; \tilde{t} + \delta t) - \mathbf{U} (z;\tilde{t}) dz &= \int_{\tilde{t}}^{\tilde{t}+\delta t} \mathbf{F}(\tilde{z};t) - \mathbf{F}(\tilde{z} + \delta z; t) dt\\
-																											   &+ \int_{\tilde{t}}^{\tilde{t} + \delta t} \int_{\tilde{z}}^{\tilde{z} + \delta z}  \mathbf{S}(z;t) dzdt.
-\end{align}
+\begin{multline}
+	\int_{\tilde{z}}^{\tilde{z} + \delta z} \mathbf{U} (z; \tilde{t} + \delta t) - \mathbf{U} (z;\tilde{t}) dz = \int_{\tilde{t}}^{\tilde{t}+\delta t} \mathbf{F}(\tilde{z};t) - \mathbf{F}(\tilde{z} + \delta z; t) dt\\
+																											   + \int_{\tilde{t}}^{\tilde{t} + \delta t} \int_{\tilde{z}}^{\tilde{z} + \delta z}  \mathbf{S}(z;t) dzdt.
+\end{multline}
 For the specific control volume, also referred to as cell $i$,
 \begin{align}
 	&[z_{i-\frac{1}{2}},z_{i+\frac{1}{2}}] \times [t^n, t^{n+1}], \\
@@ -624,12 +626,12 @@ In the following section we will discuss how to compute the flux terms.
 \section{MUSCL} \label{sec:muscl}
 The MUSCL scheme was developed by Van Leer towards the end of the 1970s \cite{van1977towards} \cite{van1979towards}.
 The version represented here is the most commonly used one.
-This MUSCL solver consists of 4 steps
+This MUSCL solver consists of 4 steps:
 \begin{enumerate}
-	\item reconstructing a plausible $\mathbf{\hat{U}}(z;t^n)$ for $z \in [z_{i-\frac{1}{2}}, z_{i+\frac{1}{2}}]$ from $\mathbf{U}_i^n$,
-	\item limiting the profile of said reconstruction, as to be "Total Variation Diminishing" (TVD), this is often also referred to as slope limiting,
-	\item solving a generalized Riemann problem,
-	\item using the solution of this Riemann problem to compute $\mathbf{U}_i^{n+1}$, also referred to as balancing over the cells.
+	\item Reconstructing a plausible $\mathbf{\hat{U}}(z;t^n)$ for $z \in [z_{i-\frac{1}{2}}, z_{i+\frac{1}{2}}]$ from $\mathbf{U}_i^n$.
+	\item Limiting the profile of said reconstruction, as to be "Total Variation Diminishing" (TVD), this is often also referred to as slope limiting.
+	\item Solving a generalized Riemann problem.
+	\item Using the solution of this Riemann problem to compute $\mathbf{U}_i^{n+1}$, also referred to as balancing over the cells.
 \end{enumerate}
 We will describe these steps more closely in \autoref{ssec:reco} - \autoref{ssec:grp}.
 \subsection{Reconstruction} \label{ssec:reco}
@@ -640,8 +642,8 @@ This means that the average of the reconstruction over the cell needs to be the 
 \end{equation}
 The reconstruction in this MUSCL scheme is chosen to be the following linear expression
 \begin{align}
-	\mathbf{\hat{U}}(z;t^n) &= \mathbf{U}_i^n + (z-z_i)a_i^n \\
-	a_i^n &= \frac{\mathbf{U}_{i+1}^n - \mathbf{U}_{i-1}}{z_{i+1} - z_{i-1}}
+	\mathbf{\hat{U}}(z;t^n) &= \mathbf{U}_i^n + (z-z_i)a_i^n, \\
+	a_i^n &= \frac{\mathbf{U}_{i+1}^n - \mathbf{U}_{i-1}}{z_{i+1} - z_{i-1}}.
 \end{align}
 \subsection{Profile Limiting} \label{ssec:pl}
 We define the total variation of the numerical solution $\mathbf{U}_i^n$ at time-step $n$ to be 
@@ -669,7 +671,7 @@ If \autoref{chk1} is satisfied but \autoref{chk2} is not, $a_i^n$ is set to the 
 \begin{equation}
 	a_i^n = 2 \frac{\mathbf{U}_i^n - \mathbf{U}_{i-1}^n}{\Delta z}.
 \end{equation}
-If \autoref{chk3} is not satisfied, $a_i^n$ is set to the biggest value allowed by \autoref{eq:tvd2}
+Otherwise, if \autoref{chk3} is not satisfied, $a_i^n$ is set to the biggest value allowed by \autoref{eq:tvd2}
 \begin{equation}
 	a_i^n = 2 \frac{\mathbf{U}_{i+1}^n - \mathbf{U}_{i}^n}{\Delta z}.
 \end{equation}
@@ -699,7 +701,7 @@ In order to get a first approximation for the flux that needs to be computed the
 	We denote the computed approximation for $\mathbf{U}$ at time-step $n+1$ by $\bar{\mathbf{U}}^{n+1}$.
 	In the next section we will be addressing how to handle the source term $\mathbf{S}$ that we have ignored here.
 
-	\section{Time step, source term} \label{sec:fe}
+	\section{Time-stepping the source term} \label{sec:fe}
 	In the previous section we have ignored the source term $\mathbf{S}$.
 	To account for the source term the following problem has to be solved:
 	\begin{equation}
@@ -1255,7 +1257,7 @@ def runSimulation(config_filename, J)
 						We chose four models that will be introduced more closely in \autoref{sec:da}.
 						We present from each model a randomly selected vessel and compare the pressure wave over one cardiac cycle in the middle of said vessel.
 						The four models consist of 9, 17, 19, and 77 vessel segments each.
-						That means 9, 17, 19, and 77 segments that each get treated as an individual vessel on which the 1D-NSEs have to be solved (\autoref{sec:sv}) and that have to be coupled to one another by solving the connecting junctions (\autoref{sssec:junctions}).
+						That means 9, 17, 19, and 77 segments that each get treated as an individual vessel on which the 1D-NSE have to be solved (\autoref{sec:sv}) and that have to be coupled to one another by solving the connecting junctions (\autoref{sssec:junctions}).
 						The result of comparing the codes can be seen in \autoref{fig:val} where the \emph{P\_JAX} refers to the pressure computed by our code throughout one cardiac cycle and \emph{P\_jl} refers to the equivalent values from the openBF code.
 						\begin{figure} [H]
 							\centering
@@ -1513,7 +1515,7 @@ The goal of this thesis was to write a differentiable 1D-haemodynamics solver.
 The underlying motivation thereof being the need for cardiovascular simulations in medicine, specifically in personalised medicine.
 The aim of having the solver be differentiable is to enable efficient parameter inference and sensitivity analysis.
 
-The construction of a differentiable solver was successful and was achieved using well established methods such as the reduction of the 3D-NSE to their 1D equivalent in \autoref{sec:sv} and the solving of these equations using the MUSCL numerical method in \autoref{sec:muscl}.
+The construction of a differentiable solver was successful and was achieved using well established methods such as the reduction of the 3D-NSE to their 1D-equivalent in \autoref{sec:sv} and the solving of these equations using the MUSCL numerical method in \autoref{sec:muscl}.
 The differentiability specifically results from the implementation in JAX.
 We could demonstrate that our code reproduces the results from previous work and does so while the execution time scales linearly w.r.t. the number of vessels and the compilation time is near constant over different network constellations (\autoref{sec:val}, \autoref{sec:sc}).
 Furthermore we showed that our solver can produce physiologically realistic results on models that were produced from 3D geometries \autoref{sec:da}.
