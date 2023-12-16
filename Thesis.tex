@@ -103,14 +103,15 @@ ETH Zürich}
 
 \begin{abstract}
 	Personalized medicine aims to improve clinical results by customizing treatments for individual patients.
-	This technique is often hampered by a lack of data.
-	Therefore computational methods are applied to simulate hard to access or unavailable data.
+	This customization is achieved by measuring indicative quantities (biomarkers) by which a patient can be assessed more closely and categorized into sub-populations.
+	In some cases (e.g. hypertension) the biomarker most closely related to the disease (e.g. local vascular pressure) is difficult and maybe even risky to measure.
+	Therefore computational methods are applied to simulate such hard to access or unavailable data.
 	The current methods can either be inefficient or hard to interpret.
-	Cardiovascular diseases are the leading cause of death globally.
-	In this field specifically the advantages and caveats of personalized medicine apply as well.
+	Since cardiovascular diseases are the leading cause of death globally they are a prime target to which to apply personalized medicine.
+	In this field however, the caveat in personalized medicine of difficult to access biomarkers applies as well.
 	Therefore this thesis aims to produce a differentiable 1D-haemodynamics solver based on well understood methods such as the 1D-Navier-Stokes equations and their treatment via the MUSCL numerical scheme.
-	The underlying motivation thereof being the bridging of the gap between inefficient and hard to interpret models by providing a more efficient method to parameter inference and sensitivity analysis while keeping the interpretability of the well understood mathematical models and numerical methods.
-	The results of our solver were validated using data from previous work in the 1D-haemodynamics field.
+	The underlying motivation thereof being the bridging of the gap between inefficient and hard to interpret models by providing a more efficient method to perform parameter inference and sensitivity analysis while keeping the interpretability of the well understood mathematical models and numerical methods.
+	The results of our solver were validated using data from previous work in the 1D-haemodynamics field and we demonstrated that parameter inference can be performed using our model.
 
 \end{abstract}
 
@@ -230,19 +231,20 @@ Finally, in \autoref{chap:resl} we validate this code and present the results pr
 % (repeat contribution / impact)
 
 \chapter{Cardiovascular System} \label{chap:cvs}
-This section serves as an overview of the cardiovascular system with a focus on the arteries of the systemic circulation. 
+This section serves as an overview of the cardiovascular system with a focus on the arteries of the systemic circulation, since this is where our simulation efforts will be focused. 
 Section \ref{sec:mbb} will describe the main building blocks of the cardiovascular system and their relation to one another, section \ref{sec:aw} will give the characteristics of the arterial walls, and section \ref{sec:b} the characteristics of blood.
+We start off with a macro view of the cardiovascular system.
 \section{Main Building Blocks} \label{sec:mbb}
 The cardiovascular system contains two major circulatory systems.
 These are the systemic and the pulmonary circulation. 
 Both are fed with blood pumped from the heart.
-Through the systemic circulation organs are supplied with oxygen-rich blood which is then transported back to the heart where it enters the pulmonary circulation.
-Through the pulmonary circulation the oxygen-poor blood is sent to the lungs where it is replenished with oxygen and then returned to the heart to re-enter the systemic circulation.
+Through the systemic circulation organs are supplied with oxygen-rich blood which is then transported back to the heart, where it enters the pulmonary circulation.
+Through the pulmonary circulation the oxygen-poor blood is sent to the lungs, where it is replenished with oxygen and then returned to the heart to re-enter the systemic circulation.
 Vessels carrying the blood away from the heart are referred to as arteries and the ones carrying the blood to the heart are referred to as veins.
 In both the systemic and the pulmonary circulation the oxygen exchange (from blood to organs or from lungs to blood respectively) take place within so called capillary vessels.
 Capillaries are very small vessels that connect arteries to veins. \cite{köppl2023dimension}
 From here on out our main focus will be on on the arteries of the systemic circulation since our simulation approach will assume the heart to be represented by pre-computed data and the effect of the capillary bed and the veins will be accounted for by a lumped parameter model (0D-model, \autoref{sssec:outl}).
-We also define the notation for $T$ as the duration of one cardiac cycle (the time between the beginnings of two heartbeats following each other).
+We also define the notation for $T$ as the duration of one cardiac cycle (the time between the beginnings of two subsequent heartbeats).
 In the next two subsections we will describe the main characteristics of the arterial walls and the blood flowing within.
 
 \section{Arterial Wall} \label{sec:aw}
@@ -250,10 +252,10 @@ An arterial wall consists of three layers or tunicae: an inner, middle, and oute
 The tunica intima lines the inside of the artery. It is made up of a single layer of endothelial cells encased in a thin layer of elastin and collagen fibres (connective tissue). 
 On the outside of the artery the tunica adventita is made up of connective tissue as well which attaches the artery to surrounding connective tissue.
 In-between these two layers lies the thickest layer, the tunica media, which consists of elastic fibres and muscle cells. 
-The tunica media is responsible for the elasticity of the artery.
-Arteries close to the heart have a tunica media that is mainly made up of elastic fibres and are referred to as elastic arteries while the tunica media of arteries farther away from the heart and of small arteries consist predominantly of muscle cells and are called muscular arteries.
-The elastic arteries also have a higher compliance.
 
+The tunica media is responsible for the elasticity of the artery.
+Arteries close to the heart have a tunica media that is mainly made up of elastic fibres and are referred to as elastic arteries while the tunica media of arteries farther away from the heart and of smaller arteries consist predominantly of muscle cells and are called muscular arteries.
+The elastic arteries also have a higher compliance than the muscular arteries.
 This means that elastic arteries are able to distended and increase their volume as a response to pressure applied to the inside of the arterial wall.
 Hence elastic arteries deform more under pressure than muscular arteries that are stiffer and don't distend as much when blood is pumped into them by the heart.
 At the same time, usually the elastic arteries are larger than the muscular arteries and the size of arteries generally decreases as the distance to the heart increases.
@@ -265,12 +267,12 @@ This mechanism is called the Windkessel effect.
 It is named after the inner workings of water pumps used by early fire brigades.
 In these devices water would be pumped by hand from the reservoir causing pressure pulses.
 This pushes the water into an air chamber.
-Here the air gets compressed which is analogous to the deforming of the artery.
-The natural decompressing of the air would then push the water out through the hose in a steady manner, just like the contracting of the artery would push out the blood.
-The Windkessel effect is often applied in vascular simulations to apply outlet boundary values. \cite{köppl2023dimension}
-
+Here, the air gets compressed, which is analogous to the deforming of the artery.
+The natural decompressing of the air would then push the water out through the hose in a steady manner, just like the contracting of the artery would push the blood on to other vessels.
+The Windkessel effect is often applied in vascular simulations to set outlet boundary values. \cite{köppl2023dimension}
 We will describe how boundary values are set using the Windkessel more closely in \autoref{sssec:outl}.
-For further reference in the following chapters we will also introduce some notation.
+
+For further reference in the following chapters we will introduce some notation.
 We call the radius of an artery in it's non-deformed state the lumen radius $r_0$ and refer to the reference vessel wall thickness by $h_0$ from here on out.
 Furthermore we denote the reference cross-section by $A_0 = \pi r_0^2$.
 In the next section we will discuss some simulation relevant properties of blood.
