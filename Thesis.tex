@@ -173,7 +173,7 @@ In order to write this code there were many modelling assumptions to be made bef
 For this thesis we chose a coupled 0D-1D model where the 0D-component is used to compute boundary conditions for certain outlets of the 1D-cardiovascular network.
 While failing to capture complex flow patterns and wall shear stress as opposed to a 3D-model the 1D-model can still simulate pulse wave transmission and systemic wave reflection effects.
 Clearly 1D-models also offer a big advantage in execution time as opposed to 3D-models. \cite{shi2011review,pfaller2020using,arzani2022machine} 
-Finally, before starting out by giving a description of the cardiovascular system as a baseline for our understanding when desrcribing the modelling approach, we provide an outlook on the content of this thesis in the following paragraph.
+Finally, before starting out by giving a description of the cardiovascular system as a baseline for our understanding when describing the modelling approach, we provide an outlook on the content of this thesis in the following paragraph.
 
 In \autoref{chap:cvs} we will provide a description of the cardiovascular system which will serve as a foundation for describing the cardiovascular simulation throughout this work.
 Thereafter, in \autoref{chap:1dm} we will describe the underlying 1D-model that we used to simulate blood flow in a single vessel.
@@ -318,17 +318,17 @@ Finally, 0D-models such as the Windkessel model can represent the approximate be
 On one end of this spectrum (3D-models) there is high accuracy but also high computational effort.
 On the other end (0D-models) only very simplified structures can be represented but at a considerably lower cost.
 In practice it is therefore very common to couple such models, choosing the more demanding models for locations in the vascular network that require more attention to be simulated accurately or that simply are of special interest.
-This leads to 3D-1D-0D models where the junctions in the network are represented by 3D-models, 1D-models are used to simulate the flow within vessels, and the 0D models are used to compute the data at the outlets of the network.
+This leads to 3D-1D-0D-models where the junctions in the network are represented by 3D-models, 1D-models are used to simulate the flow within vessels, and the 0D-models are used to compute the data at the outlets of the network.
 In the setting of this thesis the outlets are omitted vessels that are not included in the model due to not being of interest for these simulations and wanting to reduce computational effort.
 
 Another important distinction between types of models are open and closed models.
 In closed models the Windkessel models at the outlets are connected back to the inlet of the system.
 In open models the inlet is fed by some sort of input data and the Windkessel models only serve to compute boundary conditions at the outlets.\cite{köppl2023dimension}
 The model presented here will be an open model for the sake of simplicity.
-A further simplification was to only consider a 1D-0D model since the main goal of this work was to produce a fast differentiable solver.
+A further simplification was to only consider a 1D-0D-model since the main goal of this work was to produce a fast differentiable solver.
 Incorporating 3D-models in this work would have added additional complexity without providing benefits in terms of speed and reasoning w.r.t. differentiability. 
 
-\section{1D Model} \label{sec:sv}
+\section{1D-Model} \label{sec:sv}
 Within a vessel we consider the conservation of mass and momentum in cylindrical coordinates, that hold for any fluid, to be satisfied.
 In cylindrical coordinates these conservation laws read
 \begin{equation}
@@ -679,7 +679,7 @@ Otherwise, if \autoref{chk3} is not satisfied, $a_i^n$ is set to the biggest val
 \subsection{Generalized Riemann Problem and Balancing} \label{ssec:grp}
 In order to get a first approximation for the flux that needs to be computed the Riemann problem
 \begin{align}
-	\frac{\partial \mathbf{U}}{\partial t} + \frac{\partial \mathbf{F}}{\partial z} &= 0 \\
+	\frac{\partial \mathbf{U}}{\partial t} + \frac{\partial \mathbf{F}}{\partial z} &= 0, \\
 	\mathbf{U}(z,t^n) &= \left\{
 		\begin{array}{c}
 			\mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) \text{, for } z < z_{i+\frac{1}{2}}, \\
@@ -689,7 +689,7 @@ In order to get a first approximation for the flux that needs to be computed the
 	has to be solved.
 	This yields a flux $\mathbf{F^*}$ with which we compute our averaged quantities at the next half-time-step using \autoref{eq:fv}
 	\begin{align}
-		\mathbf{U}_{i+\frac{1}{2},L}^{n+\frac{1}{2}} &= \mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) + \frac{\Delta t}{2 \Delta z} \left( \mathbf{F^*}(\mathbf{\hat{U}}_i^n( z_{i-\frac{1}{2}})) - \mathbf{F^*}(\mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) \right)\\
+		\mathbf{U}_{i+\frac{1}{2},L}^{n+\frac{1}{2}} &= \mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) + \frac{\Delta t}{2 \Delta z} \left( \mathbf{F^*}(\mathbf{\hat{U}}_i^n( z_{i-\frac{1}{2}})) - \mathbf{F^*}(\mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) \right),\\
 		\mathbf{U}_{i+\frac{1}{2},R}^{n+\frac{1}{2}} &= \mathbf{\hat{U}}_i^n(z_{i+\frac{1}{2}}) + \frac{\Delta t}{2 \Delta z} \left( \mathbf{F^*}(\mathbf{\hat{U}}_{i+1}^n( z_{i+\frac{1}{2}})) - \mathbf{F^*}(\mathbf{\hat{U}}_i^n(z_{i+\frac{3}{2}}) \right),
 	\end{align}
 	where we have ignored the source term $\mathbf{S}$ for the moment.
@@ -746,7 +746,7 @@ In order to get a first approximation for the flux that needs to be computed the
 	Here the inlet is set through pre-computed data.
 	This data either represents the pressure $P_L(t)$ or the volumetric flow $Q_L(t)$ being put out by the heart and is assigned in one of the following two ways
 	\begin{align}
-		P(0,t) &= P_L(t), &t \in [0,\infty) \\
+		P(0,t) &= P_L(t), &t \in [0,\infty), \\
 		Q(0,t) &= Q_L(t), &t \in [0,\infty).
 	\end{align}
 	If one of these quantities is given at a time $t_2$ and the other $u, A, c$, and $P$ can be computed using extrapolation of characteristics.
@@ -754,49 +754,49 @@ In order to get a first approximation for the flux that needs to be computed the
 	These quantities are commonly referred to as Riemann invariants due to being constant along the characteristic curves \cite{sarra2003method}.
 	For a given state of our system $A$, $Q$ we denote the backward and forward Riemann invariants by
 	\begin{align}
-		W_1(A,u) := u - c \\
-		W_2(A,u) := u + c
+		W_1(A,u) := u - c, \\
+		W_2(A,u) := u + c,
 	\end{align}
 	with the wave speed $c(A) := \sqrt{\frac{\beta}{2\rho}\sqrt{A}}$.
 	We define discretized Riemann invariants at time-step $n$ in cell $i$ along the lines of the discretization introduced in \autoref{sec:fv}
 	\begin{align}
-		W_{1,i}^n := W_1(A_i^n,u_i^n) &= u^n_i - 4c^n_i\\
-		W_{2,i}^n := W_2(A_i^n,u_i^n) &= u^n_i + 4c^n_i
+		W_{1,i}^n := W_1(A_i^n,u_i^n) &= u^n_i - 4c^n_i,\\
+		W_{2,i}^n := W_2(A_i^n,u_i^n) &= u^n_i + 4c^n_i,
 	\end{align}
 	with $c^n_i := \sqrt{\frac{\beta_i}{2\rho}\sqrt{A_i^n}}$.
 	Therefore at the first and the second cell the two Riemann invariants read as
 	\begin{align}
-		W_{1,0}^n &= u^n_0 - 4c^n_0\\
-		W_{2,0}^n &= u^n_0 + 4c^n_0\\
-		W_{1,1}^n &= u^n_1 - 4c^n_1\\
+		W_{1,0}^n &= u^n_0 - 4c^n_0,\\
+		W_{2,0}^n &= u^n_0 + 4c^n_0,\\
+		W_{1,1}^n &= u^n_1 - 4c^n_1,\\
 		W_{2,1}^n &= u^n_1 + 4c^n_1.
 	\end{align}
 	If the input data is given in as a volumetric flow, the Riemann invariants at the next time step are computed via the following update formula:
 	\begin{align}
-		W_{1,0}^{n+1} &= W^n_{1,0} + (W^n_{1,1} - W^n_{1,0})(c^n_0-u^n_0) \frac{\Delta t}{\Delta x} \label{update1a}\\
-		W_{2,0}^{n+1} &= \frac{2Q^{n+1}_0}{A^n_0} - W^{n+1}_{1,0} \label{update2a}
+		W_{1,0}^{n+1} &= W^n_{1,0} + (W^n_{1,1} - W^n_{1,0})(c^n_0-u^n_0) \frac{\Delta t}{\Delta x} \label{update1a},\\
+		W_{2,0}^{n+1} &= \frac{2Q^{n+1}_0}{A^n_0} - W^{n+1}_{1,0}, \label{update2a}
 	\end{align}
 	where $Q^{n+1}_0$ is given through input data.
 	This equates to linearly extrapolating the Riemann invariants at the first and second cell to meet the backwards and the forwards travelling characteristic curve of the second and first cell respectively.
 	The missing input quantities are then computed from the new Riemann invariants as follows:
 	\begin{align}
-		u_0^{n+1} &= \frac{W_{1,0}^{n+1} + W_{2,0}^{n+1}}{2} \\
-		c_0^{n+1} &= \frac{W_{2,0}^{n+1} - W_{1,0}^{n+1}}{4} \\
-		A_0^{n+1} &= \frac{Q_0^{n+1}}{u_0^{n+1}} \\
+		u_0^{n+1} &= \frac{W_{1,0}^{n+1} + W_{2,0}^{n+1}}{2}, \\
+		c_0^{n+1} &= \frac{W_{2,0}^{n+1} - W_{1,0}^{n+1}}{4}, \\
+		A_0^{n+1} &= \frac{Q_0^{n+1}}{u_0^{n+1}}, \\
 		P_0^{n+1} &= P_{ext} + \beta \left( \sqrt{\frac{A_0^{n+1}}{A_{0,0}}} - 1 \right). 
 	\end{align}
 	where $A_{0,0}$ is the reference cross-section at the cell $i=0$.
 	If the input data is given as a pressure wave, the Riemann invariants at the next time step are computed via the following update formula, again provided through a linear extrapolation:
 	\begin{align}
-		W_{1,0}^{n+1} &= W^n_{1,0} + (W^n_{1,1} - W^n_{1,0})(c^n_0-u^n_0) \frac{\Delta t}{\Delta x} \label{update1b}\\
+		W_{1,0}^{n+1} &= W^n_{1,0} + (W^n_{1,1} - W^n_{1,0})(c^n_0-u^n_0) \frac{\Delta t}{\Delta x} \label{update1b}, \\
 		W_{2,0}^{n+1} &= \frac{2Q^{n}_0}{A^n_0} - W^{n+1}_{1,0} \label{update2b}.
 	\end{align}
 	The missing input quantities are then computed from the new Riemann invariants as follows:
 	\begin{align}
-		u_0^{n+1} &= \frac{W_{1,0}^{n+1} + W_{2,0}^{n+1}}{2} \\
-		c_0^{n+1} &= \frac{W_{2,0}^{n+1} - W_{1,0}^{n+1}}{4} \\
-		A_0^{n+1} &= A_{0,0}\left(\frac{P_0^{n+1}-P_{ext}}{\beta}\right)^2\\
-		Q_0^{n+1} &= A_0^{n+1} u_0^{n+1}
+		u_0^{n+1} &= \frac{W_{1,0}^{n+1} + W_{2,0}^{n+1}}{2}, \\
+		c_0^{n+1} &= \frac{W_{2,0}^{n+1} - W_{1,0}^{n+1}}{4}, \\
+		A_0^{n+1} &= A_{0,0}\left(\frac{P_0^{n+1}-P_{ext}}{\beta}\right)^2,\\
+		Q_0^{n+1} &= A_0^{n+1} u_0^{n+1},
 	\end{align}
 	where $P^{n+1}_0$ is given through input data.
 
@@ -809,41 +809,41 @@ In order to get a first approximation for the flux that needs to be computed the
 	\paragraph{Reflection} \label{par:refl}
 	This is done equivalently to the inlet boundary conditions through linear extrapolation of characteristics:
 	\begin{align}
-		W_{2,N}^{n+1}&=W_{2,N}^n+(W_{2,N-1}^n-W_{2,N-1}^n) (u_N^n+c_N^n) \frac{\Delta t}{\Delta x}, \label{eq:refl1} \\
-		W_{1,N}^{n+1}&=W_{1,N}^0-R_t (W_{2,N}^{n+1}-W_{2,N}^0) \label{eq:refl2},
+		W_{2,N}^{n+1}&=W_{2,N}^n+(W_{2,N-1}^n-W_{2,N-1}^n) (u_N^n+c_N^n) \frac{\Delta t}{\Delta x}, \label{eq:refl1}, \\
+		W_{1,N}^{n+1}&=W_{1,N}^0-R_t (W_{2,N}^{n+1}-W_{2,N}^0), \label{eq:refl2}
 	\end{align}
 	where $R_t \in [-1,1]$ is the reflection coefficient.
 	At $R_t = 0$ no reflection occurs.
 	It is noted that \autoref{eq:refl1} follows directly from linear extrapolation while \autoref{eq:refl2} is constructed in order to transfer some of the forward characteristic curve to the backward one in order to model a reflection.
 	The simulation quantities can be computed from the Riemann invariants as follows
 	\begin{align}
-		u_N^{n+1} &= \frac{W_{1,N}^{n+1} + W_{2,N}^{n+1}}{2} \\
-		c_N^{n+1} &= \frac{W_{2,N}^{n+1} - W_{1,N}^{n+1}}{4} \\
+		u_N^{n+1} &= \frac{W_{1,N}^{n+1} + W_{2,N}^{n+1}}{2}, \\
+		c_N^{n+1} &= \frac{W_{2,N}^{n+1} - W_{1,N}^{n+1}}{4}, \\
 		Q_N^{n+1} &= A_N^n u_N^{n+1}.
 	\end{align}
 	A more accurate method of computing the outlet boundary values is uses a Windkessel model.
 
 	\paragraph{Windkessel} \label{par:wk}
 	The three element Windkessel model or RCR model is applied to simulate the perfusion as described in \cite{CiCP-4-317}.
-	Such models are referred to as lumped-parameter or 0D models due to the lack of a spatial dependency.
+	Such models are referred to as lumped-parameter or 0D-models due to the lack of a spatial dependency.
 	The concept behind this method of computing outlet values is the assumption of a state $A^*$, $u^*$ at time-step $n+1$ that results from the two states $A_L$, $u_L$ and $A_R$, $u_R$ at time-step $n$ to the left and the right respectively.
 	The so called virtual state $A^*$, $u^*$ therefore satisfies the following equations in it's Riemann invariants
 	\begin{align}
-		W_1(A^*,u^*) = W_1(A_R,u_R) \label{eq:vrmi1}\\
+		W_1(A^*,u^*) = W_1(A_R,u_R), \label{eq:vrmi1}\\
 		W_2(A^*,u^*) = W_2(A_L,u_L). \label{eq:vrmi2}
 	\end{align}
 	Considering a terminal resistance model the virtual state has to satisfy
 	\begin{equation}
-		A^*u^* = \frac{P(A^*) - P_{ven}}{R} \label{eq:tr1}
+		A^*u^* = \frac{P(A^*) - P_{ven}}{R}, \label{eq:tr1}
 	\end{equation}
 	where the constant $P_{ven}$ represents the venous pressure and $R$ models the resistive load resulting from omitted arteries, the capillary bed, and the venous network.
 	The venous pressure in a healthy patient is only $8-12$ mmHg \cite{klingensmith2008washington}.
 	In our simulation it was therefore usually set to $0$.
 	Inserting \autoref{eq:p_tot} and \autoref{eq:vrmi2} into \autoref{eq:tr1} gives
 	\begin{equation}
-		f(A^*) := R \left(u_L + 4c(A_L) \right) A^* - 4Rc(A^*)A^* - \frac{\beta}{A_0} \left( \sqrt{A^*} - \sqrt{A} \right) P_{ven} = 0\label{eq:tr2}
+		f(A^*) := R \left(u_L + 4c(A_L) \right) A^* - 4Rc(A^*)A^* - \frac{\beta}{A_0} \left( \sqrt{A^*} - \sqrt{A} \right) P_{ven} = 0,\label{eq:tr2}
 	\end{equation}
-	where the wave speed $c$ of a cross section $A$ is defined as in \autoref{sssec:inlets}.
+	where the wave speed $c$ of a cross-section $A$ is defined as in \autoref{sssec:inlets}.
 	An additional term $P_{ext}$ for modelling exterior tissue pressure can be added yielding
 	\begin{equation}
 		f(A^*) := R \left(u_L + 4c(A_L) \right) A^* - 4Rc(A^*)A^* - \frac{\beta}{A_0} \left( \sqrt{A^*} - \sqrt{A} \right) P_{ven} - P_{ext} = 0.\label{eq:tr3}
@@ -851,7 +851,7 @@ In order to get a first approximation for the flux that needs to be computed the
 
 	The compliance of the omitted vessels and the resistance of the capillaries can be represented by a $CR_2$ system
 	\begin{equation}
-		C \frac{dP_C}{dt} = A^*u^* - \frac{P_C-P_{ven}}{R_2}
+		C \frac{dP_C}{dt} = A^*u^* - \frac{P_C-P_{ven}}{R_2},
 	\end{equation}
 	where $C$ represents the compliance and $P_C$ is the pressure at said compliance.
 	This equation can be discretized using an explicit Euler scheme in order to compute the values of $P_C$
@@ -968,20 +968,20 @@ In order to get a first approximation for the flux that needs to be computed the
 	Conservation of mass, pressure conservation, and extrapolation of characteristics.
 	For the conjunctions the conservation of mass leads to 
 	\begin{equation}
-		A_{1,N}^{n+1} u_{1,N}^{n+1} - A_{2,0}^{n+1} u_{2,0}^{n+1}=0
+		A_{1,N}^{n+1} u_{1,N}^{n+1} - A_{2,0}^{n+1} u_{2,0}^{n+1}=0,
 	\end{equation}
 	where $A_{1,N}^{n+1}$, $u_{1,N}^{n+1}$ and $A_{2,0}^{n+1}$, $u_{2,0}^{n+1}$ are the cross-section and the velocity at the outlet of the first vessel and the inlet of the second vessel respectively.
 	The pressure conservation is given by 
 	\begin{multline}
 		\beta_{1,N} \left( \frac{\sqrt{A_{1,N}^{n+1}}}{\sqrt{A_{0,1,N}}}-1\right)+\frac{1}{2} \rho \left( u_{1,N}^{n+1} \right) ^2 \\
-		-\beta_{2,0} \left( \frac{\sqrt{A_{2,0}^{n+1}}}{\sqrt{A_{0,2,0}}}-1\right)+\frac{1}{2} \rho \left( u_{2,0}^{n+1} \right)=0
+		-\beta_{2,0} \left( \frac{\sqrt{A_{2,0}^{n+1}}}{\sqrt{A_{0,2,0}}}-1\right)+\frac{1}{2} \rho \left( u_{2,0}^{n+1} \right)=0,
 	\end{multline}
 	where $\beta_{1,N}$, $A_{0,1,N}$ and $\beta_{2,N}$, $A_{0,2,0}$ are the elasticity coefficient and the cross-section at the outlet of the first vessel and the inlet of the second vessel respectively.
 	The first and the second term represent the pressure coming from the arterial wall.
 	The second and the third term describe the kinetic pressure stemming from the fluid itself.
 	Finally, analogously as in \autoref{sssec:outl}, we introduce the virtual state $A^*$, $u^*$ that generates from the two states $A_L$, $u_L$ and $A_R$, $u_R$
 	\begin{align}
-		W_1^* := W_1(A^*,u^*) = W_1(A_R,u_R) = W_1(A_{2,0}^{n+1}, u_{2,0}^{n+1}) \\
+		W_1^* := W_1(A^*,u^*) = W_1(A_R,u_R) = W_1(A_{2,0}^{n+1}, u_{2,0}^{n+1}), \\
 		W_2^* := W_2(A^*,u^*) = W_2(A_L,u_L) = W_1(A_{1,N}^{n+1}, u_{1,N}^{n+1}).
 	\end{align}
 	This also equates to 
@@ -997,7 +997,7 @@ In order to get a first approximation for the flux that needs to be computed the
 				q_{2}-4 k_{2,0} q_{4}-W_{2,0}^* \\
 				q_{1} q_{3}^4-q_{2} q_{4}^4 \\
 				\beta_1\left(\frac{q_{3}^2}{A_{0,1,N}^{1 / 2}}-1\right)+\frac{1}{2} \rho q_{1}^2-\beta_2\left(\frac{q_{4}^2}{A_{0,2,0}^{1 / 2}}-1\right)-\frac{1}{2} \rho q_{2}^2
-		\end{array}\right] \equiv 0
+		\end{array}\right] \equiv 0, 
 	\end{equation}
 	where we have introduced the following notation in order to more easily write this system in a matrix-vector form
 	\begin{align}
@@ -1039,9 +1039,9 @@ In order to get a first approximation for the flux that needs to be computed the
 								q_{1} q_{4}^4-q_{2} q_{5}^4-q_{3} q_{6}^4=0 \\
 								\beta_1\left(\frac{q_{4}^2}{A_{0,1,N}^{1 / 2}}-1\right)-\beta_2\left(\frac{q_{5}^2}{A_{0,2,0}^{1 / 2}}-1\right) \\
 								\beta_1\left(\frac{q_{4}^2}{A_{0,1,N}^{1 / 2}}-1\right)-\beta_3\left(\frac{q_{6}^2}{A_{0,3,0}^{1 / 2}}-1\right) 
-						\end{array}\right] \equiv 0 \label{syseq_bif}
+						\end{array}\right] \equiv 0, \label{syseq_bif}
 					\end{equation}
-					with the same shorthand notation as used when describing the Conjunctions and the following vector of variables
+					with the same shorthand notation as used when describing the conjunctions and the following vector of variables
 					\begin{multline}
 						\mathbf{q}:=\{q_k\}_{k=1}^6 = \left[
 							\begin{array}{lll}
@@ -1078,9 +1078,9 @@ In order to get a first approximation for the flux that needs to be computed the
 										q_{1} q_{4}^4+q_{2} q_{5}^4-q_{3} q_{6}^4=0 \\
 										\beta_1\left(\frac{q_{4}^2}{A_{0,1,N}^{1 / 2}}-1\right)-\beta_3\left(\frac{q_{6}^2}{A_{0,3,0}^{1 / 2}}-1\right) \\
 										\beta_2\left(\frac{q_{5}^2}{A_{0,2,N}^{1 / 2}}-1\right)-\beta_3\left(\frac{q_{6}^2}{A_{0,3,0}^{1 / 2}}-1\right)
-								\end{array}\right] \equiv 0
+								\end{array}\right] \equiv 0.
 							\end{equation}
-							Reusing the shorthand notation introduced when describing the Conjunctions and the following vector of variables
+							Reusing the shorthand notation introduced when describing the conjunctions and the following vector of variables
 							\begin{multline}
 								\mathbf{q}:=\{q_k\}_{k=1}^6=\left[
 									\begin{array}{lll}
@@ -1112,7 +1112,7 @@ In order to get a first approximation for the flux that needs to be computed the
 							Given this constraint $\Delta t$ can be determined.
 							Taking into account the aforementioned condition of preventing the characteristic curves from reaching beyond the neighbouring cell within $\Delta t$ leads to the following equation:
 							\begin{equation}
-								\Delta t \leq C_{CFL} \frac{\Delta x}{S_{max}},\hspace{10pt}  C_{CFL} \in (0,1)
+								\Delta t \leq C_{CFL} \frac{\Delta x}{S_{max}},\hspace{10pt}  C_{CFL} \in (0,1),
 							\end{equation}
 							where $S_{max} = \max_{x \in [0,L], v \in V} | u_v(x) + c_v(x) |$ and $V$ is the set of all vessels in the simulation.  
 							In our case $\Delta x$ was chosen to be at least $10^{-3}m$ and $C_{CFL}$ was set to $0.9$.
@@ -1290,7 +1290,7 @@ We present here the pressure waves simulated by our code on four different model
 All models represent anatomies from healthy individuals.
 The vessel wall thickness was computed using the empirical expression
 \begin{equation}
-	h_0 = r_0 \left(a \exp(b r_0) + c \exp(d r_0)\right)
+	h_0 = r_0 \left(a \exp(b r_0) + c \exp(d r_0)\right),
 \end{equation}
 taken from \cite{blanco2014anatomically} with the parameters
 \begin{equation}
@@ -1301,7 +1301,7 @@ These three models represent arteries around the aorta, abdominal arteries and a
 The input data provided by \emph{vascularmodel.com} was used to set the inlet boundary conditions.
 The Young's modulus for these models was calculated using the parametrization:
 \begin{equation}
-	E = \frac{r_0}{h} k_1 \exp(k_2 r_0) + k_3
+	E = \frac{r_0}{h} k_1 \exp(k_2 r_0) + k_3,
 \end{equation}
 given in \cite{ottesen2004applied} with the values
 \begin{align}
@@ -1428,11 +1428,11 @@ For the ADAN56 model the resistances and the compliance were carefully analysed 
 Due to the parameters not always being provided in the \emph{vascularmodel.com} models, here they were computed using a fairly simple approximation.
 The total resistance of the system is computed as:
 \begin{equation}
-	R_{tot} := \frac{P_{mean}}{Q_{car}}
+	R_{tot} := \frac{P_{mean}}{Q_{car}},
 \end{equation}
 where the mean pressure $P_{mean}$ and the cardiac output $Q_{car}$ are set to the nominal values:
 \begin{align}
-	P_{mean} &:= \frac{120 \text{mmHg}}{80 \frac{\text{ml}}{\text{s}}} \approx 2 \times 10^8 \frac{\text{kg}}{\text{m}^4\text{s}} \\
+	P_{mean} &:= \frac{120 \text{mmHg}}{80 \frac{\text{ml}}{\text{s}}} \approx 2 \times 10^8 \frac{\text{kg}}{\text{m}^4\text{s}}, \\
 	Q_{car} &:= 80 \frac{\text{ml}}{\text{s}} = 8 \times 10^{-5} \frac{\text{m}^3}{\text{s}}. \\
 \end{align}
 The total compliance is set to a reasonable value as well
@@ -1509,7 +1509,7 @@ For more efficient and broader inferences extensive tuning and further optimizat
 In the upcoming final chapter we will summarize our results produced in this thesis and give an outlook upon future work that this contribution might be a precursor to.
 
 \chapter{Conclusion/ Future Work} \label{chap:conc}
-To conclude this work we state the goal that this thesis set out to accomplish, the methods applied and the result thereof.
+To conclude this work we state the goal that this thesis set out to accomplish, the methods applied and the results thereof.
 Finally we will give an outlook on future work that is enabled do to our contribution.
 The goal of this thesis was to write a differentiable 1D-haemodynamics solver.
 The underlying motivation thereof being the need for cardiovascular simulations in medicine, specifically in personalised medicine.
@@ -1518,7 +1518,7 @@ The aim of having the solver be differentiable is to enable efficient parameter 
 The construction of a differentiable solver was successful and was achieved using well established methods such as the reduction of the 3D-NSE to their 1D-equivalent in \autoref{sec:sv} and the solving of these equations using the MUSCL numerical method in \autoref{sec:muscl}.
 The differentiability specifically results from the implementation in JAX.
 We could demonstrate that our code reproduces the results from previous work and does so while the execution time scales linearly w.r.t. the number of vessels and the compilation time is near constant over different network constellations (\autoref{sec:val}, \autoref{sec:sc}).
-Furthermore we showed that our solver can produce physiologically realistic results on models that were produced from 3D geometries \autoref{sec:da}.
+Furthermore we showed that our solver can produce physiologically realistic results on models that were produced from 3D-geometries \autoref{sec:da}.
 Regarding parameter inference we could demonstrate it's feasibility on a toy problem.
 
 While the main goal of making a differentiable 1D-haemodynamics solver was achieved there are still issues that need to be addressed.
@@ -1557,9 +1557,9 @@ It offers the ability to parse models, run models, and infer parameters.
 The parsing scripts can be found in the \emph{parsing} folder.
 Models can be parsed from two different formats.
 The first format being models provided by \cite{vascularmodel}.
-In order to parse these kinds of models the files representing a 3D model from \emph{vascularmodel.com} needs to be placed in the parsing folder.
+In order to parse these kinds of models the files representing a 3D-model from \emph{vascularmodel.com} needs to be placed in the parsing folder.
 Furthermore an encoding of the network structure done by centre-line extraction needs to be placed in the model folder as well.
-This network structure can be generated using the Slicer 3D software \cite{fedorov20123d}.
+This network structure can be generated using the \emph{Slicer 3D} software \cite{fedorov20123d}.
 In order to parse a \emph{vascularmodel} network, once the files have been placed appropriately, run
 
 \texttt{python parse\_vm.py <model\_name>}.
@@ -1582,7 +1582,7 @@ Finally a parameter inference can be run by executing
 \texttt{python run\_inference.py <model\_name>}.
 
 in the base directory as well.
-We note that the inferring of a parameter in this manner is very experimental and requires the user the hand tune the file \emph{src/inference.py}.
+We note that the inferring of a parameter in this manner is very experimental and requires that the user hand tunes the file \emph{src/inference.py}.
 However by running 
 
 \texttt{python run\_inference.py}.
