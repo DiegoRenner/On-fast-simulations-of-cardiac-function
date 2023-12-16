@@ -1237,17 +1237,19 @@ def runSimulation(config_filename, J)
 
 						\chapter{Results} \label{chap:resl}
 						In this chapter we will present the results produced with our JAX implementation of the haemodynamics solver described in \autoref{chap:1dm} and \autoref{chap:nm}. 
-						In \autoref{sec:da} we will show some examples of simulations that were run on different anatomies.
-						In \autoref{sec:sc} we will talk about scaling with respect to compile time and run time of our code.
-						Finally in \autoref{sec:pi} we describe an example of the code performing parameter inference.
+						Firstly we will validate the code against previous work in \autoref{sec:val}.
+						Then, in \autoref{sec:da} we will show some examples of simulations that were run on different anatomies using our implementation.
+						In \autoref{sec:sc} we will talk about scaling with respect to the compile time and run time of our code.
+						Finally in \autoref{sec:pi} we describe an example of the code performing parameter inference. TODO: make sure this exists
 
 					\section{Validation} \label{sec:val}
-						In order to validate our code we compared to the 1D-haemodynamics solver openBF\cite{openBF} that was written and validated in the course of the thesis \cite{melis2017gaussian}.
-						This code was written in the julia programming language\cite{julia}.
+						In order to validate our code we compared it to the 1D-haemodynamics solver openBF \cite{openBF} that was written and validated during the course of the thesis \cite{melis2017gaussian}.
+						That code was written in the julia programming language \cite{julia}.
 						We chose four models that will be introduced more closely in \autoref{sec:da}.
 						We present from each model a randomly selected vessel and compare the pressure wave over one cardiac cycle in the middle of said vessel.
-						The four models consist of 9, 17, 19, and 77 vessel segments.
-						The result of comparing the codes can be seen in \autoref{fig:val} where the \emph{P\_JAX} refers to the pressure computed by our code and \emph{P\_jl} refers to the code from openBF.
+						The four models consist of 9, 17, 19, and 77 vessel segments each.
+						That means 9, 17, 19, and 77 segments that each get treated as an individual vessel on which the 1D-NSEs have to be solved (\autoref{sec:sv}) and that have to be coupled to oneanother by solving the connecting junctions (\autoref{sssec:junctions}).
+						The result of comparing the codes can be seen in \autoref{fig:val} where the \emph{P\_JAX} refers to the pressure computed by our code throughtout one cardiac cylcle and \emph{P\_jl} refers to the equivalent values from the openBF code.
 						\begin{figure} [!ht]
 							\centering
 							\includegraphics[width=0.4\columnwidth]{figures/0007_H_AO_H_right_subclavian_artery_P.eps}
@@ -1259,7 +1261,7 @@ def runSimulation(config_filename, J)
 							\label{fig:val}
 \end{figure}
 The plots show that for each model there is barely any difference in the output of the two vascular simulations.
-Furthermore there is less than $1\%$ relative error between openBF's and our implementation which validates our codes correctness.
+Furthermore there is a less than $1\%$ relative error between openBF's and our implementation which validates our codes correctness.
 
 \section{Different Anatomies} \label{sec:da}
 We present here the pressure waves simulated by our code on four different models.
@@ -1273,7 +1275,7 @@ taken from \cite{blanco2014anatomically} with the parameters
 	a = 0.2802, \ b = -5.053 \text{cm}^{-1}, \ c = 0.1324,\  d = -0.1114 \text{cm}^{-1}.
 \end{equation}
 Three of the models are taken from the \emph{vascularmodel.com} website \cite{vascularmodel}.
-These three models represent arteries around the aorta, abdominal arteries and arteries of the cerebral circulation respectively.
+These three models represent arteries around the aorta, abdominal arteries and arteries of the cerebral circulation.
 The input data provided by \emph{vascularmodel.com} was used to set the inlet boundary conditions.
 The Young's modulus for these models was calculated using the parametrization:
 \begin{equation}
@@ -1290,48 +1292,46 @@ The model was developed by Blanco et al. \cite{blanco2014anatomically,blanco2014
 Therefore it is commonly referred to as "ADAN56".
 The 56 vessels are split into 61 arterial segments which are in turn split into a total of 77 segments for simulation purposes.
 
-The results from first the model from \emph{vascularmodel.com}, the aorta model, can be seen in \autoref{fig:aorta}.
+The results from the first model from \emph{vascularmodel.com}, the aorta model, can be seen in \autoref{fig:aorta}.
 The model represents the ascending, the descending and the arch of the aorta as well as the brachiocephalic and the right and left subclavian and common carotid arteries.
 These arteries are listed in \autoref{tab:aort} which also serves as a legend for the corresponding figure.
-
-\begin{figure} [!ht]
+\begin{figure} [H]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{figures/0007.eps}
 	\caption{The haemodynamics solver produces qualitatively accurate results for the 8 vessel aorta model.}
 	\label{fig:aorta}
 \end{figure}
-
-\begin{table}[!ht] 
+\begin{table}[H] 
 	\begin{center}
-		\begin{tabular}{|c|l|} 
+		\begin{tabular}{|c|l|c|l|} 
 			\hline
-			Legend & Vessel Name\\
+			Legend & Vessel Name &Legend & Vessel Name\\
 			\hline
-			$\mathbf{1}$& ascending aorta \\ 
-			$\mathbf{2}$& brachiocephalic artery \\
-			$\mathbf{3}$& right subclavian artery \\
-			$\mathbf{4}$& right common carotid artery \\
+			$\mathbf{1}$& ascending aorta &
 			$\mathbf{5}$& arch of aorta \\
+			$\mathbf{2}$& brachiocephalic artery &
 			$\mathbf{6}$& left common carotid artery \\
+			$\mathbf{3}$& right subclavian artery &
 			$\mathbf{7}$& descending aorta \\
+			$\mathbf{4}$& right common carotid artery &
 			$\mathbf{8}$& left subclavian artery \\
 			\hline
 		\end{tabular}
 	\end{center}
-	\caption{This table lists the arteries displayed in \autoref{fig:aorta}.}
+	\caption{This table lists the 8 arteries of the aorta model displayed in \autoref{fig:aorta}.}
 	\label{tab:aort}
 \end{table}
 
-The second \emph{vascularmodel.com} model, the abdominal model, consists of the following arteries: 
-The right and left common, external, and internal iliac arteries, the right and left femoral arteries, as well as the right and left renal arteries, the celiac trunk and the superior mesentric artery.
+The second \emph{vascularmodel.com} model, the abdominal model, consists among others of the following arteries: 
+The right and left common and internal iliac arteries, as well as the right and left renal arteries, the celiac trunk and the superior mesentric artery.
 The results from our simulation of the abdominal model can be seen in \autoref{fig:abdominal} and the corresponding legend is contained in \autoref{tab:abdo}.
-\begin{figure} [!ht]
+\begin{figure} [H]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{figures/0029.eps}
-	\caption{The abdominal model consists of 12 models and is therefore slightly larger than the aorta model but can still be simulated accurately.}
+	\caption{The abdominal model consists of 10 vessels and is therefore slightly larger than the aorta model but still produces physiologically realistic values.}
 	\label{fig:abdominal}
 \end{figure}
-\begin{table}[!ht]
+\begin{table}[H]
 	\begin{center}
 		\begin{tabular}{|c|l|}
 			\hline
@@ -1350,31 +1350,21 @@ The results from our simulation of the abdominal model can be seen in \autoref{f
 			\hline
 		\end{tabular}
 	\end{center}
-	\caption{This table lists the arteries displayed in \autoref{fig:abdominal}.}
+	\caption{This table lists the 10 arteries of the abdominal model displayed in \autoref{fig:abdominal}.}
 	\label{tab:abdo}
 \end{table}
+
 Our final model from the \emph{vascularmodel.com} database models cerebral arteries.
-It includes among others the right and left anterior inferior cerebellar arteries, vertebral arteries, and the second posterior cerebral artery.
+It includes among others the right and left anterior inferior cerebellar arteries the right and left vertebral arteries.
 The results from simulating the cerebral model are shown in \autoref{fig:cerebral}.
 The corresponding table containing the vessel names and their label is \autoref{tab:cere}
-\begin{figure} [!ht]
+\begin{figure} [H]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{figures/0053.eps}
 	\caption{The 10 vessel cerebral model provides reasonable results as well when simulated with our haemodynamics solver.}
 	\label{fig:cerebral}
 \end{figure}
-
-Finally we turn to the "ADAN56" model.
-With 56 vessels this is by far the biggest model presented here.
-The input data here was inspired by \cite{murgo1980aortic}.
-The results are visualized in \autoref{fig:adan56}.
-\begin{figure} [!ht]
-	\centering
-	\includegraphics[width=0.8\columnwidth]{figures/adan56_annotated.png}
-	\caption{The simulation results from the ADAN56 artery network show that larger systems can be simulated by our JAX code as well.}
-	\label{fig:adan56}
-\end{figure}
-\begin{table}[!ht]
+\begin{table}[H]
 	\begin{center}
 		\begin{tabular}{|c|l|}
 			\hline
@@ -1395,42 +1385,54 @@ The results are visualized in \autoref{fig:adan56}.
 			\hline
 		\end{tabular}
 	\end{center}
-	\caption{This table lists the arteries displayed in \autoref{fig:abdominal}.}
+	\caption{This table lists the arteries displayed in \autoref{fig:cerebral}.}
+
 	\label{tab:cere}
 \end{table}
+
+Finally we turn to the "ADAN56" model.
+With 56 vessels this is by far the biggest model presented here.
+The input data here was inspired by \cite{murgo1980aortic}.
+The results are visualized in \autoref{fig:adan56}.
+\begin{figure} [!ht]
+	\centering
+	\includegraphics[width=0.8\columnwidth]{figures/adan56_annotated.png}
+	\caption{The simulation results from the ADAN56 artery network show that larger systems can be simulated by our JAX code as well. This diagram was taken from \cite{boil2015}.}
+	\label{fig:adan56}
+\end{figure}
 A stark difference between the models from \emph{vascularmodel.com} and the ADAN56 model is how much variety there is in the different pulse waves generated for different arteries in the ADAN56 model as opposed to the ones generated for the other models.
-This is most likely a result of the way the RCR parameters were set for these different models.
+This is most likely a result of the way the Windkessel or RCR parameters were set for these different models.
 For the ADAN56 model the resistances and the compliance were carefully analysed and calibrated in \cite{blanco2014anatomically,blanco2014blood} to provide a physiologically realistic result.
 Due to the parameters not always being provided in the \emph{vascularmodel.com} models, here they were computed using a fairly simple approximation.
 The total resistance of the system is computed as:
 \begin{equation}
-	R_{tot} = \frac{P_{mean}}{Q_{car}}
+	R_{tot} := \frac{P_{mean}}{Q_{car}}
 \end{equation}
 where the mean pressure $P_{mean}$ and the cardiac output $Q_{car}$ are set to the nominal values:
 \begin{align}
-	P_{mean} &= \frac{120 \text{mmHg}}{80 \frac{\text{ml}}{\text{s}}} \approx 2 \times 10^8 \frac{\text{kg}}{\text{m}^4\text{s}} \\
-	Q_{car} &= 80 \frac{\text{ml}}{\text{s}} = 8 \times 10^{-5} \frac{\text{m}^3}{\text{s}}. \\
+	P_{mean} &:= \frac{120 \text{mmHg}}{80 \frac{\text{ml}}{\text{s}}} \approx 2 \times 10^8 \frac{\text{kg}}{\text{m}^4\text{s}} \\
+	Q_{car} &:= 80 \frac{\text{ml}}{\text{s}} = 8 \times 10^{-5} \frac{\text{m}^3}{\text{s}}. \\
 \end{align}
 The total compliance is set to a reasonable value as well
 \begin{align}
-	C_{tot} &= 10^{-3} \frac{\text{cm}^5}{\text{dyne}} = 10^{-8} \frac{\text{m}^3}{\text{Pa}}.
+	C_{tot} &:= 10^{-3} \frac{\text{cm}^5}{\text{dyne}} = 10^{-8} \frac{\text{m}^3}{\text{Pa}}.
 \end{align}
 The individual resistances and the compliances are then set using the rules for a parallel circuit.
 Let $I$ be an index set containing all vessels with a Windkessel outlet and $A_{o,i}, i \in I$ the reference cross-section at the outlet of the $i$-th vessel.
 The resistance and the compliance at vessel $i$ are then computed by
 \begin{align}
-	\xi_i &= \frac{\sum_{j \in I} A_{0,j}}{A_{0,i}} \\
-	R_{tot,i} &= \xi_i R_{tot} \\
-	C_{tot,i} &= \frac{1}{\xi_i} R_{tot}. 
+	\xi_i &:= \frac{\sum_{j \in I} A_{0,j}}{A_{0,i}}, \\
+	R_{tot,i} &:= \xi_i R_{tot}, \\
+	C_{tot,i} &:= \frac{1}{\xi_i} C_{tot}. 
 \end{align}
 Finally the proximal and the distal resistance $R_{1,i}, R_{2,i}$ have to be set for each vessel $i$.
 This is done by invoking an approximate ratio of about 1:10 between the two
 \begin{align}
-	R_{1,i} &= \frac{9}{100} R_{tot,i} \\
-	R_{2,i} &= \frac{91}{100} R_{tot,i}.
+	R_{1,i} &:= \frac{9}{100} R_{tot,i}, \\
+	R_{2,i} &:= \frac{91}{100} R_{tot,i}.
 \end{align}
 This recipe was taken from the \emph{simvascular} documentation. \cite{simvascular}
-Some of the resistances were manually fitted to better fit the specific model.
+Some of the resistances were manually fitted to better suit the specific models.
 The different behaviours in the simulation for the meticulously assigned parameters in the ADAN56 model as opposed to the approximated parameters assigned when simulating the \emph{vascularmodel.com} models demonstrate that there is no simple answer to calibrating the RCR parameters for the Windkessel model.
 This is supported by a closer description of techniques and issues when it comes to calibrating the RCR parameters given in \cite{köppl2023dimension}.
 Here the code written in this work can be seen as a step towards easier and more accurate procedures to determine such parameters.
@@ -1445,7 +1447,7 @@ These timings were produced on a Xeon E3-1505 v6 with 4 cores and 8 threads, a b
 \begin{figure} [!ht]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{figures/timing.eps}
-	\caption{The compile time doesn't grow significantly with increasing numbers of vessel segments due to built-in Python loops being avoided which would be costly to compile. Total compute times seem to scale linearly w.r.t. the number of vessel segments with the exception of the 20 vessel segment simulation.}
+	\caption{The compile time doesn't grow significantly with increasing numbers of vessel segments due to built-in Python loops being avoided which would be costly to compile due to the loops having to be unrolled. Total compute times seem to scale linearly w.r.t. the number of vessel segments with the exception of the 19 vessel segment simulation.}
 	\label{fig:timing}
 \end{figure}
 The compile time remains almost constant around 3s even as the number of vessel segments increases over two magnitudes of order.
@@ -1503,6 +1505,7 @@ In general we believe this work offers fruitful ground for future contributions,
 % This creates an appendix chapter, comment if not needed.
 \appendix
 \chapter{Code Documentation/ Manual} \label{app:doc}
+
 
 
 \end{document}
