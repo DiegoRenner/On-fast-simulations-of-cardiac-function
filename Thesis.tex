@@ -102,15 +102,15 @@ ETH Zürich}
 
 
 \begin{abstract}
-	Personalized medicine aims to improve clinical results by customizing treatments for individual patients.
+	Personalised medicine aims to improve clinical results by customizing treatments for individual patients.
 	This customization is achieved by measuring indicative quantities (biomarkers) by which a patient can be assessed more closely and categorized into sub-populations.
 	In some cases (e.g. hypertension), the biomarker most closely related to the disease (e.g. local vascular pressure) is difficult and maybe even risky to measure (e.g. hypertensive pregnancy disorder).
-	Therefore computational methods are applied to simulate such hard to access or unavailable data.
-	The current methods can either be inefficient or hard to interpret.
-	Since cardiovascular diseases are the leading cause of death globally they are a prime target to which to apply personalized medicine.
-	In this field however, the caveat in personalized medicine of difficult to access biomarkers applies as well.
+	Therefore computational methods are applied to infer such hard to access or unavailable data by solving an inverse problem.
+	The current methods by which this is done are either inefficient, due to relying on slow optimization methods, or hard to interpret, due to using "black box" deep-learning algorithms.
+	Since cardiovascular diseases are the leading cause of death globally they are a prime target to which to apply the personalised medicine approach.
+	In this field however, the caveat in personalised medicine of difficult to access biomarkers applies as well.
 	Therefore this thesis aims to produce a differentiable 1D-haemodynamics solver based on well understood methods such as the 1D-Navier-Stokes equations and their treatment via the MUSCL numerical scheme.
-	The underlying motivation thereof being the bridging of the gap between inefficient and hard to interpret models by providing a more efficient method to perform parameter inference and sensitivity analysis while keeping the interpretability of the well understood mathematical models and numerical methods.
+	The underlying motivation thereof being the bridging of the gap between inefficient and hard to interpret models by providing a faster method to perform parameter inference and sensitivity analysis while keeping the interpretability of the well understood mathematical models and numerical methods.
 	The results of our solver were validated using data from previous work in the 1D-haemodynamics field and we demonstrated that parameter inference can be performed using our model.
 
 \end{abstract}
@@ -120,8 +120,8 @@ ETH Zürich}
 \mainmatter % do not remove this line
 
 \chapter{Introduction}
-By taking into account the characteristics of an individual patient and customizing their treatment according to which characteristics-dependent sub-population they fall into, personalized medicine aims to improve upon results a more generalized approach would achieve \cite{ashley2016towards,national2011toward,giardino2017role}.
-To succeed in the personalization of a treatment, a disease specific number of quantities (biomarkers) need to be determined \cite{burke1998integrating}.
+By taking into account the characteristics of an individual patient and customizing their treatment according to which characteristics-dependent sub-population they fall into, personalised medicine aims to improve upon results a more generalized approach would achieve \cite{ashley2016towards,national2011toward,giardino2017role}.
+To succeed in the personalisation of a treatment, a disease specific number of quantities (biomarkers) need to be determined \cite{burke1998integrating}.
 These biomarkers can have a varying degree of correlation with a disease's existence, progression, and outcome.
 For instance local vascular pressure is highly correlated with hypertension.
 While there are methods to estimate this quantity from ultrasound or Magnetic Resonance Imaging \cite{markl20124d}, these methods tend not to be accurate enough for standard clinical practice \cite{everett2012beyond}.
@@ -132,10 +132,10 @@ Therefore, in order to determine the biomarkers that are hard to capture in a cl
 Such computational models aim to simulate a patients individual physiology in order to reveal aforementioned "hidden" biomarkers.
 This is especially useful when the computed biomarkers can be connected via first principals to the outcome of a disease.
 Here we mention again local vascular pressure and hypertension as a prime example.
-However simulating such quantities accurately depends heavily on a high number of personalized parameters, leading to a similar problem as described initially: needing to access difficult to measure or unobtainable data for a specific patient.
+However simulating such quantities accurately depends heavily on a high number of personalised parameters, leading to a similar problem as described initially: needing to access difficult to measure or unobtainable data for a specific patient.
 An attempt to avoid the problem of having to know these values is using population averaged means.
-This however defeats the purpose of personalized medicine.
-What has therefore become the method of choice to address the issue of personalized medicine using computational models is to build simulators that output the values of some desired biomarkers and to then try and solve the inverse problem of fitting the parameters of the simulator to a specific patient.
+This however defeats the purpose of personalised medicine.
+What has therefore become the method of choice to address the issue of personalised medicine using computational models is to build simulators that output the values of some desired biomarkers and to then try and solve the inverse problem of fitting the parameters of the simulator to a specific patient.
 
 There are two main ways of achieving the goal of calibrating a simulation for an individual:
 \begin{enumerate}
@@ -145,18 +145,19 @@ There are two main ways of achieving the goal of calibrating a simulation for an
 The reason deep-learning techniques were attempted is due to the fact that the "classical" approaches are very inefficient.
 This in part because derivatives are often hard to determine for the attempted simulations so the algorithms of choice for solving the inverse problem are gradient-free. 
 Moreover due to the models being very sensitive to their parameters and there being ambiguous solutions \cite{nolte2022inverse,quick2001infinite} these gradient-free algorithms have to be run at very small step sizes. \cite{taylor2009patient,tuccio2022parameter,marsden2014optimization,mineroff2019optimization,bozkurt2022patient}
-The ability to easily take gradients of one of these models with respect to it's parameters would greatly improve the process of personalizing it without loosing the interpretability as would be the case when using a deep-learning algorithm.
-Personalized medicine could specifically be aided by using gradients to more efficiently infer parameters or perform sensitivity analysis.
+The ability to easily take gradients of one of these models with respect to it's parameters would greatly improve the process of personalising it without loosing the interpretability as would be the case when using a deep-learning algorithm.
+Personalised medicine could specifically be aided by using gradients to more efficiently infer parameters or perform sensitivity analysis.
 
-Due to the complexity of the cardiovascular system and the significance of cardiovascular disease globally the mathematical and numerical modelling of haemodynamics has gained a lot of traction over recent years.
-Two of the main factors for this complexity are the multi-scale and multi-physics nature of the cardiovascular system that arises from vessels of strongly varying sizes and not much data being available for certain parts of these models to go off of \cite{quarteroni2016geometric}.
+%Due to the complexity of the cardiovascular system and the significance of cardiovascular disease globally the mathematical and numerical modelling of haemodynamics has gained a lot of traction over recent years.
+%Two of the main factors for this complexity are the multi-scale and multi-physics nature of the cardiovascular system that arises from vessels of strongly varying sizes and not much data being available for certain parts of these models to go off of \cite{quarteroni2016geometric}.
+The cardiovascular system and cardiovascular disease are prime targets for the approaches of personalised medicine. 
 The significance of cardiovascular disease and it's research stems from it being the most prevalent cause of death.
 Worldwide it lead to 17.3 million deaths per year as of 2015.
 This number is projected to increase by the year 2030 to more than 23.6 million. \cite{update2015heart}
 In Europe cardiovascular disease was responsible for close to one third (32.7\%) of all deaths in the year 2020 \cite{Coelho2020}.
 Cardiovascular systems have been well studied, from analytical solutions of simplified models to approximations of complex systems.
 In order to tackle this complexity of the meaningful task of modelling cardiovascular systems numerical modelling has become prevalent \cite{formaggia2009multiscale,quarteroni2016geometric,black2020p14,el2018investigating,qureshi2014numerical,reichold2009vascular}.
-The general issue described up until now, with regards to the difficulty of personalizing treatments, is also relevant when considering the cardiovascular system.
+The issue of needing access to hard to obtain biomarkers and the pitfalls of the existing simulations providing such biomarkers hold as well in the case of cardiovascular diseases.
 
 Therefore, the goal of this work is to provide a fast, differentiable cardiovascular simulation.
 This is a step towards enabling efficient and interpretable model calibration to be applied in personalised medicine.
@@ -166,17 +167,20 @@ That is, JAX optimizes the written code to take advantage of parallelization and
 The optimization for GPU execution is especially useful since it allows for data parallelization, i.e. batch executions of the code on a single device.
 This means multiple models for different patients could be optimized simultaneously on a single GPU.
 Next to the advantages brought about by the implementation in JAX, the implementation of the code in Python makes the solver accessible for future work.
-We also provide the written code as is in an open-source manner hoping to aid progress in the field overall.
+We also provide the written code as is in an open-source manner hoping to aid progress in the field overall. 
+In order to provide this code there were many modelling assumptions to be made before attempting to implement a solver.
 
-For this thesis we choose a coupled 0D-1D model where the 0D part is used to compute boundary conditions for certain outlets of the 1D cardiovascular network.
+For this thesis we chose a coupled 0D-1D model where the 0D part is used to compute boundary conditions for certain outlets of the 1D cardiovascular network.
 While failing to capture complex flow patterns and wall shear stress as opposed to a 3D model the 1D model can still simulate pulse wave transmission and systemic wave reflection effects.
 Clearly 1D models also offer a big advantage in execution time as opposed to 3D models. \cite{shi2011review,pfaller2020using,arzani2022machine} 
+Finally, before starting out by giving a description the cardiovascular system, we provide an outlook on the content of this thesis in the following paragraph.
 
-In \autoref{chap:cvs} we will provide a basic understanding of the cardiovascular system which will serve as a base for describing the cardiovascular simulation throughout this work.
+In \autoref{chap:cvs} we will provide a basic understanding of the cardiovascular system which will serve as a foundation for describing the cardiovascular simulation throughout this work.
 Thereafter, in \autoref{chap:1dm} we will describe the underlying 1D-model that we used to simulate blood flow in a single vessel.
 In \autoref{chap:nm} we explain how to solve this model numerically and how to couple multiple such models in order to simulate a cardiovascular network.
 Then, in \autoref{chap:impl}  we will describe key factors of how we implemented the numerical algorithms that solve our 1D-model.
-Finally, in \autoref{chap:resl} we validate this code and present the results produced by it, including a parameter inference performed on a toy problem.
+In the second to last chapter, \autoref{chap:resl}, we validate this code and present the results produced by it, including a parameter inference performed on a toy problem.
+Lastly we conclude this work by summarizing our results and giving an outlook on future work in \autoref{chap:conc}.
 
 
 
@@ -1502,11 +1506,11 @@ While this is a very small system and the time taken to perform the inference is
 For more efficient and broader inferences extensive tuning and further optimization might be necessary. We refer the interested reader to \autoref{app:doc} in order to run the toy problem described here.
 In the upcoming final chapter we will summarize our results produced in this thesis and give an outlook upon future work that this contribution might be a precursor to.
 
-\chapter{Conclusion/ Future Work}
+\chapter{Conclusion/ Future Work} \label{chap:conc}
 To conclude this work we state the goal that this thesis set out to accomplish, the methods applied and the result thereof.
 Finally we will give an outlook on future work that is enabled do to our contribution.
 The goal of this thesis was to write a differentiable 1D-haemodynamics solver.
-The underlying motivation thereof being the need for cardiovascular simulations in medicine, specifically in personalized medicine.
+The underlying motivation thereof being the need for cardiovascular simulations in medicine, specifically in personalised medicine.
 The aim of having the solver be differentiable is to enable efficient parameter inference and sensitivity analysis.
 
 The construction of a differentiable solver was successful and was achieved using well established methods such as the reduction of the 3D-NSE to their 1D equivalent in \autoref{sec:sv} and the solving of these equations using the MUSCL numerical method in \autoref{sec:muscl}.
