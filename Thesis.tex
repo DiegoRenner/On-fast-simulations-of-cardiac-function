@@ -1505,6 +1505,47 @@ In general we believe this work offers fruitful ground for future contributions,
 % This creates an appendix chapter, comment if not needed.
 \appendix
 \chapter{Code Documentation/ Manual} \label{app:doc}
+The code written for this thesis can be found at \cite{jaxflowsim}.
+It offers the ability to parse models, run models, and infere parameters.
+The parsing scripts can be found in the \emph{parsing} folder.
+Models can be parsed from two different formats.
+The first format being models provided by \cite{vascularmodel}.
+In order to parse these kinds of models the files representing a 3D model from \emph{vascularmodel.com} needs to be placed in the parsing folder.
+Furthermore an encoding of the network structure done by centre-line extraction needs to be placed in the model folder as well.
+This network structure can be generated using the Slicer 3D software \cite{fedorov20123d}.
+In order to parse a \emph{vascularmodel} network, once the files have been placed appropriately, run
+
+\texttt{python parse\_vm.py <model\_name>}.
+
+The second format that can be parsed is the format used in the openBF-hub repository \cite{openbfhub}.
+In order to parse these models the repository need to be cloned in to the \emph{parsing} folder.
+Then the models can be parsed by running
+
+\texttt{python parse\_bf.py <model\_name> <model\_sub\_dir>}
+
+where depending on the model the \emph{model\_sub\_dir} argument might not be relevant. TODO: change name of this script
+The parsed models are all stored in the \emph{test} folder.
+They can be run by executing the following command in the base directory of the \emph{jaxFlowSim} repository
+
+\texttt{python run\_model.py <model\_name>}.
+
+The results of a succesfully simulated model can be found in the folder \emph{results/<model\_name>}.
+Finally a parameter inference can be run by executing
+
+\texttt{python run\_inference.py <model\_name>}.
+
+in the base directory as well.
+We note that the inferring of a parameter in this manner is very experimental and requires the user the hand tune the file \emph{src/inference.py}.
+However by running 
+
+\texttt{python run\_inference.py}.
+
+without an argument the toy problem from \autoref{sec:pi} can be computed.
+TODO: adjust last lines to reflect changes
+TODO: check references
+
+
+
 
 
 
