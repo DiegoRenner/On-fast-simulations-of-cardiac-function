@@ -90,11 +90,11 @@ ETH Zürich}
 \cleardoublepage
 
 \begin{acknowledgements}
-	Firstly I would like to thank Prof. Dr. Mishra form the Seminar of Applied Mathematics for giving me the opportunity to work on this project and guiding my process.	
+	Firstly I would like to thank Prof. Dr. Mishra form the Seminar of Applied Mathematics at ETH Zurich for giving me the opportunity to work on this project and guiding my process.	
 	I'm very grateful to have been able to work on this interesting topic and get the input of someone who is so experienced in the field of fluid dynamics and machine learning.
 
-	Furthermore I would like to thank Dr. Kissas and Dr. Moseley for having answered so many of my questions throughout this thesis.
-	Be it about the intricacies of JAX, the details of modelling haemodynamics, or the scientific writing process, I could always count on them for a solid answer despite their own busy schedule.
+	Furthermore I would like to thank Dr. Kissas and Dr. Moseley From the ETH AI Center for having answered so many of my questions throughout this thesis.
+	Be it about the intricacies of JAX, the details of modelling haemodynamics, or the scientific writing process, I could always count on them for a solid answer despite their own busy schedules.
 
 	Finally I would like to thank my family for supporting me throughout my studies and making it possible for me to pursue my interest in the sciences.
 
@@ -136,13 +136,13 @@ An attempt to avoid the problem of having to know these values is using populati
 This however defeats the purpose of personalized medicine.
 What has therefore become the method of choice to address the issue of personalized medicine using computational models is to build simulators that output the values of some desired biomarkers and to then try and solve the inverse problem of fitting the parameters of the simulator to a specific patient.
 
-There are two main ways of achieving the goal of calibrating a simulation for an individual
+There are two main ways of achieving the goal of calibrating a simulation for an individual:
 \begin{enumerate}
-	\item A "classical" approach, where the inverse problem is solved using Markov-Chain-Monte-Carlo \cite{melis2017gaussian}, or Kalman filters \cite{manganotti2022modeling}.
-	\item A deep-learning approach where the calibration is avoided all together in favour of learning the model from data. \cite{kissas2020machine,arzani2022machine}
+	\item A "classical" approach where the inverse problem is solved using Markov-Chain-Monte-Carlo samplers \cite{melis2017gaussian}, or Kalman filters \cite{manganotti2022modeling}.
+	\item A deep-learning approach where the calibration is avoided all together in favour of learning the model from data \cite{kissas2020machine,arzani2022machine}.
 \end{enumerate}
 The reason deep-learning techniques were attempted is due to the fact that the "classical" approaches are very inefficient.
-This is because in part because derivatives are often hard to determine for the attempted simulations so the algorithms of choice for solving the inverse problem are gradient-free. 
+This in part because derivatives are often hard to determine for the attempted simulations so the algorithms of choice for solving the inverse problem are gradient-free. 
 Moreover due to the models being very sensitive to their parameters and there being ambiguous solutions \cite{nolte2022inverse,quick2001infinite} these gradient-free algorithms have to be run at very small step sizes. \cite{taylor2009patient,tuccio2022parameter,marsden2014optimization,mineroff2019optimization,bozkurt2022patient}
 The ability to easily take gradients of one of these models with respect to it's parameters would greatly improve the process of personalizing it without loosing the interpretability as would be the case when using a deep-learning algorithm.
 Personalized medicine could specifically be aided by using gradients to more efficiently infer parameters or perform sensitivity analysis.
@@ -150,11 +150,11 @@ Personalized medicine could specifically be aided by using gradients to more eff
 Due to the complexity of the cardiovascular system and the significance of cardiovascular disease globally the mathematical and numerical modelling of haemodynamics has gained a lot of traction over recent years.
 Two of the main factors for this complexity are the multi-scale and multi-physics nature of the cardiovascular system that arises from vessels of strongly varying sizes and not much data being available for certain parts of these models to go off of \cite{quarteroni2016geometric}.
 The significance of cardiovascular disease and it's research stems from it being the most prevalent cause of death.
-Worldwide it leads to 17.3 million deaths per year as of 2015.
+Worldwide it lead to 17.3 million deaths per year as of 2015.
 This number is projected to increase by the year 2030 to more than 23.6 million. \cite{update2015heart}
 In Europe cardiovascular disease was responsible for close to one third (32.7\%) of all deaths in the year 2020 \cite{Coelho2020}.
-Cardiovascular systems have been well studied, from analytical solutions of simplified models.
-In order to tackle the complexity of the meaningful task of modelling cardiovascular systems numerical modelling has become prevalent \cite{formaggia2009multiscale,quarteroni2016geometric,black2020p14,el2018investigating,qureshi2014numerical,reichold2009vascular}.
+Cardiovascular systems have been well studied, from analytical solutions of simplified models to approximations of complex systems.
+In order to tackle this complexity of the meaningful task of modelling cardiovascular systems numerical modelling has become prevalent \cite{formaggia2009multiscale,quarteroni2016geometric,black2020p14,el2018investigating,qureshi2014numerical,reichold2009vascular}.
 The general issue described up until now, with regards to the difficulty of personalizing treatments, is also relevant when considering the cardiovascular system.
 
 Therefore, the goal of this work is to provide a fast, differentiable cardiovascular simulation.
@@ -175,7 +175,7 @@ In \autoref{chap:cvs} we will provide a basic understanding of the cardiovascula
 Thereafter, in \autoref{chap:1dm} we will describe the underlying 1D-model that we used to simulate blood flow in a single vessel.
 In \autoref{chap:nm} we explain how to solve this model numerically and how to couple multiple such models in order to simulate a cardiovascular network.
 Then, in \autoref{chap:impl}  we will describe key factors of how we implemented the numerical algorithms that solve our 1D-model.
-Finally, in \autoref{chap:resl} we validate this code and present the results produced by it.
+Finally, in \autoref{chap:resl} we validate this code and present the results produced by it, including a parameter inference performed on a toy problem.
 
 
 
@@ -308,7 +308,7 @@ The length and diameters of these vessels are on the scale of meters.
 According with which accuracy the system is supposed to be represented different dimensions of models can be chosen.
 3D-models for instance can represent such quantities as turbulence or wall shear stresses.
 1D-models cannot represent these 3D quantities but can still compute pressure and flow along an artery at reasonable accuracy while requiring significantly less computation than a 3D model.
-Finally 0D models such as the Windkessel model can represent the approximate behaviour at outlets of a network where it would be too costly to simulate every vessel individually with a 1d- or a 3D-model
+Finally 0D models such as the Windkessel model can represent the approximate behaviour at outlets of a network where it would be too costly to simulate every vessel individually with a 1D- or a 3D-model
 
 On one end of this spectrum (3D models) there is high accuracy but also high computational effort.
 On the other end (0D models) only very simplified structures can be represented but at a considerably lower cost.
@@ -345,7 +345,7 @@ is the velocity field, $P$ is the pressure, and $\mathbf{F}$ is any force acting
 Usually the NSE are considered to be made up of \autoref{eq:cont} and \autoref{eq:mass} as well as the energy equation.
 In our case the energy equation can be omitted due to us considering an incompressible Newtonian fluid and therefore there not being any temperature gradients in the fluid and there being no heat flux by conduction.
 Furthermore we also assume that heat generated by friction is negligible and that there are no heat sources.
-Finally wall displacement should be small enough for the work to be done by it on the fluid to be negligible. (TODO:reference)
+Finally wall displacement should be small enough for the work to be done by it on the fluid to be negligible. 
 We consider a vessel to be an axisymmetric tube along the $z$ axis in a cylindrical coordinate system $\left(z,r,\phi\right)$.
 Under the following assumptions the 3D-Navier-Stokes equations can be reduced to a 1D-model:
 
@@ -457,16 +457,16 @@ For this velocity profile the Coriolis coefficient is
 	\alpha = \frac{\gamma + 2}{\gamma + 1}.
 \end{equation}
 For $\gamma=2$, $\alpha = \frac{4}{3}$ this gives a plug flow, a rather flat velocity profile that decays rapidly at the artery walls.
-For $\gamma=9$, $\alpha = \frac{11}{10} $ we get a hyperbolic velocity profile and hence a Poiseuille-like flow. (TODO:plot?)\cite{köppl2023dimension} \cite{barnard1966theory}
+For $\gamma=9$, $\alpha = \frac{11}{10} $ we get a hyperbolic velocity profile and hence a Poiseuille-like flow. \cite{köppl2023dimension} \cite{barnard1966theory}
 
 We want to determine the variables $Q, A,$ and $P$.
 Until now we've considered the two equations of mass and momentum conservation determining $Q$ and $A$.
-In order to determine $P$ we therefore need another equation, a so called tube law.
+In order to close the system and determine $P$ we therefore need another equation, a so called tube law.
 There are many different ways to model the pressure $P$ within a deforming tube and there is no way that is considered the de facto right way.
 For a full comparison of a wide range of such models we refer to \cite{gomez2017analysis}.
 In the model used in this work the pressure $P$ is given by the external pressure $P_{ext}$ stemming from surrounding tissue as well as the pressure from the deformation of the vessel:
 \begin{equation}
-	P_{def}(z;t) := \frac{h_0(z) \sigma(z;t)}{r(z;t)}, \label{eq:pdef}
+	P_{def}(z;t) := \frac{h_0(z) \sigma(z;t)}{\pi r(z;t)}, \label{eq:pdef}
 \end{equation}
 given by the Young-Laplace law \cite{laplace1805traité} \cite{young1804essay}.
 Here $\sigma$ is the stress which describes the internal forces that neighbouring particles of the continuous material exert on each other.
@@ -475,12 +475,12 @@ Assuming linear elasticity (\autoref{it:lec}) and using Hooke's law \cite{hooke1
 	\sigma(z;t) := \epsilon(z;t) E \label{eq:stress},
 \end{equation}
 where $E$ describes the stiffness of the elastic material and is called Young's modulus.
-$\epsilon$ is the stress and gives the deformation of the material.
+The quantity $\epsilon$ is referred to as the stress and models the deformation of the material.
 Assuming an isotropic, homogeneous, and incompressible arterial wall, an axisymmetric deformation, and circular cross-sections (\autoref{it:nlc}) that are independent of each other $\epsilon$ is given by:
 \begin{equation}
 	\epsilon(z;t) := \frac{r(z;t)-r_0(z;t)}{ (1-\nu^2) r_0(z;t)}. \label{eq:strain}
 \end{equation}
-$\nu$ is the elasticity parameter or the Poisson's ratio.
+$\nu$ is the elasticity parameter or Poisson's ratio.
 It is the ratio of transverse contraction to longitudinal extension strain in the direction of the stretching force.
 Combining \autoref{eq:pdef}-\autoref{eq:strain} with a term for the external pressure $P_{ext}$ we get \cite{sherwin2003one} \cite{sherwin2003computational}: 
 \begin{align}
@@ -525,7 +525,7 @@ We can rewrite equation \ref{1deqs2} in it's conservative form by defining the f
 	-22\frac{\mu}{\rho}\frac{Q}{A} 
 	\end{bmatrix},
 \end{equation}
-where we have inserted \autoref{eq:p_tot} for $P$.
+where we have inserted \autoref{eq:p_tot} for $P$ and we have set Poisson's ration $\nu = \frac{1}{2}$ since biological tissue is nearly incompressible \cite{sherwin2003one}.
 The conservative form then reads:
 \begin{equation}
 	\begin{aligned}
@@ -690,7 +690,7 @@ In order to get a first approximation for the flux that needs to be computed the
 	The flux that are computed in both Riemann problems mentioned in this section are not solved for analytically but numerically using the conservative form of the Lax-Friedrichs scheme.
 	Given that the flux function is Lipschitz continuous, this scheme is conservative and consistent \cite{köppl2023dimension}.
 	In general it is first order accurate and stable for small enough step sizes (see \autoref{sec:cfl}). \cite{leveque1992numerical}
-	In order to be compatible with the next section we denote the computed approximation for $\mathbf{U}$ at timestep $n+1$ by $\bar{\mathbf{U}}^{n+1}$.
+	We denote the computed approximation for $\mathbf{U}$ at time-step $n+1$ by $\bar{\mathbf{U}}^{n+1}$.
 	In the next section we will be addressing how to handle the source term $\mathbf{S}$ that we have ignored here.
 
 	\section{Time step, source term} \label{sec:fe}
@@ -993,7 +993,7 @@ In order to get a first approximation for the flux that needs to be computed the
 	\end{equation}
 	where we have introduced the following notation in order to more easily write this system in a matrix-vector form
 	\begin{align}
-		\mathbf{q}&:= \{q\}_{k=1}^4 = \left[\begin{array}{llll}
+		\mathbf{q}&:= \{q_k\}_{k=1}^4 = \left[\begin{array}{llll}
 				u_{1,N}^{n+1}, & u_{2,0}^{n+1}, & \left( A_{1,N}^{n+1}\right)^{1 / 4}, & \left( A_{2,0}^{n+1} \right)^{1 / 4}
 		\end{array}\right]^T. 
 			\end{align}
@@ -1035,7 +1035,7 @@ In order to get a first approximation for the flux that needs to be computed the
 					\end{equation}
 					with the same shorthand notation as used when describing the Conjunctions and the following vector of variables
 					\begin{multline}
-						\mathbf{q}:=\{q\}_{k=1}^6 = \left[
+						\mathbf{q}:=\{q_k\}_{k=1}^6 = \left[
 							\begin{array}{lll}
 								u_{1,N}^{n+1}, & u_{2,0}^{n+1}, & u_{3,0}^{n+1},
 						\end{array} \right. \\
@@ -1074,7 +1074,7 @@ In order to get a first approximation for the flux that needs to be computed the
 							\end{equation}
 							Reusing the shorthand notation introduced when describing the Conjunctions and the following vector of variables
 							\begin{multline}
-								\mathbf{q}:=\{q\}_{k=1}^6=\left[
+								\mathbf{q}:=\{q_k\}_{k=1}^6=\left[
 									\begin{array}{lll}
 										u_{1,N}^{n+1}, & u_{2,N}^{n+1}, & u_{3,0}^{n+1}, 
 								\end{array} \right. \\
@@ -1173,13 +1173,14 @@ In order to get a first approximation for the flux that needs to be computed the
 							Another option would be to us one of the JAX loop constructions, the so-called JAX \emph{fori\_loop}.
 							This would avoid the large overhead at compile time.
 							However the restriction of having to have the same-sized arrays in every loop iteration would make the simulation either inherently inefficient or inherently in-accurate since very small vessels would have to simulated with fine meshes or vice versa large vessels with coarse meshes.
-							Therefore padding doesn't only allow for increased vectorization but also provides the ability to use an inhomogeneous mesh while keeping the compilation time relatively shorti at the same time.
+							Therefore padding doesn't only allow for increased vectorization but also provides the ability to use an inhomogeneous mesh while keeping the compilation time relatively short at the same time.
+							In some cases loops can't be avoided by padding alone but another technique called masking has to be applied which we will describe in the next section.
 
 							\subsection{Masking} \label{sec:msk}
 							At certain points within the MUSCL solver ghost cells need to be inserted at the edges of the vessels.
 							In order to avoid having to loop over the array and introducing the usual issues mentioned in the previous section that come along when using loops in JAX one can apply these values using a technique called masking.
 							In order to apply the wanted value to the ghost cells one needs to store five arrays.
-							Once the original array that needs to have ghost cells inserted padded with a zero on either end, two times the original array shifted forwards and backwardsuwith two zeros at the beginning or the end respectively, and two times a boolean array containing the locations of either the ghost cells at the inlet or the outlet.
+							Once the original array that needs to have ghost cells inserted padded with a zero on either end, two times the original array shifted forwards and backwards with two zeros at the beginning or the end respectively, and two times a boolean array containing the locations of either the ghost cells at the inlet or the outlet.
 							The padded original array, the forward shifted array and the boolean array with the locations of the ghost cells at the outlets can be combined with the JAX equivalent of the NumPy where function to insert the outlet ghost cells.
 							Equivalently for the original array, the shifted back array, the boolean array with the locations of the ghost cells at the inlets, and the inlet ghost cells.
 
@@ -1192,10 +1193,10 @@ In order to get a first approximation for the flux that needs to be computed the
 							Specifically we set initial data ($u(z;0)$, $A(z;0)$, $Q(z;0)$, \autoref{ssec:initial_conditions}) for each vessel, inlet data ($P(0;t)$ or $Q(0;t)$, \autoref{sssec:inlets}) at all inlets, outlet parameters ($R_t$, $R_1$, $C$, $R_2$, \autoref{sssec:outl}) for outlet vessels, mesh sizes ($\Delta x$, \autoref{sec:fv}) and parameters ($\beta$, $P_{ext}$, \autoref{sec:sv}) for each vessel, and global parameters ($\rho$, $T$, $C_{CFL}$, $N$, \autoref{sec:b},\autoref{sec:cfl}, where $N$ stands for the number of vessels in the network).
 							Then we generate the $J \times N$ matrix P\_t that will be used to store the pressure values at the centre of each vessel throughout one cardiac cycle.
 							Thereafter a while loop is initiated in lines \ref{ln:whout1} and \ref{ln:whout2} within which at each iteration an entire cardiac cycle of length $T$ is computed.
-							In this while loop we first set the time $t$ at which we want to simulate the system and a counter of time steps taken in the current cardiac cylce to $0$ in lines \ref{ln:t0}-\ref{ln:i0} and then we store a copy of the pressure data (line \ref{ln:cp}) so we can compare the two after storing the results from the upcoming solver in the new copy.
+							In this while loop we first set the time $t$ at which we want to simulate the system and a counter of time steps taken in the current cardiac cycle to $0$ in lines \ref{ln:t0}-\ref{ln:i0} and then we store a copy of the pressure data (line \ref{ln:cp}) so we can compare the two after storing the results from the upcoming solver in the new copy.
 
 							Each cardiac cycle is itself described by a while-loop that computes the next time step (line \ref{ln:cfl}) using the $C_{CFL}$ parameter as in \autoref{sec:cfl}, updates boundary values (line \ref{ln:bv}) as in \autoref{ssec:boundary_values} by using either a reflective model with the parameter $R_t$ or a Windkessel model using the parameters $R_1$, $C$, $R_2$, executes the MUSCL solver described in \autoref{sec:muscl} over all vessels (line \ref{ln:muscl}) advancing $\mathbf{U}_i^{n}$ to $\mathbf{U}_i^{n+1}$ $\forall i \in \{1,...,M\}$, saves the pressure at the centre of each vessel for each individual time-step (line \ref{ln:svp}), and finally increases the time by the time-step that was just computed (line \ref{ln:updt}) and the time-step counter by $1$ (line \ref{ln:updi}).
-							This while loop also contains a condition that wil exit the loop if more than $J$ time-stpes have ben computed for the current cardiac cycle.
+							This while loop also contains a condition that will exit the loop if more than $J$ time-steps have been computed for the current cardiac cycle.
 							After computing a cardiac cycle the saved pressures are compared to the ones from the previous cardiac cycle at each vessel and the old pressure values are overwritten by the new ones (line \ref{ln:ow2} - \ref{ln:conv}).
 							Cardiac cycles are computed until the pressure differences in each vessel are smaller than $0.1$ mmHg in the euclidean norm which is expressed by line \ref{ln:conv}.
 							This is in accordance with the comment made in \autoref{ssec:initial_conditions} about a steady state needing to be reached in order to get rid of negative effects from imprecisely set initial conditions.
@@ -1231,26 +1232,27 @@ def runSimulation(config_filename, J)
 						This was done by applying padding (\autoref{sec:pdd}) and masking (\autoref{sec:msk}) allowing for JAX to better optimize this code section and leverage GPU resources more effectively as opposed to an implementation using loops.
 						Finally what is denoted in \autoref{lst:pc} by \emph{simulation\_data} consists of multiple 2D-arrays containing global constants, vessel constants, and simulation quantities.
 						While this is less accessible to read than for instance having a class that describes a vessel it allows for more efficient data movement and to more easily adhere to JAX's requirements when using their loop constructs or their optimizations overall.
-						More details on the code as well as instructions on how to parse model configuration from different sources and run said models can be found in \autoref{app:doc} TODO:fit to ressources in appendix.
+						Details on how to run the model we described here, as well as instructions on how to parse model configurations from different sources and perform parameter inference, can be found in \autoref{app:doc}. 
+						In the next chapter we will go over the results we got from running our code.
 
 
 
 						\chapter{Results} \label{chap:resl}
 						In this chapter we will present the results produced with our JAX implementation of the haemodynamics solver described in \autoref{chap:1dm} and \autoref{chap:nm}. 
-						Firstly we will validate the code against previous work in \autoref{sec:val}.
+						Firstly we will validate the code against previous work in \autoref{sec:val} and compare the time taken to compute models between our implementation and the implementation used for validation.
 						Then, in \autoref{sec:da} we will show some examples of simulations that were run on different anatomies using our implementation.
 						In \autoref{sec:sc} we will talk about scaling with respect to the compile time and run time of our code.
-						Finally in \autoref{sec:pi} we describe an example of the code performing parameter inference. TODO: make sure this exists
+						Finally in \autoref{sec:pi} we describe an example of the code performing parameter inference. 
 
-					\section{Validation} \label{sec:val}
+					\section{Validation and Comparison} \label{sec:val}
 						In order to validate our code we compared it to the 1D-haemodynamics solver openBF \cite{openBF} that was written and validated during the course of the thesis \cite{melis2017gaussian}.
 						That code was written in the julia programming language \cite{julia}.
 						We chose four models that will be introduced more closely in \autoref{sec:da}.
 						We present from each model a randomly selected vessel and compare the pressure wave over one cardiac cycle in the middle of said vessel.
 						The four models consist of 9, 17, 19, and 77 vessel segments each.
-						That means 9, 17, 19, and 77 segments that each get treated as an individual vessel on which the 1D-NSEs have to be solved (\autoref{sec:sv}) and that have to be coupled to oneanother by solving the connecting junctions (\autoref{sssec:junctions}).
-						The result of comparing the codes can be seen in \autoref{fig:val} where the \emph{P\_JAX} refers to the pressure computed by our code throughtout one cardiac cylcle and \emph{P\_jl} refers to the equivalent values from the openBF code.
-						\begin{figure} [!ht]
+						That means 9, 17, 19, and 77 segments that each get treated as an individual vessel on which the 1D-NSEs have to be solved (\autoref{sec:sv}) and that have to be coupled to one another by solving the connecting junctions (\autoref{sssec:junctions}).
+						The result of comparing the codes can be seen in \autoref{fig:val} where the \emph{P\_JAX} refers to the pressure computed by our code throughout one cardiac cycle and \emph{P\_jl} refers to the equivalent values from the openBF code.
+						\begin{figure} [H]
 							\centering
 							\includegraphics[width=0.4\columnwidth]{figures/0007_H_AO_H_right_subclavian_artery_P.eps}
 							\includegraphics[width=0.4\columnwidth]{figures/0029_H_ABAO_H_celiac_branch_P.eps
@@ -1262,6 +1264,19 @@ def runSimulation(config_filename, J)
 \end{figure}
 The plots show that for each model there is barely any difference in the output of the two vascular simulations.
 Furthermore there is a less than $1\%$ relative error between openBF's and our implementation which validates our codes correctness.
+We also compared the time each of the simulators took to run model with varying numbers of vessel segments.
+For this the models were run 10 times each and the computation time was calculated by taking the average of these 10 measurements.
+The results can be seen in \autoref{fig:comparison}.
+\begin{figure} [H]
+	\centering
+	\includegraphics[width=0.8\columnwidth]{figures/comparison.eps}
+	\caption{Smaller systems suffer from the overhead JAX compilation creates but for larger models the execution times become equal. For the largest model the JAX code even beats the julia implementation.}
+	\label{fig:comparison}
+\end{figure}
+As is to be expected for smaller models the JAX code performs worse than the julia code do to the overhead of the JAX compilation not paying of.
+However it can be seen that the optimizations start to pay of as the simulated network size increases, where the JAX code finally is faster then the julia implementation at $77$ vessel segments.
+These comparisons were produced on a Xeon E3-1505 v6 with 4 cores and 8 threads, a base frequency of 3.0GHz and a maximum turbo frequency of 4.0GHz, 8MB of cache, and 16GB of DDR4 memory clocked at 2400MT.
+In the next section we will discuss the results computed by our JAX implementation of the 1D-haemodynamics solver.
 
 \section{Different Anatomies} \label{sec:da}
 We present here the pressure waves simulated by our code on four different models.
@@ -1440,27 +1455,51 @@ Given data the differentiability of the code could be leveraged to perform param
 
 \section{Scaling} \label{sec:sc}
 As mentioned in \autoref{sec:jax} on JAX there is a significant overhead to the compilation JAX performs in order to optimize.
-This begs the question if the compilation dominates the total computation time and how the compilation time scales for growing numbers of vessel segments in a simulated network.
+This begs the question if the compilation dominates the computation time and how the compilation time scales for growing numbers of vessel segments in a simulated network.
+Here computation time includes the duration of the compilation and the simulation of a model while the compilation time only describes the time JAX needs to compile before the actual simulation.
 If the compilation time doesn't increase much even for larger models this would mean that for big enough systems the compilation overhead could pay off.
-The compilation and total computation time have been plotted for simulations with different numbers of vessel segments in \autoref{fig:timing}
-These timings were produced on a Xeon E3-1505 v6 with 4 cores and 8 threads, a base frequency of 3.0GHz and a maximum turbo frequency of 4.0GHz, 8MB of cache, and 16GB of DDR4 memory clocked at 2400MT.
+The compilation and computation time have been plotted for simulations with different numbers of vessel segments in \autoref{fig:timing}.
+These timings were produced on the same setup as described in \autoref{sec:val}.
 \begin{figure} [!ht]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{figures/timing.eps}
 	\caption{The compile time doesn't grow significantly with increasing numbers of vessel segments due to built-in Python loops being avoided which would be costly to compile due to the loops having to be unrolled. Total compute times seem to scale linearly w.r.t. the number of vessel segments with the exception of the 19 vessel segment simulation.}
 	\label{fig:timing}
 \end{figure}
-The compile time remains almost constant around 3s even as the number of vessel segments increases over two magnitudes of order.
-This is due to the methods described in \autoref{sec:al}.
-Due to avoiding built-in python loops in favour of JAX loop constructions the compile time is kept more or less static since these kind of loops don't have to be unrolled during compilation.
+The compile time remains almost constant around 3 seconds even as the number of vessel segments increases about $80$ times.
+This is due to the methods applied that were described in \autoref{sec:al}.
+Specifically due to avoiding built-in python loops in favour of JAX loop constructions the compile time is kept more or less static since these kind of loops do not have to be unrolled during compilation.
 Hence there is barely any additional effort involved with compiling for larger network simulations.
-In general the compile time is only a fraction of the total compute time once a certain amount of vessels is considered in the simulation and becomes and it becomes insignificant with growing model sizes.
-It can also be observed that total compute time shows linear scaling as a function of the number of vessel segments when considering the 20 vessel segment data point to be an outlier.
+In general the compile time is only a fraction of the compute time once a certain amount of vessels is considered in the simulation and it becomes insignificant with growing model sizes.
+It can also be observed that the compute times shows linear scaling as a function of the number of vessel segments when considering the 19 vessel segment data point to be an outlier.
 Convergence within a simulation is heavily dependent on the specific network that is being simulated.
-Therefore it is reasonable to assume that there will be outliers when comparing the compute time between simulations with different underlying networks.
+Therefore it is reasonable to assume that there will be outliers when comparing the compute times between simulations with different underlying networks.
+
+It is important to notice that these timings were computed on a CPU since the performance of our implementation is better on CPUs as opposed to GPUs.
+This could maybe be improved by farther optimizing the code but most likely also stems at least partially from the fact that a 1D-model as we use it does not lend itself well to efficient GPU execution.
+This is due to the operations being performed not being able to leverage the massive parallelism a GPU offers since the spatial mesh used for the numeric approximation is not very big and the time steps have to be solved sequentially.
+However for larger models than the ones presented here and running multiple models in parallel it might still be advantageous to run on a GPU.
+%A possible improvement we might suggest however is to avoid solving the junctions by solving many small linear systems of equations and instead solving one large sparse system.
+In the upcoming final section of this chapter we will present a parameter inference on a toy problem.
 
 
 \section{Parameter Inference} \label{sec:pi}
+In order to demonstrate the ability of our code to perform a parameter inference we present here a toy problem.
+For this toy problem we try to infer a parameter of a system consisting of a single bifurcation as described in \autoref{sssec:junctions}.
+Here we tried to infer one of the $R_1$ parameters of the Windkessel models (\autoref{sssec:outl}) at the two outlets of the three vessel system.
+In order to perform the inference, the No-U-Turn Sampler (NUTS) \cite{hoffman2014no} was used to perform a Hamiltonian Monte Carlo \cite{duane1987hybrid} optimization with adaptively set path lengths.
+Before being able to do the optimization we simulated a baseline using the solver introduced during the course of this thesis with a reasonable value for the Windkessel parameter to be inferred.
+We set the parameter to $\hat{R}_1=6.8123 \times 10^7$.
+The output of this simulation will be used as the target of the optimization algorithm.
+ 
+Once our baseline was computed we initialized a prior $\bar{R}_1 \sim 10^8 \times \mathcal{N}(0,1)$ around an offset value of our original Windkessel parameter $\hat{R}_1$.
+Our observed data from the baseline computation and the prior we just defined were provided in a model to the \emph{NumPyro} \cite{phan2019composable,bingham2019pyro} implementation of the Markov-Chain-Monte-Carlo method using the NUTS sampler.
+The optimizer was run with 10 warm-up-steps and 100 sample-steps.
+The parameter inference took roughly one hour and returned $7 \times 10^7$ as the mean for the posterior of $\bar{R}_1$ leading to a relative error of about $2.5\%$.
+
+While this is a very small system and the time taken to perform the inference is quite high we present this example as proof that our code is differentiable and that parameter inference can be performed by applying this differentiability.
+For more efficient and broader inferences extensive tuning and further optimization might be necessary. We refer the interested reader to \autoref{app:doc} in order to run the toy problem described here.
+In the upcoming final chapter we will summarize our results produced in this thesis and give an outlook upon future work that this contribution might be a precursor to.
 
 \chapter{Conclusion/ Future Work}
 To conclude this work we state the goal that this thesis set out to accomplish, the methods applied and the result thereof.
@@ -1471,14 +1510,15 @@ The aim of having the solver be differentiable is to enable efficient parameter 
 
 The construction of a differentiable solver was successful and was achieved using well established methods such as the reduction of the 3D-NSE to their 1D equivalent in \autoref{sec:sv} and the solving of these equations using the MUSCL numerical method in \autoref{sec:muscl}.
 The differentiability specifically results from the implementation in JAX.
-We could demonstrate that our code reproduces the results from previous work and does so while the execution time scales linearly w.r.t. the number of vessels and the compilation time is near constant over different network constellations (\autoref{sec:val}, \autoref{sec:sc}).(TODO: add comparison to julia and GPU execution and mention here)
+We could demonstrate that our code reproduces the results from previous work and does so while the execution time scales linearly w.r.t. the number of vessels and the compilation time is near constant over different network constellations (\autoref{sec:val}, \autoref{sec:sc}).
 Furthermore we showed that our solver can produce physiologically realistic results on models that were produced from 3D geometries \autoref{sec:da}.
-Regarding parameter inference we could demonstrate it's feasibility on a toy problem (TODO: change to reflect results from parameter inference).
+Regarding parameter inference we could demonstrate it's feasibility on a toy problem.
 
 While the main goal of making a differentiable 1D-haemodynamics solver was achieved there are still issues that need to be addressed.
 First off there may be potential to improve execution times on GPUs, especially the solving of junctions. 
-This consists of solving many small linear systems which is not a workload that offers it self readily to GPU optimization.
+This consists of solving many small linear systems which is not a workload that offers itself readily to GPU optimization.
 Reformulating this part of the solver, perhaps in the form of one large sparse system may lend itself better to execution on the GPU.
+Despite this being an inefficient way of solving the problem when computing naively, on a GPU and combined with the optimizations from JAX this might lead to better performance.
 It is also possible that the advantages of computing on a GPU could only be leveraged for very large systems or when running many simulations simultaneously.
 This would have to be explored more closely.
 
@@ -1494,7 +1534,7 @@ A prime example for this is the tube law, here described by \autoref{eq:p_tot}.
 While there is a lot of literature suggesting and comparing different methods of computing the tube law there is no method that is considered to be the best or even fundamentally correct \cite{gomez2017analysis}.
 It would therefore be interesting to use data to infer this law and compare the results to the values obtained by using one of the given models from the literature.
 
-In general we believe this work offers fruitful ground for future contributions, be it through producing an even faster and more GPU friendly differentiable solver or using the existing solver to learn parameters and underlying laws.
+In general we believe this work offers fruitful ground for future contributions, be it through producing an even faster and more GPU friendly differentiable solver or using the existing solver to learn parameters and underlying laws of 1D-haemodynamic solvers.
 
 
 
@@ -1506,7 +1546,7 @@ In general we believe this work offers fruitful ground for future contributions,
 \appendix
 \chapter{Code Documentation/ Manual} \label{app:doc}
 The code written for this thesis can be found at \cite{jaxflowsim}.
-It offers the ability to parse models, run models, and infere parameters.
+It offers the ability to parse models, run models, and infer parameters.
 The parsing scripts can be found in the \emph{parsing} folder.
 Models can be parsed from two different formats.
 The first format being models provided by \cite{vascularmodel}.
@@ -1523,13 +1563,13 @@ Then the models can be parsed by running
 
 \texttt{python parse\_bf.py <model\_name> <model\_sub\_dir>}
 
-where depending on the model the \emph{model\_sub\_dir} argument might not be relevant. TODO: change name of this script
+where depending on the model the \emph{model\_sub\_dir} argument might not be relevant. 
 The parsed models are all stored in the \emph{test} folder.
 They can be run by executing the following command in the base directory of the \emph{jaxFlowSim} repository
 
 \texttt{python run\_model.py <model\_name>}.
 
-The results of a succesfully simulated model can be found in the folder \emph{results/<model\_name>}.
+The results of a successfully simulated model can be found in the folder \emph{results/<model\_name>}.
 Finally a parameter inference can be run by executing
 
 \texttt{python run\_inference.py <model\_name>}.
@@ -1541,8 +1581,6 @@ However by running
 \texttt{python run\_inference.py}.
 
 without an argument the toy problem from \autoref{sec:pi} can be computed.
-TODO: adjust last lines to reflect changes
-TODO: check references
 
 
 
