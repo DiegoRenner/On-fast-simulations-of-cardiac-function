@@ -1501,7 +1501,7 @@ The output of this simulation will be used as the target of the optimization alg
  
 Once our baseline was computed we initialized a prior $\bar{R}_1 \sim 10^8 \times \mathcal{N}(0,1)$ around an offset value of our original Windkessel parameter $\hat{R}_1$.
 Our observed data from the baseline computation and the prior we just defined were provided in a model to the \emph{NumPyro} \cite{phan2019composable,bingham2019pyro} implementation of the Markov-Chain-Monte-Carlo method using the NUTS sampler.
-The optimizer was run with 10 warm-up-steps and 100 sample-steps.
+The optimizer was run with 10 warm-up-steps and 200 sample-steps.
 The parameter inference took roughly one hour and returned $7 \times 10^7$ as the mean for the posterior of $\bar{R}_1$ leading to a relative error of about $2.5\%$.
 
 While this is a very small system and the time taken to perform the inference is quite high we present this example as proof that our code is differentiable and that parameter inference can be performed by applying this differentiability.
