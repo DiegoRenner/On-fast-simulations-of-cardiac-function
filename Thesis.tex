@@ -2,7 +2,6 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{graphicx}
 \usepackage{float}
 \usepackage{cprotect}
 \usepackage{listings}
@@ -14,15 +13,6 @@
 \usepackage[outdir=./figures/]{epstopdf}
 \usepackage{titlesec}
 
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{graphicx}
-\usepackage{float}
-\usepackage{cprotect}
-\usepackage{listings}
-\usepackage{xcolor}
-\usepackage{dirtree}
-\usepackage[labelfont=bf,font=small,skip=5pt]{caption}
 
 \setcounter{secnumdepth}{3}
 \usepackage{hyperref}
@@ -1226,9 +1216,9 @@ def runSimulation(config_filename, J)
 			simulation_data = muscl(simulation_data, dt) |\label{ln:muscl}|
 			P_t[i,:] = savePressure(simulation_data) |\label{ln:svp}|
 			t = t + dt |\label{ln:updt}|
-			i = i + 1 |\label{ln:updi}|
-			if i >= J
-				break
+		i = i + 1 |\label{ln:updi}|
+		if i >= J
+			break
 		converged = checkConv(P_t, P_t_temp) |\label{ln:conv}|
 						\end{lstlisting}
 						It is noted that the computation of the boundary conditions in line \ref{ln:bv} requires a for loop.
