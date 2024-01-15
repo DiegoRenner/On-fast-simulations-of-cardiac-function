@@ -966,7 +966,7 @@ In order to get a first approximation for the flux that needs to be computed the
 		\beta_{1,N} \left( \frac{\sqrt{A_{1,N}^{n+1}}}{\sqrt{A_{0,1,N}}}-1\right)+\frac{1}{2} \rho \left( u_{1,N}^{n+1} \right) ^2 \\
 		-\beta_{2,0} \left( \frac{\sqrt{A_{2,0}^{n+1}}}{\sqrt{A_{0,2,0}}}-1\right)+\frac{1}{2} \rho \left( u_{2,0}^{n+1} \right)=0,
 	\end{multline}
-	where $\beta_{1,N}$, $A_{0,1,N}$ and $\beta_{2,N}$, $A_{0,2,0}$ are the elasticity coefficient and the cross-section at the outlet of the first vessel and the inlet of the second vessel respectively.
+	where $\beta_{1,N}$, $A_{0,1,N}$ and $\beta_{2,N}$, $A_{0,2,0}$ are the elasticity coefficient and the reference cross-section at the outlet of the first vessel and the inlet of the second vessel respectively.
 	The first and the second term represent the pressure coming from the arterial wall.
 	The second and the third term describe the kinetic pressure stemming from the fluid itself.
 	Finally, analogously as in \autoref{sssec:outl}, we introduce the virtual state $A^*$, $u^*$ that generates from the two states $A_L$, $u_L$ and $A_R$, $u_R$
@@ -976,15 +976,15 @@ In order to get a first approximation for the flux that needs to be computed the
 	\end{align}
 	This also equates to 
 	\begin{align}
-		W_1^* = u_{2,0}^{n+1} + 4c_{2,0}^{n+1} = u_{2,0}^{n+1} + 4k_{2,0} \left( A_{2,0}^{n+1} \right)^{\frac{1}{4}}, \\
-		W_2^* = u_{1,N}^{n+1} + 4c_{1,N}^{n+1} = u_{1,N}^{n+1} + 4k_{1,N} \left( A_{2,0}^{n+1} \right)^{\frac{1}{4}}.
+		W_1^* = u_{2,0}^{n+1} - 4c_{2,0}^{n+1} = u_{2,0}^{n+1} - 4k_{2,0} \left( A_{2,0}^{n+1} \right)^{\frac{1}{4}}, \\
+		W_2^* = u_{1,N}^{n+1} + 4c_{1,N}^{n+1} = u_{1,N}^{n+1} + 4k_{1,N} \left( A_{1,N}^{n+1} \right)^{\frac{1}{4}}.
 	\end{align}
 	where $k_{l,i} := \sqrt{\frac{\beta_{l,i}}{2\rho}}$ for $l \in \{1,2\}$, $i \in \{0,1,...N\}$.
 	This leads to the system of equations:
 	\begin{equation}
 		\mathbf{f}(\mathbf{q}) := \left[\begin{array}{c}
-				q_{1}+4 k_{1,N} q_{3}-W_{1,N}^* \\
-				q_{2}-4 k_{2,0} q_{4}-W_{2,0}^* \\
+				q_{1}+4 k_{1,N} q_{3}-W_{2}^* \\
+				q_{2}-4 k_{2,0} q_{4}-W_{1}^* \\
 				q_{1} q_{3}^4-q_{2} q_{4}^4 \\
 				\beta_1\left(\frac{q_{3}^2}{A_{0,1,N}^{1 / 2}}-1\right)+\frac{1}{2} \rho q_{1}^2-\beta_2\left(\frac{q_{4}^2}{A_{0,2,0}^{1 / 2}}-1\right)-\frac{1}{2} \rho q_{2}^2
 		\end{array}\right] \equiv 0, 
