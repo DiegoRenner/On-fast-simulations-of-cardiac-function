@@ -536,7 +536,7 @@ The conservative form then reads:
 where we have added initial values $\mathbf{U}_0$ and boundary conditions $\mathbf{U}_L$ and $\mathbf{U}_R$ so that equation \ref{eq:1deqs3} now yields a well posed problem.\cite{formaggia2010cardiovascular}
 This concludes the description of the 1D-model for a single artery.
 The explicit setting of the aforementioned initial conditions and boundary values needs to be modelled as well.
-However we will dress this in \autoref{sec:icbc} of the next chapter after introducing our numerical methods and some notations that will make it easier to describe the assigning of initial conditions and boundary values.
+However we will address this in \autoref{sec:icbc} of the next chapter after introducing our numerical methods and some notations that will make it easier to describe the assigning of initial conditions and boundary values.
 
 
 
@@ -1460,7 +1460,7 @@ These timings were produced on the same setup as described in \autoref{sec:val}.
 \begin{figure} [!ht]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{figures/timing.eps}
-	\caption{The compile time doesn't grow significantly with increasing numbers of vessel segments due to built-in Python loops being avoided which would be costly to compile due to the loops having to be unrolled. Total compute times seem to scale linearly w.r.t. the number of vessel segments with the exception of the 19 vessel segment simulation.}
+	\caption{The compile time doesn't grow significantly with increasing numbers of vessel segments due to built-in Python loops being avoided which would be costly to compile due to the loops having to be unrolled. Total compute times seem to scale linearly w.r.t. he number of vessel segments with the exception of the 19 vessel segment simulation.}
 	\label{fig:timing}
 \end{figure}
 The compile time remains almost constant around 3 seconds even as the number of vessel segments increases about $80$ times.
