@@ -715,9 +715,9 @@ In order to get a first approximation for the flux that needs to be computed the
 	It is difficult to determine useful initial conditions for a haemodynamics computation.
 	What is usually done therefore is to simply set
 	\begin{align}
-		u(z;0) &\equiv 0, &z \in [0,l]\\
-		A(z;0) &= A_0(z), &z \in [0,l] \\
-		Q(z;0) &= u(z;0)A(z;0) = 0, &z \in [0,l].
+		u(z;0) &\equiv 0, &z \in [0,l],\\
+		A(z;0) &= A_0(z), &z \in [0,l], \\
+		Q(z;0) &= u(z;0)A(z;0) \equiv 0, &z \in [0,l].
 	\end{align}
 	The pressure $P$ is then computed by \autoref{eq:p_tot}.
 	The physically inaccurate initial conditions can lead to false values propagating when solving the system.
