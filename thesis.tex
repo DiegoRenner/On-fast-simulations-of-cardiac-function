@@ -80,10 +80,10 @@ ETH Zürich}
 \cleardoublepage
 
 \begin{acknowledgements}
-	Firstly I would like to thank Prof. Dr. Mishra form the Seminar of Applied Mathematics at ETH Zurich for giving me the opportunity to work on this project and guiding my process.	
+	Firstly I would like to thank Prof. Dr. Mishra from the Seminar of Applied Mathematics at ETH Zurich for giving me the opportunity to work on this project and guiding my process.	
 	I'm very grateful to have been able to work on this interesting topic and get the input of someone who is so experienced in the field of fluid dynamics and machine learning.
 
-	Furthermore I would like to thank Dr. Kissas and Dr. Moseley From the ETH AI Center for having answered so many of my questions throughout this thesis.
+	Furthermore I would like to thank Dr. Kissas and Dr. Moseley from the ETH AI Center for having answered so many of my questions throughout this thesis.
 	Be it about the intricacies of JAX, the details of modelling haemodynamics, or the scientific writing process, I could always count on them for a solid answer despite their own busy schedules.
 
 	Finally I would like to thank my family for supporting me throughout my studies and making it possible for me to pursue my interest in the sciences.
@@ -100,7 +100,8 @@ ETH Zürich}
 	Since cardiovascular diseases are the leading cause of death globally they are a prime target to which to apply the personalised medicine approach.
 	In this field however, the caveat in personalised medicine of difficult to access biomarkers applies as well.
 	Therefore this thesis aims to produce a differentiable 1D-haemodynamics solver based on well understood methods such as the 1D-Navier-Stokes equations and their treatment via the MUSCL numerical scheme.
-	The underlying motivation thereof being the bridging of the gap between inefficient and hard to interpret models by providing a faster method to perform parameter inference and sensitivity analysis while keeping the interpretability of the well understood mathematical models and numerical methods.
+	The underlying motivation thereof being the bridging of the gap between inefficient and hard to interpret models.
+	By providing a faster method to perform parameter inference and sensitivity analysis through differentiability while keeping interpretability of the well understood mathematical models and numerical methods, the best of both worlds is combined.
 	The results of our solver were validated using data from previous work in the 1D-haemodynamics field and we demonstrated that parameter inference can be performed using our model.
 
 \end{abstract}
@@ -135,7 +136,7 @@ There are two main ways of achieving the goal of calibrating a simulation for an
 The reason deep-learning techniques were attempted is due to the fact that the "classical" approaches are very inefficient.
 This is in part because derivatives are often hard to determine for the attempted simulations so the algorithms of choice for solving the inverse problem are gradient-free. 
 Moreover due to the models being very sensitive to their parameters and there being ambiguous solutions \cite{nolte2022inverse,quick2001infinite} these gradient-free algorithms have to be run at very small step sizes. \cite{taylor2009patient,tuccio2022parameter,marsden2014optimization,mineroff2019optimization,bozkurt2022patient}
-The ability to easily take gradients of one of these models with respect to it's parameters would greatly improve the process of personalising it without loosing the interpretability as would be the case when using a deep-learning algorithm.
+The ability to easily take gradients of one of these models with respect to it's parameters would greatly improve the process of personalising it without losing the interpretability, as would be the case when using a deep-learning algorithm.
 Personalised medicine could specifically be aided by using gradients to more efficiently infer parameters or perform sensitivity analysis.
 
 %Due to the complexity of the cardiovascular system and the significance of cardiovascular disease globally the mathematical and numerical modelling of haemodynamics has gained a lot of traction over recent years.
@@ -144,14 +145,14 @@ The cardiovascular system and cardiovascular disease are prime targets for the a
 The significance of cardiovascular disease and it's research stems from it being the most prevalent cause of death.
 Worldwide it lead to 17.3 million deaths per year as of 2015.
 This number is projected to increase by the year 2030 to more than 23.6 million. \cite{update2015heart}
-In Europe cardiovascular disease was responsible for close to one third (32.7\%) of all deaths in the year 2020 \cite{Coelho2020}.
-Therefore cardiovascular systems have been well studied, from analytical solutions of simplified models to approximations of complex systems.
-In order to tackle this complexity of the meaningful task of modelling cardiovascular systems numerical modelling has become prevalent \cite{formaggia2009multiscale,quarteroni2016geometric,black2020p14,el2018investigating,qureshi2014numerical,reichold2009vascular}.
+In Europe, cardiovascular disease was responsible for close to one third (32.7\%) of all deaths in the year 2020 \cite{Coelho2020}.
+Therefore, cardiovascular systems have been well studied from analytical solutions of simplified models to approximations of complex systems.
+In order to tackle this complexity of the meaningful task of modelling cardiovascular systems, numerical modelling has become prevalent \cite{formaggia2009multiscale,quarteroni2016geometric,black2020p14,el2018investigating,qureshi2014numerical,reichold2009vascular}.
 The issue of needing access to hard to obtain biomarkers and the pitfalls of the existing simulations providing such biomarkers hold as well in the case of cardiovascular disease.
 
 Therefore, the goal of this work is to provide a fast, differentiable cardiovascular simulation.
 This is a step towards enabling efficient and interpretable model calibration to be applied in personalised medicine.
-In order to be differentiable the haemodynamics solver written in the course of this thesis was written using the JAX library \cite{jax123}.
+In order to be differentiable, the haemodynamics solver written in the course of this thesis was written using the JAX library \cite{jax123}.
 On top of differentiability, JAX also offers device agnostic execution.
 That is, JAX optimizes the written code to take advantage of parallelization and other advantages of modern hardware regardless of being executed on a CPU, GPU or TPU.
 The optimization for GPU execution is especially useful since it allows for data parallelization, i.e. batch executions of the code on a single device.
@@ -161,7 +162,7 @@ We also provide the written code as is in an open-source manner hoping to aid pr
 In order to write this code there were many modelling assumptions to be made before attempting to implement the solver.
 
 For this thesis we chose a coupled 0D-1D model where the 0D-component is used to compute boundary conditions for certain outlets of the 1D-cardiovascular network.
-While failing to capture complex flow patterns and wall shear stress as opposed to a 3D-model the 1D-model can still simulate pulse wave transmission and systemic wave reflection effects.
+While failing to capture complex flow patterns and wall shear stress as opposed to a 3D-model, the 1D-model can still simulate pulse wave transmission and systemic wave reflection effects.
 Clearly 1D-models also offer a big advantage in execution time as opposed to 3D-models. \cite{shi2011review,pfaller2020using,arzani2022machine} 
 Finally, before starting out by giving a description of the cardiovascular system as a baseline for our understanding when describing the modelling approach, we provide an outlook on the content of this thesis in the following paragraph.
 
@@ -170,7 +171,7 @@ Thereafter, in \autoref{chap:1dm} we will describe the underlying 1D-model that 
 In \autoref{chap:nm} we explain how to solve this model numerically and how to couple multiple such models in order to simulate a cardiovascular network.
 Then, in \autoref{chap:impl}  we will describe key factors of how we implemented the numerical algorithms that solve our 1D-model.
 In the second to last chapter, \autoref{chap:resl}, we validate this code and present the results produced by it, including a parameter inference performed on a toy problem.
-Lastly we conclude this work by summarizing our results and giving an outlook on future work in \autoref{chap:conc}.
+Lastly, we conclude this work by summarizing our results and giving an outlook on future work in \autoref{chap:conc}.
 
 
 
@@ -232,10 +233,10 @@ We start off with a macro view of the cardiovascular system.
 The cardiovascular system contains two major circulatory systems.
 These are the systemic and the pulmonary circulation. 
 Both are fed with blood pumped from the heart.
-Through the systemic circulation organs are supplied with oxygen-rich blood which is then transported back to the heart, where it enters the pulmonary circulation.
-Through the pulmonary circulation the oxygen-poor blood is sent to the lungs, where it is replenished with oxygen and then returned to the heart to re-enter the systemic circulation.
+Through the systemic circulation, organs are supplied with oxygen-rich blood which is then transported back to the heart, where it enters the pulmonary circulation.
+Through the pulmonary circulation, the oxygen-poor blood is sent to the lungs, where it is replenished with oxygen and then returned to the heart to re-enter the systemic circulation.
 Vessels carrying the blood away from the heart are referred to as arteries and the ones carrying the blood to the heart are referred to as veins.
-In both the systemic and the pulmonary circulation the oxygen exchange (from blood to organs or from lungs to blood respectively) take place within so called capillary vessels.
+In both the systemic and the pulmonary circulation, the oxygen exchange (from blood to organs or from lungs to blood respectively) takes place within so-called capillary vessels.
 Capillaries are very small vessels that connect arteries to veins. \cite{köppl2023dimension}
 From here on out our main focus will be on on the arteries of the systemic circulation since our simulation approach will assume the heart to be represented by pre-computed data and the effect of the capillary bed and the veins will be accounted for by a lumped parameter model (0D-model, \autoref{sssec:outl}).
 We also define the notation for $T$ as the duration of one cardiac cycle (the time between the beginnings of two subsequent heartbeats).
@@ -244,13 +245,13 @@ In the next two subsections we will describe the main characteristics of the art
 \section{Arterial Wall} \label{sec:aw}
 An arterial wall consists of three layers or tunicae: an inner, middle, and outer layer also referred to as intima, media, and adventita respectively.
 The tunica intima lines the inside of the artery. It is made up of a single layer of endothelial cells encased in a thin layer of elastin and collagen fibres (connective tissue). 
-On the outside of the artery the tunica adventita is made up of connective tissue as well which attaches the artery to surrounding connective tissue.
+On the outside of the artery, the tunica adventita is made up of connective tissue as well which attaches the artery to surrounding connective tissue.
 In-between these two layers lies the thickest layer, the tunica media, which consists of elastic fibres and muscle cells. 
 
 The tunica media is responsible for the elasticity of the artery.
 Arteries close to the heart have a tunica media that is mainly made up of elastic fibres and are referred to as elastic arteries while the tunica media of arteries farther away from the heart and of smaller arteries consist predominantly of muscle cells and are called muscular arteries.
 The elastic arteries also have a higher compliance than the muscular arteries.
-This means that elastic arteries are able to distended and increase their volume as a response to pressure applied to the inside of the arterial wall.
+This means that elastic arteries are able to distend and increase their volume as a response to pressure applied to the inside of the arterial wall.
 Hence elastic arteries deform more under pressure than muscular arteries that are stiffer and don't distend as much when blood is pumped into them by the heart.
 At the same time, usually the elastic arteries are larger than the muscular arteries and the size of arteries generally decreases as the distance to the heart increases.
 
@@ -259,7 +260,7 @@ The pulse-like pressure change coming from the heart leads to the elastic arteri
 Until the next pulse arrives these vessels will contract slowly, pushing the blood at a constant rate into the arteries farther away from the heart and finally into the capillaries.
 This mechanism is called the Windkessel effect.
 It is named after the inner workings of water pumps used by early fire brigades.
-In these devices water would be pumped by hand from the reservoir causing pressure pulses.
+In these devices, water would be pumped by hand from the reservoir causing pressure pulses.
 This pushes the water into an air chamber.
 Here, the air gets compressed, which is analogous to the deforming of the artery.
 The natural decompressing of the air would then push the water out through the hose in a steady manner, just like the contracting of the artery would push the blood on to other vessels.
@@ -276,7 +277,7 @@ Blood consists of red blood cells (Erythrocytes), white blood cells (Leukocytes)
 The Erythrocytes make up about 97\% of the cellular volume.
 They are flexible, can bind to one another, and their micro-structure determines the blood mechanical properties.
 The volume occupied by red blood cells in respect to the total blood volume is called the haematocrit value.
-At different age, altitude, health, and bodily activity the haematocrit value varies. We want to relate the haematocrit value with the blood dynamic viscosity and the so called shear rate in order to determine if blood can be considered a Newtonian fluid. In order to do so we first introduce the shear stress
+At different age, altitude, health, and bodily activity the haematocrit value varies. We want to relate the haematocrit value with the blood dynamic viscosity and the so-called shear rate in order to determine if blood can be considered a Newtonian fluid. In order to do so we first introduce the shear stress
 \begin{equation}
 	\tau = \frac{F}{A}
 \end{equation}
@@ -285,7 +286,7 @@ The cross-section affected by the shear stress is deformed at a certain angle.
 This angle can be assigned an angular velocity and is referred to as the shear rate.
 We denote the shear rate by $D$. \cite{köppl2023dimension}
 The blood dynamic viscosity $\mu$ decreases hyperbolically with the shear rate $D$.
-At about $D > 100s^{-1}$ the viscosity stays constant for common haematocrit values.
+At about $D > 100s^{-1}$, the viscosity stays constant for common haematocrit values.
 In larger arteries the average shear rate close to the walls is above the $100s^{-1}$ threshold. \cite{MCDbook}
 Therefore, the blood's viscosity is often considered constant and it can roughly be viewed as a Newtonian fluid for the sake of simplicity \cite{fung2013biomechanics,guyton2006textbook,MCDbook,pedley_1980,zamir2000physics,zamir2006physics}. 
 Another important property of a fluid when attempting to model it is it's compressibility. 
@@ -298,28 +299,28 @@ In this chapter we will discuss the different approaches that can be taken when 
 After that we will give a mathematical description of the model we chose in \autoref{sec:sv}.
 
 \section{Different Modelling Approaches} \label{sec:ma}
-In this thesis we focus on simulating macro-circulation in arteries, i.e. cardiovascular networks consisting of the largest arteries of the human circulation.
+In this thesis, we focus on simulating macro-circulation in arteries, i.e. cardiovascular networks consisting of the largest arteries of the human circulation.
 The length and diameters of these vessels are on the scale of meters.
-According with which accuracy the system is supposed to be represented models of different dimensionality can be chosen.
+According to with which accuracy the system is supposed to be represented, models of different dimensionality can be chosen.
 3D-models for instance can represent such quantities as turbulence or wall shear stresses.
 1D-models cannot represent these 3D-quantities but can still compute pressure and flow along an artery at reasonable accuracy while requiring significantly less computation than a 3D-model.
 Finally, 0D-models such as the Windkessel model can represent the approximate behaviour of ensembles of vessels and are often used to simulate the outlets of a network modelled in higher dimensions, where it would be too costly to simulate every vessel individually at the increased accuracy.
 
-On one end of this spectrum (3D-models) there is high accuracy but also high computational effort.
-On the other end (0D-models) only very simplified structures can be represented but at a considerably lower cost.
+On one end of this spectrum (3D-models), there is high accuracy but also high computational effort.
+On the other end (0D-models), only very simplified structures can be represented but at a considerably lower cost.
 In practice it is therefore very common to couple such models, choosing the more demanding models for locations in the vascular network that require more attention to be simulated accurately or that simply are of special interest.
 This leads to 3D-1D-0D-models where the junctions in the network are represented by 3D-models, 1D-models are used to simulate the flow within vessels, and the 0D-models are used to compute the data at the outlets of the network.
-In the setting of this thesis the outlets are omitted vessels that are not included in the model due to not being of interest for these simulations and wanting to reduce computational effort.
+In the setting of this thesis, the outlets are omitted vessels that are not included in the model due to not being of interest for these simulations and wanting to reduce computational effort.
 
 Another important distinction between types of models are open and closed models.
 In closed models the Windkessel models at the outlets are connected back to the inlet of the system.
 In open models the inlet is fed by some sort of input data and the Windkessel models only serve to compute boundary conditions at the outlets.\cite{köppl2023dimension}
 The model presented here will be an open model for the sake of simplicity.
-A further simplification was to only consider a 1D-0D-model since the main goal of this work was to produce a fast differentiable solver.
+A further simplification was to only consider a 1D-0D-model since the main goal of this work was to produce a fast and differentiable solver.
 Incorporating 3D-models in this work would have added additional complexity without providing benefits in terms of speed and reasoning w.r.t. differentiability. 
 
 \section{1D-Model} \label{sec:sv}
-Within a vessel we consider the conservation of mass and momentum in cylindrical coordinates, that hold for any fluid, to be satisfied.
+Within a vessel, we consider the conservation of mass and momentum in cylindrical coordinates that hold for any fluid, to be satisfied.
 In cylindrical coordinates these conservation laws read
 \begin{equation}
 	\frac{\partial \rho (z,r,\phi; t)}{\partial t} + \nabla \cdot \rho (z,r,\phi; t)\mathbf{u}(z,r,\phi; t) = 0, \label{eq:cont}
@@ -382,7 +383,7 @@ The remaining three equations read
 \begin{equation}
 	\frac{\partial u_r}{\partial t} + u_z \frac{\partial u_r}{\partial z} + u_r \frac{\partial u_r}{\partial r} = -\frac{1}{\rho} \frac{\partial P}{\partial r} + \frac{\mu}{\rho} \left( \frac{\partial^2 u_r}{\partial z^2} + \frac{\partial^2 u_r}{\partial r^2} + \frac{1}{r} \frac{\partial u_r}{\partial r} - \frac{u_r}{r^2}\right). \label{eq:momr}
 \end{equation}
-In order to simplify the equations we introduce typical velocities $U_z$ and $U_r$ and define the non-dimensional quantities as:
+In order to simplify the equations we introduce typical velocities $U_z$ and $U_r$ and define the non-dimensional quantities as
 \begin{equation}
 	\tilde{r} := \frac{r}{r_0}, \ \tilde{z} := \frac{z}{l_0}, \ \tilde{t} := t \frac{U_z}{l_0}, \ \tilde{u}_z := \frac{u_z}{U_z}, \ \tilde{u}_r := \frac{u_r}{U_r}, \ \tilde{P} := \frac{P}{\rho U_z^2}, \ \epsilon := \frac{U_r}{U_z}.
 \end{equation}
@@ -459,10 +460,10 @@ For $\gamma=9$, $\alpha = \frac{11}{10} $ we get a hyperbolic velocity profile a
 
 We want to determine the variables $Q, A,$ and $P$.
 Until now we've considered the two equations of mass and momentum conservation determining $Q$ and $A$.
-In order to close the system and determine $P$ we therefore need another equation, a so called tube law.
+In order to close the system and determine $P$ we therefore need another equation, a so-called tube law.
 There are many different ways to model the pressure $P$ within a deforming tube and there is no way that is considered the de facto right way.
 For a full comparison of a wide range of such models we refer to \cite{gomez2017analysis}.
-In the model used in this work the pressure $P$ is given by the external pressure $P_{ext}$ stemming from surrounding tissue as well as the pressure from the deformation of the vessel:
+In the model used in this work the pressure $P$ is given by the external pressure $P_{ext}$ stemming from surrounding tissue as well as the pressure from the deformation of the vessel
 \begin{equation}
 	P_{def}(z;t) := \frac{h_0(z) \sigma(z;t)}{\pi r(z;t)}, \label{eq:pdef}
 \end{equation}
@@ -474,13 +475,13 @@ Assuming linear elasticity (\autoref{it:lec}) and using Hooke's law \cite{hooke1
 \end{equation}
 where $E$ describes the stiffness of the elastic material and is called Young's modulus.
 The quantity $\epsilon$ is referred to as the stress and models the deformation of the material.
-Assuming an isotropic, homogeneous, and incompressible arterial wall, an axisymmetric deformation, and circular cross-sections (\autoref{it:nlc}) that are independent of each other $\epsilon$ is given by:
+Assuming an isotropic, homogeneous, and incompressible arterial wall, an axisymmetric deformation, and circular cross-sections (\autoref{it:nlc}) that are independent of each other $\epsilon$ is given by
 \begin{equation}
 	\epsilon(z;t) := \frac{r(z;t)-r_0(z;t)}{ (1-\nu^2) r_0(z;t)}. \label{eq:strain}
 \end{equation}
 In this definition, $\nu$ is the elasticity parameter or Poisson's ratio.
 It is the ratio of transverse contraction to longitudinal extension strain in the direction of the stretching force.
-Combining \autoref{eq:pdef}-\autoref{eq:strain} with a term for the external pressure $P_{ext}$ we get \cite{sherwin2003one} \cite{sherwin2003computational}: 
+Combining \autoref{eq:pdef}-\autoref{eq:strain} with a term for the external pressure $P_{ext}$ we get \cite{sherwin2003one} \cite{sherwin2003computational}
 \begin{align}
 	P(z;t) &:= P_{ext}(z;t) + \beta \left( \sqrt{\frac{A(z;t)}{A_0(z)}}-1 \right),  \label{eq:p_tot}\\
 	\beta(z) &:=  \frac{\sqrt{\pi} E h_0(z)}{(1-\nu^2) \sqrt{A_0(z)}}.
@@ -488,8 +489,8 @@ Combining \autoref{eq:pdef}-\autoref{eq:strain} with a term for the external pre
 We refer to $\beta$ as the elasticity coefficient from here on out.
 Comparison with experimental data shows that a plug-flow is a reasonable approximation of the velocity profile \cite{hunter1972numerical} \cite{smith2000generation} \cite{smith2002anatomically}.
 Therefore it is reasonable to set $\gamma = 9, \alpha = \frac{11}{10}$.
-Since the plug-flow velocity profile is relatively flat the average of $Q$ doesn't differ from the actual value anywhere along $r$.
-Therefore we can also set the Coriolis' coefficient $\alpha$ (averaging correction parameter) to $\alpha = 1$. \cite{formaggia2010cardiovascular}
+Since the plug-flow velocity profile is relatively flat, the average of $Q$ doesn't differ from the actual value anywhere along $r$.
+Therefore, we can also set the Coriolis' coefficient $\alpha$ (averaging correction parameter) to $\alpha = 1$. \cite{formaggia2010cardiovascular}
 Inserting these fixed values for $\gamma$ and $\alpha$ into \autoref{eq:1deqs1} and \autoref{eq:1deqs2} leads to 
 \begin{equation}
 	\begin{aligned} 
@@ -536,14 +537,14 @@ The conservative form then reads:
 where we have added initial values $\mathbf{U}_0$ and boundary conditions $\mathbf{U}_L$ and $\mathbf{U}_R$ so that equation \ref{eq:1deqs3} now yields a well posed problem.\cite{formaggia2010cardiovascular}
 This concludes the description of the 1D-model for a single artery.
 The explicit setting of the aforementioned initial conditions and boundary values needs to be modelled as well.
-However we will address this in \autoref{sec:icbc} of the next chapter after introducing our numerical methods and some notations that will make it easier to describe the assigning of initial conditions and boundary values.
+However, we will address this in \autoref{sec:icbc} of the next chapter after introducing our numerical methods and some notations that will make it easier to describe the assigning of initial conditions and boundary values.
 
 
 
 
 
 \chapter{Numerical Methods} \label{chap:nm}
-The numerical realization of the 1D-model within a single vessel described in \autoref{sec:sv} is achieved using a Finite Volume (FV) method to solve the homogeneous part of the equation \autoref{eq:1deqs3} while the source term is accounted for by using a forward Euler time-step. 
+The numerical realization of the 1D-model within a single vessel described in \autoref{sec:sv} is achieved using a Finite Volume (FV) method to solve the homogeneous part of the equation \autoref{eq:1deqs3}, while the source term is accounted for by using a forward Euler time-step. 
 The FV method that was applied here is the monotonic upstream-centred scheme for conservation laws (MUSCL).
 The initial data, inlets, junctions, and outlets of the system are set from data, in accordance with neighbouring vessels, or through a reflective or a Windkessel model.
 
@@ -552,14 +553,14 @@ We will then describe the FV method and state the specific MUSCL scheme we used 
 Thereafter we briefly describe the forward Euler time-step used to accommodate the inhomogeneous part of our 1D-equations in \autoref{sec:fe} and finally we state how we applied initial conditions and boundary values in \autoref{sec:icbc}.
 
 \section{Literature Review} \label{sec:lr}
-The governing equations derived in \autoref{sec:sv} have mainly been approach numerically in four different manners.
+The governing equations derived in \autoref{sec:sv} have mainly been approached numerically in four different manners.
 Namely through the method of characteristics or finite difference (FD), finite volume (FV), or finite element (FE) schemes.
-Using the method of characteristics the hyperbolic PDE that describes the haemodynamics is rewritten as an ODE of the Riemann invariants of the system along the corresponding characteristic lines.
+Using the method of characteristics, the hyperbolic PDE that describes the haemodynamics is rewritten as an ODE of the Riemann invariants of the system along the corresponding characteristic lines.
 This method was used in \cite{streeter1963pulsatile,bodley1971non,parker1990forward,wang2004wave,wang2003time}.
 A finite difference scheme was applied by \cite{smith2002anatomically,elad1991numerical,elad1991numerical,pontrelli2003numerical,reymond2009validation}.
 The finite volume and the finite element methods have become more prevalent in recent years.
 The advantage of the FV solver over the FD solver is that they can treat discontinuities \cite{toro2001shock}, i.e. they can deal with potential large gradients occurring in the solution \cite{shu1988efficient,harten1997uniformly}.
-In the case of our simulation these might occur when assigning boundary values and therefore a FV method word be beneficial.
+In the case of our simulation, these might occur when assigning boundary values and therefore a FV method would be beneficial.
 The finite volume method was applied by \cite{melis2017gaussian,brook1999numerical,brook2002model} and the finite element method has been used in \cite{sherwin2003one,sherwin2003computational,formaggia2001coupling,wan2002one,porenta1986finite,rooz1982finite,bessems2008experimental}
 While higher accuracy and faster convergence can technically be achieved by a FE method, there are applications in venous systems where FE schemes do not converge.
 There is also increasing complexity involved when implementing models that are based on the method of characteristics all the way up to finite element methods.
@@ -568,12 +569,12 @@ The reason for this is that the FV solver offers many benefits when applied to h
 The 1D-NSE (\autoref{eq:1deqs3}) is a hyperbolic PDE, i.e. these equations describe phenomena where information travels at finite speeds. 
 Some of the benefits of using FV methods to solve hyperbolic systems are the ability of these methods to be shock capturing and to be inherently conservative.
 They therefore offer enough accuracy to model the problem while having the added benefit of reduced complexity when comparing them to a FE implementation.
-Offering enough accuracy therefore the FV method was the most straight forward one towards a differentiable 1D-haemodynamics solver.
+Offering enough accuracy therefore, the FV method was the most straight forward one towards a differentiable 1D-haemodynamics solver.
 
 
 \section{Finite Volume (FV)} \label{sec:fv}
 In order to describe the FV method that was applied to solve \autoref{eq:1deqs3} we will first introduce a space and time discretization.
-The space discretization is defined as follows:
+The space discretization is defined as follows
 \begin{align}
 	&0 = z_0 < z_1 < z_2 < ... < z_N = l, \\
 	&z_i :=  i \Delta z,\ i \in \{0,1,...,N\} , \\
@@ -625,7 +626,7 @@ This MUSCL solver consists of 4 steps:
 \end{enumerate}
 We will describe these steps more closely in \autoref{ssec:reco} - \autoref{ssec:grp}.
 \subsection{Reconstruction} \label{ssec:reco}
-When reconstructing a solution within a cell $\mathbf{\hat{U}}(z;t^n), z \in [z_{i-\frac{1}{2}}, z_{i+\frac{1}{2}}]$ with respect to the computed average of that cell $\mathbf{U}_i^n$ conservation has to be taken into account.
+When reconstructing a solution within a cell $\mathbf{\hat{U}}(z;t^n), z \in [z_{i-\frac{1}{2}}, z_{i+\frac{1}{2}}]$ with respect to the computed average of that cell $\mathbf{U}_i^n$, conservation has to be taken into account.
 This means that the average of the reconstruction over the cell needs to be the same as the average it was reconstructed from 
 \begin{equation}
 	\frac{1}{\Delta z} \int_{z_{i-\frac{1}{2}}}^{z_{i+\frac{1}{2}}} \mathbf{\hat{U}}_i^n(z;t^n) dz = \mathbf{U}_i^n.
@@ -667,7 +668,7 @@ Otherwise, if \autoref{chk3} is not satisfied, $a_i^n$ is set to the biggest val
 \end{equation}
 
 \subsection{Generalized Riemann Problem and Balancing} \label{ssec:grp}
-In order to get a first approximation for the flux that needs to be computed the Riemann problem
+In order to get a first approximation for the flux that needs to be computed, the Riemann problem
 \begin{align}
 	\frac{\partial \mathbf{U}}{\partial t} + \frac{\partial \mathbf{F}}{\partial z} &= 0, \\
 	\mathbf{U}(z,t^n) &= \left\{
@@ -685,7 +686,7 @@ In order to get a first approximation for the flux that needs to be computed the
 	where we have ignored the source term $\mathbf{S}$ for the moment.
 	The resulting $\mathbf{U}_{i+\frac{1}{2},L}^{n+\frac{1}{2}}$ and $\mathbf{U}_{i+\frac{1}{2},R}^{n+\frac{1}{2}}$ are then used as left and right states of a new Riemann problem.
 	The flux from this Riemann problem is again inserted into \autoref{eq:fv} giving the final value for $\mathbf{U}_i^{n+1}$.
-	The flux that are computed in both Riemann problems mentioned in this section are not solved for analytically but numerically using the conservative form of the Lax-Friedrichs scheme.
+	The fluxes that are computed in both Riemann problems mentioned in this section are not solved for analytically but numerically, using the conservative form of the Lax-Friedrichs scheme.
 	Given that the flux function is Lipschitz continuous, this scheme is conservative and consistent \cite{köppl2023dimension}.
 	In general it is first order accurate and stable for small enough step sizes (see \autoref{sec:cfl}). \cite{leveque1992numerical}
 	We denote the computed approximation for $\mathbf{U}$ at time-step $n+1$ by $\bar{\mathbf{U}}^{n+1}$.
@@ -693,7 +694,7 @@ In order to get a first approximation for the flux that needs to be computed the
 
 	\section{Time-stepping the source term} \label{sec:fe}
 	In the previous section we have ignored the source term $\mathbf{S}$.
-	To account for the source term the following problem has to be solved:
+	To account for the source term, the following problem has to be solved
 	\begin{equation}
 		\frac{d \mathbf{U}}{d t}=\mathbf{S}(\mathbf{U}) .
 	\end{equation}
@@ -706,10 +707,10 @@ In order to get a first approximation for the flux that needs to be computed the
 
 	\section{Initial Conditions and Boundary Values} \label{sec:icbc}
 	We need to consider initial conditions for each vessel in our system which we will address in \autoref{ssec:initial_conditions}.
-	Furthermore each vessel also needs to have boundary values set as described in \autoref{ssec:boundary_values}.
-	For vessels at the edge of the network that get fed by the heart we set the input values through data.
+	Furthermore, each vessel also needs to have boundary values set as described in \autoref{ssec:boundary_values}.
+	For vessels at the edge of the network that get fed by the heart, we set the input values through data.
 	For vessels within the network the boundary values are set in correspondence with the neighbouring vessels.
-	For vessels at the edge at the network that provide blood to get capillary bed the output values are set through either a reflection or a Windkessel model
+	For vessels at the edge at the network that provide blood to get capillary bed, the output values are set through either a reflection or a Windkessel model
 	These three cases of boundary values that need to be set are descried in \autoref{sssec:inlets} - \autoref{sssec:junctions}.
 	\subsection{Initial Conditions} \label{ssec:initial_conditions}
 	It is difficult to determine useful initial conditions for a haemodynamics computation.
@@ -742,7 +743,7 @@ In order to get a first approximation for the flux that needs to be computed the
 	If one of these quantities is given at a time $t^{n+1}$ the remaining quantities describig our system can be computed at $t^{n+1}$ as well using extrapolation of characteristics.
 	By Riemann's method of characteristics\cite{riemann1860fortpflanzung} the equations governing our 1D-model (\ref{eq:p_tot},\ref{eq:1deqs3}) imply that changes in pressure and velocity propagate in the backward and forward direction at the speeds $u-c$ and $u+c$.
 	These quantities are commonly referred to as Riemann invariants due to being constant along the characteristic curves \cite{sarra2003method}.
-	For a given state of our system $A$, $Q$ we denote the backward and forward Riemann invariants by
+	For a given state of our system $A$, $Q$, we denote the backward and forward Riemann invariants by
 	\begin{align}
 		W_1(A,u) := u - c, \\
 		W_2(A,u) := u + c,
@@ -754,21 +755,21 @@ In order to get a first approximation for the flux that needs to be computed the
 		W_{2,i}^n := W_2(A_i^n,u_i^n) &= u^n_i + 4c^n_i,
 	\end{align}
 	with $c^n_i := \sqrt{\frac{\beta_i}{2\rho}\sqrt{A_i^n}}$.
-	Therefore at the first and the second cell the two Riemann invariants read as
+	Therefore, at the first and the second cell the two Riemann invariants read as
 	\begin{align}
 		W_{1,0}^n &= u^n_0 - 4c^n_0,\\
 		W_{2,0}^n &= u^n_0 + 4c^n_0,\\
 		W_{1,1}^n &= u^n_1 - 4c^n_1,\\
 		W_{2,1}^n &= u^n_1 + 4c^n_1.
 	\end{align}
-	If the input data is given in as a volumetric flow, the Riemann invariants at the next time step are computed via the following update formula:
+	If the input data is given in as a volumetric flow, the Riemann invariants at the next time step are computed via the following update formula
 	\begin{align}
 		W_{1,0}^{n+1} &= W^n_{1,0} + (W^n_{1,1} - W^n_{1,0})(c^n_0-u^n_0) \frac{\Delta t}{\Delta x} \label{update1a},\\
 		W_{2,0}^{n+1} &= \frac{2Q^{n+1}_0}{A^n_0} - W^{n+1}_{1,0}, \label{update2a}
 	\end{align}
 	where $Q^{n+1}_0$ is given through input data.
 	This equates to linearly extrapolating the Riemann invariants at the first and second cell to meet the backwards and the forwards travelling characteristic curve of the second and first cell respectively.
-	The missing input quantities are then computed from the new Riemann invariants as follows:
+	The missing input quantities are then computed from the new Riemann invariants as follows
 	\begin{align}
 		u_0^{n+1} &= \frac{W_{1,0}^{n+1} + W_{2,0}^{n+1}}{2}, \\
 		c_0^{n+1} &= \frac{W_{2,0}^{n+1} - W_{1,0}^{n+1}}{4}, \\
@@ -776,12 +777,12 @@ In order to get a first approximation for the flux that needs to be computed the
 		P_0^{n+1} &= P_{ext} + \beta \left( \sqrt{\frac{A_0^{n+1}}{A_{0,0}}} - 1 \right). 
 	\end{align}
 	where $A_{0,0}$ is the reference cross-section at the cell $i=0$.
-	If the input data is given as a pressure wave, the Riemann invariants at the next time step are computed via the following update formula, again provided through a linear extrapolation:
+	If the input data is given as a pressure wave, the Riemann invariants at the next time step are computed via the following update formula, again provided through a linear extrapolation
 	\begin{align}
 		W_{1,0}^{n+1} &= W^n_{1,0} + (W^n_{1,1} - W^n_{1,0})(c^n_0-u^n_0) \frac{\Delta t}{\Delta x} \label{update1b}, \\
 		W_{2,0}^{n+1} &= \frac{2Q^{n}_0}{A^n_0} - W^{n+1}_{1,0} \label{update2b}.
 	\end{align}
-	The missing input quantities are then computed from the new Riemann invariants as follows:
+	The missing input quantities are then computed from the new Riemann invariants as follows
 	\begin{align}
 		u_0^{n+1} &= \frac{W_{1,0}^{n+1} + W_{2,0}^{n+1}}{2}, \\
 		c_0^{n+1} &= \frac{W_{2,0}^{n+1} - W_{1,0}^{n+1}}{4}, \\
@@ -792,12 +793,12 @@ In order to get a first approximation for the flux that needs to be computed the
 
 	\subsubsection{Outlets} \label{sssec:outl}
 	One of the most basic ways of setting outlet values is to use reflection coefficient to model how much of a wave leaves the vessel and how much gets reflected.
-	In cases where this doesn't provide enough accuracy Windkessel models are applied \cite {formaggia2010cardiovascular}.
+	In cases where this doesn't provide enough accuracy, Windkessel models are applied \cite {formaggia2010cardiovascular}.
 	These models are constructed after the function of a water pump as described in \autoref{sec:aw} by considering an analogous electrical circuit.
 	We introduce here a reflective and a three-parameter Windkessel model.
 
 	\paragraph{Reflection} \label{par:refl}
-	This is done equivalently to the inlet boundary conditions through linear extrapolation of characteristics:
+	This is done equivalently to the inlet boundary conditions through linear extrapolation of characteristics
 	\begin{align}
 		W_{2,N}^{n+1}&=W_{2,N}^n+(W_{2,N-1}^n-W_{2,N-1}^n) (u_N^n+c_N^n) \frac{\Delta t}{\Delta x}, \label{eq:refl1}, \\
 		W_{1,N}^{n+1}&=W_{1,N}^0-R_t (W_{2,N}^{n+1}-W_{2,N}^0), \label{eq:refl2}
@@ -811,13 +812,13 @@ In order to get a first approximation for the flux that needs to be computed the
 		c_N^{n+1} &= \frac{W_{2,N}^{n+1} - W_{1,N}^{n+1}}{4}, \\
 		Q_N^{n+1} &= A_N^n u_N^{n+1}.
 	\end{align}
-	A more accurate method of computing the outlet boundary values is uses a Windkessel model.
+	A more accurate method of computing the outlet boundary values is to use a Windkessel model.
 
 	\paragraph{Windkessel} \label{par:wk}
 	The three element Windkessel model or RCR model is applied to simulate the perfusion as described in \cite{CiCP-4-317}.
 	Such models are referred to as lumped-parameter or 0D-models due to the lack of a spatial dependency.
 	The concept behind this method of computing outlet values is the assumption of a state $A^*$, $u^*$ at time-step $n+1$ that results from the two states $A_L$, $u_L$ and $A_R$, $u_R$ at time-step $n$ to the left and the right respectively.
-	The so called virtual state $A^*$, $u^*$ therefore satisfies the following equations in it's Riemann invariants
+	The so-called virtual state $A^*$, $u^*$ therefore satisfies the following equations in it's Riemann invariants
 	\begin{align}
 		W_1(A^*,u^*) = W_1(A_R,u_R), \label{eq:vrmi1}\\
 		W_2(A^*,u^*) = W_2(A_L,u_L). \label{eq:vrmi2}
@@ -848,9 +849,9 @@ In order to get a first approximation for the flux that needs to be computed the
 	\begin{equation}
 		P_C^n = P_C^{n-1} + \frac{\Delta t}{C} \left(A_Lu_L - \frac{ \left( P_C^{n-1} - P_{ven} \right)}{R_2} \right). \label{eq:pc}
 	\end{equation}
-	In order for the wave exiting the vessel to arrive at the compliance without being reflected we couple the terminal resistance model with the $CR_2$ model.
+	In order for the wave exiting the vessel to arrive at the compliance without being reflected, we couple the terminal resistance model with the $CR_2$ model.
 	This is done by setting $R=R_1$ and $P_{ven}=P_C$ in \autoref{eq:tr2}.
-	Since $A_L$, $u_L$ represent the state at the end oft the vessel and can therefore be set to $A_i^n$, $u_i^n$.
+	Since $A_L$, $u_L$ represent the state at the end of the vessel they can therefore be set to $A_i^n$, $u_i^n$.
 	The \autoref{eq:tr1} coupled with \autoref{eq:pc} can be solved with a Newton solver\cite{atkinson1991introduction} in order to receive $A^*$.
 	Using \autoref{eq:p_tot}, \autoref{eq:tr1} and the computed value for $A^*$ we can compute $u^*$.
 	Finally $A_i^{n+1}$, $u_i^{n+1}$ are set to $A^*$, $u^*$ respectively. \cite{alastruey2008reduced}
@@ -949,14 +950,13 @@ In order to get a first approximation for the flux that needs to be computed the
 
 	\subsubsection{Junctions} \label{sssec:junctions}
 	Three types of junctions are considered.
-	Conjunctions: joining two vessels, bifurcations: splitting one vessel into two, and anastomosis: joining two vessels into one.
+	Conjunctions: joining two vessels; bifurcations: splitting one vessel into two; and anastomosis: joining two vessels into one.
 	We will describe the governing equations of the junction types in the next three paragraphs. 
 
 	\paragraph{Conjunctions} \label{par:conjunctions}
 	A conjunction is the outlet of a vessel connected to the inlet of another vessel.
-	For all types of junctions three types of equations are taken into account. 
-	Conservation of mass, pressure conservation, and extrapolation of characteristics.
-	For the conjunctions the conservation of mass leads to 
+	For all types of junctions three types of equations are taken into account - conservation of mass, pressure conservation, and extrapolation of characteristics.
+	For the conjunctions, the conservation of mass leads to 
 	\begin{equation}
 		A_{1,N}^{n+1} u_{1,N}^{n+1} - A_{2,0}^{n+1} u_{2,0}^{n+1}=0,
 	\end{equation}
@@ -980,7 +980,7 @@ In order to get a first approximation for the flux that needs to be computed the
 		W_2^* = u_{1,N}^{n+1} + 4c_{1,N}^{n+1} = u_{1,N}^{n+1} + 4k_{1,N} \left( A_{1,N}^{n+1} \right)^{\frac{1}{4}}.
 	\end{align}
 	where $k_{l,i} := \sqrt{\frac{\beta_{l,i}}{2\rho}}$ for $l \in \{1,2\}$, $i \in \{0,1,...N\}$.
-	This leads to the system of equations:
+	This leads to the system of equations
 	\begin{equation}
 		\mathbf{f}(\mathbf{q}) := \left[\begin{array}{c}
 				q_{1}+4 k_{1,N} q_{3}-W_{2}^* \\
@@ -1018,9 +1018,9 @@ In order to get a first approximation for the flux that needs to be computed the
 					In the next section we will be describing how to compute boundary values at bifurcations.
 
 					\paragraph{Bifurcations} \label{par:bifurcations}
-					A bifurcation is a junction where on vessel outlet connects to two vessel inlets.
-					For bifurcations the same conservation laws are applied as for the conjunction, i.e. conservation of mass, conservation of pressure, and compatibility of the characteristic curves.
-					This lead to the following system of equations:
+					A bifurcation is a junction where one vessel outlet connects to two vessel inlets.
+					For bifurcations, the same conservation laws are applied as for the conjunction, i.e. conservation of mass, conservation of pressure, and compatibility of the characteristic curves.
+					This leads to the following system of equation
 					\begin{equation}
 						\mathbf{f}(\mathbf{q}):=\left[\begin{array}{c}
 								q_{1}+4 k_{1,N} q_{4}-W_{1,N}^* \\
@@ -1059,7 +1059,7 @@ In order to get a first approximation for the flux that needs to be computed the
 
 							\paragraph{Anastomosis} \label{par:anastomosis}
 							An anastomosis describes two vessel outlets connecting to a single vessel inlet.
-							For the Anastomosis applying the extrapolation of characteristics, conservation of mass, and pressure conservation leads to the following system of equations
+							For the anastomosis, applying the extrapolation of characteristics, conservation of mass, and pressure conservation leads to the following system of equations
 							\begin{equation}
 								\mathbf{f}(\mathbf{q}):=\left[\begin{array}{c}
 										q_{1}+4 k_{1,N} q_{4}-W_{1,N}^* \\
@@ -1092,15 +1092,15 @@ In order to get a first approximation for the flux that needs to be computed the
 									\end{array} 
 								\right].
 							\end{equation}
-							As in the case of Bifurcations the kinetic energy terms in the pressure conservation equations are neglected.
+							As in the case of bifurcations, the kinetic energy terms in the pressure conservation equations are neglected.
 							In the following last section of this chapter we will describe how to determine time-step sizes to ensure stability for the numerical scheme introduced in \autoref{sec:fv} and \autoref{sec:muscl}.
 
 							\section{CFL Condition} \label{sec:cfl}
 							The CFL condition is set so that the information travelling along a characteristic curve only affects neighbouring cells. 
 							Since the numerical scheme (\autoref{sec:fv},\autoref{sec:muscl}) only takes neighbouring cells into account doing otherwise would result in numerical errors stacking up.
-							The $\Delta x$ from the space discretization is set according at how high a resolution the solution needs to be computed.
+							The $\Delta x$ from the space discretization is set according to how high a resolution the solution needs to be computed.
 							Given this constraint $\Delta t$ can be determined.
-							Taking into account the aforementioned condition of preventing the characteristic curves from reaching beyond the neighbouring cell within $\Delta t$ leads to the following equation:
+							Taking into account the aforementioned condition of preventing the characteristic curves from reaching beyond the neighbouring cell within $\Delta t$ leads to the following equation
 							\begin{equation}
 								\Delta t \leq C_{CFL} \frac{\Delta x}{S_{max}},\hspace{10pt}  C_{CFL} \in (0,1),
 							\end{equation}
@@ -1109,16 +1109,16 @@ In order to get a first approximation for the flux that needs to be computed the
 							In the next chapter we will go over issues that can occur and methods to be used when implementing our previously described numerical methods in JAX.
 
 							\chapter{Implementation} \label{chap:impl}
-							Since differentiability was a priority in the implementation of this model the library JAX which is available as a package in Python was used.
+							Since differentiability was a priority in the implementation of this model, the library JAX, which is available as a package in Python was used.
 							In order to leverage the full effectiveness of JAX some special considerations had to be made when considering how to realize the simulation described in \autoref{chap:1dm} and \autoref{chap:nm}.
 							In this chapter we  will give an overview of the functionality of JAX relating to this thesis in \autoref{sec:jax} and then describe the broad structure of the implemented code in \autoref{sec:cs}.
 
 
 							\section{JAX} \label{sec:jax}
 							JAX used to stand for "Just After eXecution" which refers to the manner in which JAX used to optimize during compilation.
-							JAX achieves optimization during compilation along other things through tracing.
-							While tracing the code is optimized with the help of a computational graph.
-							Essentially the code is parsed without executing it in order to detect inefficiencies in data movement and computation.
+							JAX achieves optimization during compilation, among other things, through tracing.
+							While tracing, the code is optimized with the help of a computational graph.
+							Essentially, the code is parsed without executing it, in order to detect inefficiencies in data movement and computation.
 							While JAX still uses tracing to speed up code execution it is not done in a "Just After eXecution"-manner.
 							Later on JAX was thought of as a recursive acronym "JAX is Autograd and XLA" in the spirit of the well known acronym GNU ("GNU is Not Unix").
 							Autograd is a now deprecated Python library that can automatically differentiate native Python and NumPy code.
@@ -1299,7 +1299,7 @@ given in \cite{ottesen2004applied} with the values
 	k_2 &= -22.53 \frac{1}{\ \text{cm}}, \\
 	k_3 &= 8.65 \times 10^5 \frac{\text{g}}{\text{s}^2\text{cm}}.
 \end{align}
-The fourth model is the so called "anatomically-detailed arterial network" or "ADAN" model and it is made up of the largest arteries of the human circulation.
+The fourth model is the so-called "anatomically-detailed arterial network" or "ADAN" model and it is made up of the largest arteries of the human circulation.
 The model was developed by Blanco et al. \cite{blanco2014anatomically,blanco2014blood} and this specific variant of it contains 56 vessels.
 Therefore it is commonly referred to as "ADAN56".
 The 56 vessels are split into 61 arterial segments which are in turn split into a total of 77 segments for simulation purposes.
