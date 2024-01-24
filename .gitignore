@@ -11,4 +11,7 @@
 *.toc
 *.pdf
 figures/*.xcf
-
+*.vtp
+*.psvm
+*.svg
+*.pvd
