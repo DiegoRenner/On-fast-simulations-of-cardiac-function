@@ -10,8 +10,15 @@
 *.synctex
 *.toc
 *.pdf
-figures/*.xcf
 *.vtp
 *.psvm
 *.svg
 *.pvd
+*.xcf
+*.dvi
+*.nav
+*.snm
+*.vrb
+*.synctex(busy)
+*.jpg
+
