@@ -2,6 +2,8 @@
 \usepackage{listings}
 \usepackage[font=small]{caption}
 \usepackage[outdir=./images/]{epstopdf}
+\usepackage{float}
+\usepackage{graphicx}
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
@@ -43,22 +45,43 @@
 
 \begin{frame}
 	\frametitle{Towards Personalised Medicine: Current Approaches}
-	\begin{center}
-		\includegraphics[width=0.70\textwidth]{images/approaches_current.eps}
-	\end{center}
+	\begin{minipage}{0.59\textwidth}
+		\begin{figure}[H]
+			\includegraphics[width=\textwidth]{images/approaches_current.eps}
+		\end{figure}
+	\end{minipage} 
+	\begin{minipage}{0.39\textwidth}
+		\begin{block}{Personalised Medicine}
+			characterizing a patient and customizing their treatment according to which sub-population they fall into	
+		\end{block}
+		\begin{block}{Problem}
+			hard/risky/impossible to determine necessary biomarkers that would allow accurate diagnosis/treatment of disease
+		\end{block}
+
+	\end{minipage}
 \end{frame}
 
 \begin{frame}
 	\frametitle{Towards Personalised Medicine: Future Approaches}
-	\begin{center}
-		\includegraphics[width=0.70\textwidth]{images/approaches_future.eps}
-	\end{center}
+	\begin{minipage}{0.59\textwidth}
+		\begin{figure}[H]
+			\includegraphics[width=\textwidth]{images/approaches_future.eps}
+		\end{figure}
+	\end{minipage} \hfill
+	\begin{minipage}{0.39\textwidth}
+		\begin{block}{Model Based Approach}
+			simulate clinically hard/ risky/ impossible to determine biomarkers that have a strong correlation with the disease outcome via first principles 
+		\end{block}
+		\begin{block}{Example}
+			$\hookrightarrow$
+		\end{block}
+	\end{minipage}
 \end{frame}
 \begin{frame}
 	\frametitle{Example: Bifurcation}
 	\begin{center}
-			\includegraphics[width=0.49\textwidth]{images/bifurcation.eps}
-			\includegraphics[width=0.49\textwidth]{images/compare_output_params_P_P.eps}
+		\includegraphics[width=0.49\textwidth]{images/bifurcation.eps}
+		\includegraphics[width=0.49\textwidth]{images/compare_output_params_P_P.eps}
 	\end{center}
 \end{frame}
 
@@ -75,29 +98,29 @@
 %\end{frame}
 
 \begin{frame}
-	\frametitle{Example: Bifurcation}
+	\frametitle{3D Model Pipeline}
 
-		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/medical_imaging_0007.eps}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/3d_model_0007.eps}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/1d_model_0007.eps}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/bifurcation.eps}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/3d_biomarkers_0007.eps}}}$
+	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/medical_imaging_0007.eps}}}$
+	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
+	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/3d_model_0007.eps}}}$
+	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
+	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/1d_model_0007.eps}}}$
+	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
+	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/bifurcation.eps}}}$
+	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
+	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/3d_biomarkers_0007.eps}}}$
 \end{frame}
-\begin{frame}
-	\frametitle{Motivation}
-	\begin{block}{Use and Novelty}
-		\begin{itemize}
-			\item towards personalised medicine
-			\item parameter inference
-			\item sensitivity analysis
-		\end{itemize}
-	\end{block}
-	\vspace{5mm}
-\end{frame}
+%\begin{frame}
+%	\frametitle{Motivation}
+%	\begin{block}{Use and Novelty}
+%		\begin{itemize}
+%			\item towards personalised medicine
+%			\item parameter inference
+%			\item sensitivity analysis
+%		\end{itemize}
+%	\end{block}
+%	\vspace{5mm}
+%\end{frame}
 
 \section{Model}
 
@@ -187,16 +210,16 @@
 		set $Q$ from data $\rightarrow$ set $u$, $A$, $c$, $P$ through linear extrapolation of charateristics
 	\end{block}
 	\begin{block}{Junctions}
-	solve linear system of equations consisting of:
-	\begin{itemize}
-		\item conservation of mass, 
-		\item conservation of pressure, 
-		\item extrapolation of charateristics	
-	\end{itemize}
-\end{block}
-\begin{block}{Outlets}
-	0D-/ lumped parameter model: three element Windkessel (RCR) model 
-\end{block}
+		solve linear system of equations consisting of:
+		\begin{itemize}
+			\item conservation of mass, 
+			\item conservation of pressure, 
+			\item extrapolation of charateristics	
+		\end{itemize}
+	\end{block}
+	\begin{block}{Outlets}
+		0D-/ lumped parameter model: three element Windkessel (RCR) model 
+	\end{block}
 \end{frame}
 \begin{frame}
 	\frametitle{Numerical Methods}
