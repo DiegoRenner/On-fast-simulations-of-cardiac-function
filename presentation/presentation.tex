@@ -1,6 +1,6 @@
 \documentclass{beamer}
 \usepackage{listings}
-\usepackage[font=small]{caption}
+\usepackage[font=footnotesize]{caption}
 \usepackage[outdir=./images/]{epstopdf}
 \usepackage{float}
 \usepackage{graphicx}
@@ -79,10 +79,46 @@
 \end{frame}
 \begin{frame}
 	\frametitle{Example: Bifurcation}
+	\begin{figure}
 	\begin{center}
-		\includegraphics[width=0.49\textwidth]{images/bifurcation.eps}
-		\includegraphics[width=0.49\textwidth]{images/compare_output_params_P_P.eps}
+		\begin{minipage}{0.43\linewidth}
+		\includegraphics[width=\linewidth]{images/bifurcation.eps}
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.1\linewidth}
+		\includegraphics[width=\linewidth]{images/right_arrow.png}
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.43\linewidth}
+		\includegraphics[width=\linewidth]{images/compare_output_params_P_P.eps}
+		\end{minipage}
+		%\begin{minipage}{0.48\linewidth}
+		%	\captionof{figure}{test}
+		%\end{minipage}
+		%\hfill
+		%\begin{minipage}{0.48\linewidth}
+		%	\captionof{figure}{test}
+		%\end{minipage}
+		\begin{minipage}{0.43\linewidth}
+			\caption*{The bifurcation $\xi := \{u_H, \xi_1, \xi_2, \xi_3\}$ consists of a driving flow $u_H$ and three vessels: $\xi_1 := \{l^1, h_0^1, A_0^1, E^1\}$, $\xi_2 := \{l^2, h_0^2, A_0^2, E^2, R_1^2, C^2, R_2^2\}$, $\xi_3 := \{l^3, h_0^3, A_0^3, E^3, R_1^3, C^3, R_2^3\}.$}
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.43\linewidth}
+			\caption*{Altering the Windkessel parameters $(R_1,C,R_2)$ leads to vastly different pressure waves being simulated.}
+			\vfill
+		\end{minipage}
 	\end{center}
+	\end{figure}
+	{\tiny \centering 
+		$u_H \hat{=}$ flow from heart,
+
+		$l \hat{=}$ vessel length,
+		$h_0 \hat{=}$ reference vessel wall thickness,
+		$A_0 \hat{=}$ reference cross-section,
+
+		$E \hat{=}$ Young's modulus,
+		$R_1, C, R_2 \hat{=}$ Windkessel parameters,
+	\par}
 \end{frame}
 
 %\begin{frame}
@@ -161,6 +197,7 @@
 		$\mathbf{U_L} \hat{=}$ left boundary values,
 		$\mathbf{U_R} \hat{=}$ right boundary values,
 
+		$l \hat{=}$ vessel length,
 		$A \hat{=}$ cross-section,
 		$A_0 \hat{=}$ reference cross-section,
 		$Q \hat{=}$ volumetric flow-rate,
@@ -177,7 +214,7 @@
 	\frametitle{Tube Law}
 	\begin{align}
 		P(z;t) &:= P_{ext}(z;t) + \beta \left( \sqrt{\frac{A(z;t)}{A_0(z)}}-1 \right),      \label{eq:p_tot}\\
-		\beta(z) &:=  \frac{\sqrt{\pi} E h_0(z)}{(1-\nu^2) \sqrt{A_0(z)}}.
+		\beta(z) &:=  \frac{\sqrt{\pi} E h_0(z)}{(1-\nu^2) \sqrt{A_0(z)}},\  z \in \left[ 0,l \right], \ t > 0. 
 	\end{align}
 
 	\vfill
@@ -185,6 +222,10 @@
 	{\tiny \centering 
 		$P \hat{=}$ pressure,
 		$P_{ext} \hat{=}$ external pressure,
+
+		$l \hat{=}$ vessel length,
+		$A \hat{=}$ cross-section,
+		$A_0 \hat{=}$ reference cross-section,
 
 		$E \hat{=}$ Young's modulus,
 		$h_0 \hat{=}$ reference vessel wall thickness,
