@@ -5,6 +5,7 @@
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{array}
+\usepackage{varwidth}
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
@@ -83,19 +84,19 @@
 	\begin{itemize}
 		\item affect large parts of the population
 		\item heavily studied but currently no perfect solution 
-		\begin{tabular}{| m{5cm} | m{2cm}| m{2cm} |  } 
-		\hline
-		biomarker(s) & measurement & correlation \\ 
-		\hline
-		\hline
-		systolic, end diastolic, mean pressure wave velocity & ultrasound/ MRI & weak \\ 
-		\hline
-		abolute vascular pressure & invasive & strong \\ 
-		\hline
-	\end{tabular}
-	\item
-	$\Rightarrow$ accurately determining the absolute vascular pressure through a computational model would allow reliable prediction of HPD while avoiding the risk of an invasive procedure
-\item problem: need patient specific parameters for model
+			\begin{tabular}{| m{5cm} | m{2cm}| m{2cm} |  } 
+				\hline
+				biomarker(s) & measurement & correlation \\ 
+				\hline
+				\hline
+				systolic, end diastolic, mean pressure wave velocity & ultrasound/ MRI & weak \\ 
+				\hline
+				abolute vascular pressure & invasive & strong \\ 
+				\hline
+			\end{tabular}
+		\item
+			$\Rightarrow$ accurately determining the absolute vascular pressure through a computational model would allow reliable prediction of HPD while avoiding the risk of an invasive procedure
+		\item problem: need patient specific parameters for model
 	\end{itemize}
 
 \end{frame}
@@ -178,17 +179,69 @@
 
 \begin{frame}
 	\frametitle{3D Model Pipeline}
-
+	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/medical_imaging_0007.eps}}}$
+	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
+	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/3d_model_0007.eps}}}$
+	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {. . .}}$
+	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {Medical Imaging}}$
+	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {Extract 3D Geometry}}$
+	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {}}$
+	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/bifurcation.eps}}}$
+	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$ 
+	$\vcenter{	\hbox{\begin{varwidth}{0.2\textwidth} 
+				Solver: \begin{itemize} 
+					\item fluid 
+					\item structure 
+					\item fluid-structure
+				\end{itemize} 
+	\end{varwidth}}}$
+	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
+	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/3d_biomarkers_0007.eps}}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {Set Parameters}}$
+	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {Solve}}$
+	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {Biomarkers}}$
+	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+\end{frame}
+\begin{frame}
+	\frametitle{1D Model Pipeline}
 	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/medical_imaging_0007.eps}}}$
 	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
 	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/3d_model_0007.eps}}}$
 	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
 	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/1d_model_0007.eps}}}$
 	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {Medical Imaging}}$
+	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {Extract 3D Geometry}}$
+	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {Extract 1D Geometry}}$
+	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
 	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/bifurcation.eps}}}$
+	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$ 
+	$\vcenter{	\hbox{\begin{varwidth}{0.2\textwidth} 
+				Solver: \begin{itemize} 
+					\item fluid 
+					\item structure 
+					\item fluid-structure
+				\end{itemize} 
+	\end{varwidth}}}$
 	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
 	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/3d_biomarkers_0007.eps}}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {Set Parameters}}$
+	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {Solve}}$
+	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {Biomarkers}}$
+	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
 \end{frame}
+
 %\begin{frame}
 %	\frametitle{Motivation}
 %	\begin{block}{Use and Novelty}
