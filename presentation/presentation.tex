@@ -205,15 +205,15 @@
 	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
 	$\vcenter{\vfil \hbox to 0.2\textwidth {. . .}}$
 	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {Medical Imaging}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize medical imaging}}$
 	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {Extract 3D Geometry}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize extract 3D geometry}}$
 	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
 	$\vcenter{\vfil \hbox to 0.2\textwidth {}}$
 	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
 	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/bifurcation.eps}}}$
 	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$ 
-	$\vcenter{	\hbox{\begin{varwidth}{0.2\textwidth} 
+	$\vcenter{	\hbox{\begin{varwidth}{0.21\textwidth} 
 				Solver: \begin{itemize} 
 					\item fluid 
 					\item structure 
@@ -222,11 +222,11 @@
 	\end{varwidth}}}$
 	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
 	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/3d_biomarkers_0007.eps}}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {Set Parameters}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize set parameters}}$
 	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {Solve}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize solve}}$
 	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {Biomarkers}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize biomarkers}}$
 	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
 \end{frame}
 \begin{frame}
@@ -237,15 +237,16 @@
 	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
 	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/1d_model_0007.eps}}}$
 	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {Medical Imaging}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize medical imaging}}$
 	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {Extract 3D Geometry}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize extract 3D geometry}}$
 	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {Extract 1D Geometry}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize extract 1D geometry}}$
 	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+	\vfill
 	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/bifurcation.eps}}}$
 	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$ 
-	$\vcenter{	\hbox{\begin{varwidth}{0.2\textwidth} 
+	$\vcenter{	\hbox{\begin{varwidth}{0.21\textwidth} 
 				Solver: \begin{itemize} 
 					\item fluid 
 					\item structure 
@@ -253,12 +254,12 @@
 				\end{itemize} 
 	\end{varwidth}}}$
 	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/3d_biomarkers_0007.eps}}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {Set Parameters}}$
+	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/adan56_tibiofibular_trunk_L_P.eps}}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize set parameters}}$
 	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {Solve}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize solve}}$
 	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {Biomarkers}}$
+	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize biomarkers}}$
 	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
 \end{frame}
 
@@ -351,19 +352,29 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Initial Conditions}
+	\frametitle{Initial Conditions (IC)}
+	\begin{center}
+	\begin{minipage}{0.39\textwidth}
+		\begin{block}{Steady State}
+			Since good IC are not known trivial ones are set and the simulation is run until a steady state is reached.
+		\end{block}
+
+	\end{minipage}
+	\begin{minipage}{0.59\textwidth}
+	\includegraphics[width=\textwidth]{images/adan56_tibiofibular_trunk_L_P_steady_state.eps}
+	\end{minipage}
+	\hfill
 	\begin{align}
 		u(z;0) &\equiv 0, &z \in [0,l],\\
 		A(z;0) &= A_0(z), &z \in [0,l], \\
 		Q(z;0) &= u(z;0)A(z;0) \equiv 0, &z \in [0,l].
 	\end{align}
-	\vspace{5mm}
+	\end{center}
 \end{frame}
 \begin{frame}
 	\frametitle{Inlets, Juntions, Outlets}
 	\begin{block}{Inlets}
-
-		set $P$, or $Q$ from data 	
+		set $P$ or $Q$ from data 	
 	\end{block}
 	\begin{block}{Junctions}
 		solve linear system of equations consisting of:
@@ -390,32 +401,32 @@
 
 \section{Implementation}
 
-\begin{frame} [fragile]
-	\frametitle{Code Structure}
-	\begin{lstlisting}[basicstyle=\fontsize{7}{7}\selectfont\ttfamily, language=Python, caption={$dt \hat{=}$timestep(CFL), setBoundaryValues$\hat{=}$inlet(from data), outlet(Windkessel),junctions(conservation laws), muscl$\hat{=}$Monotonic Upstream-centered Scheme for Conservation Laws(Finite Volume)}, label=lst:pc, escapechar=|] 
-		def runSimulation(config_filename, J) 
-			config = loadConfig(config_filename) |\label{ln:init_start}|
-			simulation_data = buildArterialNetwork(config) |\label{ln:init_end}|
-
-			P_t = [0] |\label{ln:pt}|
-
-			converged = False |\label{ln:whout1}|
-			while not converged: |\label{ln:whout2}|
-				t = 0 |\label{ln:t0}|
-				i = 0 |\label{ln:i0}|
-				P_t_temp = P_t |\label{ln:cp}|
-				while t < T:
-					dt = computeDt(simulation_data) |\label{ln:cfl}|
-					simulation_data = setBoundaryValues(simulation_data, dt) |\label{ln:bv    }|
-					simulation_data = muscl(simulation_data, dt) |\label{ln:muscl}|
-					P_t[i,:] = savePressure(simulation_data) |\label{ln:svp}|
-					t = t + dt |\label{ln:updt}|
-				i = i + 1 |\label{ln:updi}|
-				if i >= J:
-					break
-				converged = checkConv(P_t, P_t_temp) |\label{ln:conv}|
-\end{lstlisting}
-\end{frame}
+%\begin{frame} [fragile]
+%	\frametitle{Code Structure}
+%	\begin{lstlisting}[basicstyle=\fontsize{7}{7}\selectfont\ttfamily, language=Python, caption={$dt \hat{=}$timestep(CFL), setBoundaryValues$\hat{=}$inlet(from data), outlet(Windkessel),junctions(conservation laws), muscl$\hat{=}$Monotonic Upstream-centered Scheme for Conservation Laws(Finite Volume)}, label=lst:pc, escapechar=|] 
+%		def runSimulation(config_filename, J) 
+%			config = loadConfig(config_filename) |\label{ln:init_start}|
+%			simulation_data = buildArterialNetwork(config) |\label{ln:init_end}|
+%
+%			P_t = [0] |\label{ln:pt}|
+%
+%			converged = False |\label{ln:whout1}|
+%			while not converged: |\label{ln:whout2}|
+%				t = 0 |\label{ln:t0}|
+%				i = 0 |\label{ln:i0}|
+%				P_t_temp = P_t |\label{ln:cp}|
+%				while t < T:
+%					dt = computeDt(simulation_data) |\label{ln:cfl}|
+%					simulation_data = setBoundaryValues(simulation_data, dt) |\label{ln:bv    }|
+%					simulation_data = muscl(simulation_data, dt) |\label{ln:muscl}|
+%					P_t[i,:] = savePressure(simulation_data) |\label{ln:svp}|
+%					t = t + dt |\label{ln:updt}|
+%				i = i + 1 |\label{ln:updi}|
+%				if i >= J:
+%					break
+%				converged = checkConv(P_t, P_t_temp) |\label{ln:conv}|
+%\end{lstlisting}
+%\end{frame}
 \begin{frame}
 	\frametitle{Padding}
 	without padding
@@ -431,26 +442,26 @@
 \end{frame}
 
 \section{Results}
-\begin{frame}
-	\frametitle{Model: Aorta (0007\_H\_AO\_H)}
-	\begin{figure} [H]
-		\centering
-		\includegraphics[width=\columnwidth]{images/0007.eps}
-		\label{fig:aorta}
-	\end{figure}
-\end{frame}
-\begin{frame}
-	\frametitle{Model: Abdominal Arteries (0029\_H\_ABAO\_H)}
-	\includegraphics[width=\columnwidth]{images/0029.eps}
-\end{frame}
-\begin{frame}
-	\frametitle{Model: Cerebellar Arteries (0053\_H\_CERE\_H)}
-	\includegraphics[width=\columnwidth]{images/0053.eps}
-\end{frame}
-\begin{frame}
-	\frametitle{Model: ADAN56}
-	\includegraphics[width=\textwidth]{images/adan56.eps}
-\end{frame}
+%\begin{frame}
+%	\frametitle{Model: Aorta (0007\_H\_AO\_H)}
+%	\begin{figure} [H]
+%		\centering
+%		\includegraphics[width=\columnwidth]{images/0007.eps}
+%		\label{fig:aorta}
+%	\end{figure}
+%\end{frame}
+%\begin{frame}
+%	\frametitle{Model: Abdominal Arteries (0029\_H\_ABAO\_H)}
+%	\includegraphics[width=\columnwidth]{images/0029.eps}
+%\end{frame}
+%\begin{frame}
+%	\frametitle{Model: Cerebellar Arteries (0053\_H\_CERE\_H)}
+%	\includegraphics[width=\columnwidth]{images/0053.eps}
+%\end{frame}
+%\begin{frame}
+%	\frametitle{Model: ADAN56}
+%	\includegraphics[width=\textwidth]{images/adan56.eps}
+%\end{frame}
 \begin{frame}
 	\frametitle{Validation}
 	\begin{figure} [H]
