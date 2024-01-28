@@ -95,7 +95,7 @@
 				\hline
 			\end{tabular}
 		\item
-			$\Rightarrow$ accurately determining the absolute vascular pressure through a computational model would allow reliable prediction of HPD while avoiding the risk of an invasive procedure
+			$\Rightarrow$ accurately determining the absolute vascular pressure through a computational model would allow reliable diagnosis of HPD while avoiding the risk of an invasive procedure
 		\item problem: need patient specific parameters for model
 	\end{itemize}
 
@@ -163,6 +163,26 @@
 	\begin{block}{Conclusion}
 		The parameters are patient dependent and can heavily influence the simulation outcome. Therefore efficient methods of determining these parameters (solving the inverse problem) are necessary.
 	\end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Solving the Inverse Problem}
+\begin{tabular}{| m{2cm} | m{2cm}| m{2cm} | m{2.4cm} | } 
+	\hline
+	approach & method & speed & interpretability\\ 
+	\hline
+	\hline
+	"classical" numerical methods & stochastic & slower & high \\ 
+	\hline
+	deep learning & gradient based & faster & low \\ 
+	\hline
+\end{tabular}
+
+	\begin{block}{Conclusion}
+		When solving the inverse problem "classical" numerical methods are inefficient due to not having gradients available while deep learning approaches lack interpretability.
+		A numerical solver that provides gradient information w.r.t. it's parameters would provide a fast a interpretable way of solving the inverse problem.
+	\end{block}
+
 \end{frame}
 
 %\begin{frame}
