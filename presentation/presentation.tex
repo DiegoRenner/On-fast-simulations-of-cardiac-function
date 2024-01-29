@@ -36,7 +36,7 @@
 \usetheme{Frankfurt}
 \beamertemplatenavigationsymbolsempty
 
-\title{jaxFlowSim}
+\title{On differentiable simulations of \\ haemodynamic systems}
 
 \author{Diego Renner}
 
@@ -45,6 +45,31 @@
 \section{Introduction}
 \maketitle
 
+\begin{frame}
+	\frametitle{Towards Personalised Medicine: Current Approaches}
+	\begin{minipage}{0.59\textwidth}
+		\begin{figure}[H]
+			\includegraphics[width=\textwidth]{images/approaches_current.eps}
+		\end{figure}
+	\end{minipage} 
+	\begin{minipage}{0.39\textwidth}
+
+	\end{minipage}
+\end{frame}
+\begin{frame}
+	\frametitle{Towards Personalised Medicine: Current Approaches}
+	\begin{minipage}{0.59\textwidth}
+		\begin{figure}[H]
+			\includegraphics[width=\textwidth]{images/approaches_current.eps}
+		\end{figure}
+	\end{minipage} 
+	\begin{minipage}{0.39\textwidth}
+		\begin{block}{Personalised Medicine}
+			characterizing a patient and customizing their treatment according to which sub-population they fall into	
+		\end{block}
+
+	\end{minipage}
+\end{frame}
 \begin{frame}
 	\frametitle{Towards Personalised Medicine: Current Approaches}
 	\begin{minipage}{0.59\textwidth}
@@ -63,6 +88,29 @@
 	\end{minipage}
 \end{frame}
 
+\begin{frame}
+	\frametitle{Towards Personalised Medicine: Future Approaches}
+	\begin{minipage}{0.59\textwidth}
+		\begin{figure}[H]
+			\includegraphics[width=\textwidth]{images/approaches_future.eps}
+		\end{figure}
+	\end{minipage} \hfill
+	\begin{minipage}{0.39\textwidth}
+	\end{minipage}
+\end{frame}
+\begin{frame}
+	\frametitle{Towards Personalised Medicine: Future Approaches}
+	\begin{minipage}{0.59\textwidth}
+		\begin{figure}[H]
+			\includegraphics[width=\textwidth]{images/approaches_future.eps}
+		\end{figure}
+	\end{minipage} \hfill
+	\begin{minipage}{0.39\textwidth}
+		\begin{block}{Model Based Approach}
+			simulate clinically hard/ risky/ impossible to determine biomarkers that have a strong correlation with the disease outcome via first principles 
+		\end{block}
+	\end{minipage}
+\end{frame}
 \begin{frame}
 	\frametitle{Towards Personalised Medicine: Future Approaches}
 	\begin{minipage}{0.59\textwidth}
@@ -115,20 +163,10 @@
 			\begin{minipage}{0.43\linewidth}
 				\includegraphics[width=\linewidth]{images/compare_output_params_P_P.eps}
 			\end{minipage}
-			%\begin{minipage}{0.48\linewidth}
-			%	\captionof{figure}{test}
-			%\end{minipage}
-			%\hfill
-			%\begin{minipage}{0.48\linewidth}
-			%	\captionof{figure}{test}
-			%\end{minipage}
 			\begin{minipage}{0.43\linewidth}
-				\caption*{The bifurcation $\xi := \{u_H, \xi_1, \xi_2, \xi_3\}$ consists of a driving flow $u_H$ and three vessels: $\xi_1 := \{l^1, h_0^1, A_0^1, E^1\}$, $\xi_2 := \{l^2, h_0^2, A_0^2, E^2, R_1^2, C^2, R_2^2\}$, $\xi_3 := \{l^3, h_0^3, A_0^3, E^3, R_1^3, C^3, R_2^3\}.$}
 			\end{minipage}
 			\hfill
 			\begin{minipage}{0.43\linewidth}
-				\caption*{Altering the Windkessel parameters $(R_1,C,R_2)$ leads to vastly different pressure waves being simulated.}
-				\vfill
 			\end{minipage}
 		\end{center}
 	\end{figure}
@@ -158,15 +196,107 @@
 			\begin{minipage}{0.43\linewidth}
 				\includegraphics[width=\linewidth]{images/compare_output_params_P_P.eps}
 			\end{minipage}
+			\begin{minipage}{0.43\linewidth}
+				\caption*{The bifurcation $\xi := \{u_H, \xi_1, \xi_2, \xi_3\}$ consists of a driving flow $u_H$ and three vessels: $\xi_1 := \{l^1, h_0^1, A_0^1, E^1\}$, $\xi_2 := \{l^2, h_0^2, A_0^2, E^2, R_1^2, C^2, R_2^2\}$, $\xi_3 := \{l^3, h_0^3, A_0^3, E^3, R_1^3, C^3, R_2^3\}.$}
+			\end{minipage}
+			\hfill
+			\begin{minipage}{0.43\linewidth}
+			\end{minipage}
 		\end{center}
 	\end{figure}
+	{\tiny \centering 
+		$u_H \hat{=}$ flow from heart,
+
+		$l \hat{=}$ vessel length,
+		$h_0 \hat{=}$ reference vessel wall thickness,
+		$A_0 \hat{=}$ reference cross-section,
+
+		$E \hat{=}$ Young's modulus,
+		$R_1, C, R_2 \hat{=}$ Windkessel parameters.
+	\par}
+\end{frame}
+\begin{frame}
+	\frametitle{Example: Bifurcation}
+	\begin{figure}
+		\begin{center}
+\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
+			\begin{minipage}{0.43\linewidth}
+				\includegraphics[width=\linewidth]{images/bifurcation.eps}
+			\end{minipage}
+			\hfill
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\hfill
+			\begin{minipage}{0.43\linewidth}
+				\includegraphics[width=\linewidth]{images/compare_output_params_P_P.eps}
+			\end{minipage}
+		
+			%\begin{minipage}{0.48\linewidth}
+			%	\captionof{figure}{test}
+			%\end{minipage}
+			%\hfill
+			%\begin{minipage}{0.48\linewidth}
+			%	\captionof{figure}{test}
+			%\end{minipage}
+		\end{minipage}
+	\hfill
+\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
+			\begin{minipage}{0.43\linewidth}
+				\caption*{The bifurcation $\xi := \{u_H, \xi_1, \xi_2, \xi_3\}$ consists of a driving flow $u_H$ and three vessels: $\xi_1 := \{l^1, h_0^1, A_0^1, E^1\}$, $\xi_2 := \{l^2, h_0^2, A_0^2, E^2, R_1^2, C^2, R_2^2\}$, $\xi_3 := \{l^3, h_0^3, A_0^3, E^3, R_1^3, C^3, R_2^3\}.$}
+			\end{minipage}
+			\hfill
+			\begin{minipage}{0.43\linewidth}
+				\caption*{Altering the Windkessel parameters $(R_1,C,R_2)$ leads to vastly different pressure waves being simulated.}
+				\vfill
+			\end{minipage}
+\end{minipage}
+		\end{center}
+	\end{figure}
+	\hfill
+\begin{minipage}[t][0.1\paperheight][t]{\textwidth}
+	{\tiny \centering 
+		$u_H \hat{=}$ flow from heart,
+
+		$l \hat{=}$ vessel length,
+		$h_0 \hat{=}$ reference vessel wall thickness,
+		$A_0 \hat{=}$ reference cross-section,
+
+		$E \hat{=}$ Young's modulus,
+		$R_1, C, R_2 \hat{=}$ Windkessel parameters.
+	\par}
+		\end{minipage}
+\end{frame}
+\begin{frame}
+	\frametitle{Example: Bifurcation}
+	\begin{figure}
+		\begin{center}
+\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
+			\begin{minipage}{0.43\linewidth}
+				\includegraphics[width=\linewidth]{images/bifurcation.eps}
+			\end{minipage}
+			\hfill
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\hfill
+			\begin{minipage}{0.43\linewidth}
+				\includegraphics[width=\linewidth]{images/compare_output_params_P_P.eps}
+			\end{minipage}
+		\end{minipage}
+		\end{center}
+	\end{figure}
+\begin{minipage}[t][0.45\paperheight][t]{\textwidth}
+	\hfill
 	\begin{block}{Conclusion}
 		The parameters are patient dependent and can heavily influence the simulation outcome. Therefore efficient methods of determining these parameters (solving the inverse problem) are necessary.
 	\end{block}
+		\end{minipage}
 \end{frame}
 
 \begin{frame}
 	\frametitle{Solving the Inverse Problem}
+\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
 \begin{tabular}{| m{2cm} | m{2cm}| m{2cm} | m{2.4cm} | } 
 	\hline
 	approach & method & speed & interpretability\\ 
@@ -177,11 +307,33 @@
 	deep learning & gradient based & faster & low \\ 
 	\hline
 \end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
+\end{minipage}
+\end{frame}
 
+\begin{frame}
+	\frametitle{Solving the Inverse Problem}
+\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
+\begin{tabular}{| m{2cm} | m{2cm}| m{2cm} | m{2.4cm} | } 
+	\hline
+	approach & method & speed & interpretability\\ 
+	\hline
+	\hline
+	"classical" numerical methods & stochastic & slower & high \\ 
+	\hline
+	deep learning & gradient based & faster & low \\ 
+	\hline
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
 	\begin{block}{Conclusion}
 		When solving the inverse problem "classical" numerical methods are inefficient due to not having gradients available while deep learning approaches lack interpretability.
 		A numerical solver that provides gradient information w.r.t. it's parameters would provide a fast a interpretable way of solving the inverse problem.
 	\end{block}
+\end{minipage}
 
 \end{frame}
 
