@@ -229,115 +229,12 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{1D-Navier Stokes Equations}
-	\begin{equation}
-		\begin{aligned}
-			\frac{\partial \mathbf{U}}{\partial t} + \frac{\partial \mathbf{F} \left(
-			\mathbf{U} \right)}{\partial z} &= \mathbf{S} \left( \mathbf{U} \right), \ t>0, \
-			z \in \left[ 0,l \right], \\
-			\mathbf{U} \left( z;0 \right) &= \mathbf{U}_0 \left( z \right), \ z \in \left[ 0,l \right], \\
-			\mathbf{U} \left( 0;t \right) &= \mathbf{U}_L \left( t \right), \ t>0,\\
-			\mathbf{U} \left( l;t \right) &= \mathbf{U}_R \left( t \right), \ t>0,
-		\end{aligned} \label{eq:1deqs3}
-	\end{equation}
-	\begin{equation}
-		\mathbf{U} :=
-		\begin{bmatrix}
-			A \\
-			Q
-		\end{bmatrix}, \ 
-		\mathbf{F} \left( \mathbf{U} \right) :=
-		\begin{bmatrix}
-			Q \\
-			\frac{Q^2}{A} + \frac{\beta A^{\frac{3}{2}}}{3\rho\sqrt{A_0}}
-		\end{bmatrix}, \ 
-		\mathbf{S} \left( \mathbf{U} \right) :=
-		\begin{bmatrix}
-			0 \\
-			-22\frac{\mu}{\rho}\frac{Q}{A}
-		\end{bmatrix}.
-	\end{equation}
-
-	\vfill
-
-	{\tiny \centering 
-		$\mathbf{U_0} \hat{=}$ initial condition, 
-		$\mathbf{U_L} \hat{=}$ left boundary values,
-		$\mathbf{U_R} \hat{=}$ right boundary values,
-
-		$l \hat{=}$ vessel length,
-		$A \hat{=}$ cross-section,
-		$A_0 \hat{=}$ reference cross-section,
-		$Q \hat{=}$ volumetric flow-rate,
-
-		$\beta \hat{=}$ elasticity coefficient,
-		$\rho \hat{=}$ blood density,
-		$\mu \hat{=}$ blood dynamic viscosity. 
-	\par}
-
-
-\end{frame}
-
-\begin{frame}
-	\frametitle{Tube Law}
-	\begin{align}
-		P(z;t) &:= P_{ext}(z;t) + \beta \left( \sqrt{\frac{A(z;t)}{A_0(z)}}-1 \right),      \label{eq:p_tot}\\
-		\beta(z) &:=  \frac{\sqrt{\pi} E h_0(z)}{(1-\nu^2) \sqrt{A_0(z)}},\  z \in \left[ 0,l \right], \ t > 0. 
-	\end{align}
-
-	\vfill
-
-	{\tiny \centering 
-		$P \hat{=}$ pressure,
-		$P_{ext} \hat{=}$ external pressure,
-
-		$l \hat{=}$ vessel length,
-		$A \hat{=}$ cross-section,
-		$A_0 \hat{=}$ reference cross-section,
-
-		$E \hat{=}$ Young's modulus,
-		$h_0 \hat{=}$ reference vessel wall thickness,
-		$\nu \hat{=}$ Poisson's ratio (elasticity parameter). 
-	\par}
-
-\end{frame}
-
-\begin{frame}
-	\frametitle{Initial Conditions (IC)}
+	\frametitle{1D Geometry Extraction: Slicer 3D + VMTK}
 	\begin{center}
-	\begin{minipage}{0.39\textwidth}
-		\begin{block}{Steady State}
-			Since good IC are not known trivial ones are set and the simulation is run until a steady state is reached.
-		\end{block}
-
-	\end{minipage}
-	\begin{minipage}{0.59\textwidth}
-	\includegraphics[width=\textwidth]{images/adan56_tibiofibular_trunk_L_P_steady_state.eps}
-	\end{minipage}
-	\hfill
-	\begin{align}
-		u(z;0) &\equiv 0, &z \in [0,l],\\
-		A(z;0) &= A_0(z), &z \in [0,l], \\
-		Q(z;0) &= u(z;0)A(z;0) \equiv 0, &z \in [0,l].
-	\end{align}
+		\includegraphics[width=\textwidth]{images/0053_extract.eps}
 	\end{center}
 \end{frame}
-\begin{frame}
-	\frametitle{Inlets, Juntions, Outlets}
-	\begin{block}{Inlets}
-		set $P$ or $Q$ from data 	
-	\end{block}
-	\begin{block}{Junctions}
-		solve linear system of equations consisting of:
-		\begin{itemize}
-			\item conservation of mass and
-			\item conservation of momentum.
-		\end{itemize}
-	\end{block}
-	\begin{block}{Outlets}
-		0D-/ lumped parameter model: three element Windkessel (RCR) model 
-	\end{block}
-\end{frame}
+
 \begin{frame}
 	\frametitle{1D Model Pipeline}
 	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/medical_imaging_0007.eps}}}$
@@ -371,7 +268,6 @@
 	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize biomarkers}}$
 	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
 \end{frame}
-
 \begin{frame}
 	\frametitle{Example: Bifurcation}
 	\begin{figure}
@@ -613,6 +509,117 @@
 	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize biomarkers}}$
 	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
 \end{frame}
+\begin{frame}
+	\frametitle{1D-Navier Stokes Equations}
+	\begin{equation}
+		\begin{aligned}
+			\frac{\partial \mathbf{U}}{\partial t} + \frac{\partial \mathbf{F} \left(
+			\mathbf{U} \right)}{\partial z} &= \mathbf{S} \left( \mathbf{U} \right), \ t>0, \
+			z \in \left[ 0,l \right], \\
+			\mathbf{U} \left( z;0 \right) &= \mathbf{U}_0 \left( z \right), \ z \in \left[ 0,l \right], \\
+			\mathbf{U} \left( 0;t \right) &= \mathbf{U}_L \left( t \right), \ t>0,\\
+			\mathbf{U} \left( l;t \right) &= \mathbf{U}_R \left( t \right), \ t>0,
+		\end{aligned} \label{eq:1deqs3}
+	\end{equation}
+	\begin{equation}
+		\mathbf{U} :=
+		\begin{bmatrix}
+			A \\
+			Q
+		\end{bmatrix}, \ 
+		\mathbf{F} \left( \mathbf{U} \right) :=
+		\begin{bmatrix}
+			Q \\
+			\frac{Q^2}{A} + \frac{\beta A^{\frac{3}{2}}}{3\rho\sqrt{A_0}}
+		\end{bmatrix}, \ 
+		\mathbf{S} \left( \mathbf{U} \right) :=
+		\begin{bmatrix}
+			0 \\
+			-22\frac{\mu}{\rho}\frac{Q}{A}
+		\end{bmatrix}.
+	\end{equation}
+
+	\vfill
+
+	{\tiny \centering 
+		$\mathbf{U_0} \hat{=}$ initial condition, 
+		$\mathbf{U_L} \hat{=}$ left boundary values,
+		$\mathbf{U_R} \hat{=}$ right boundary values,
+
+		$l \hat{=}$ vessel length,
+		$A \hat{=}$ cross-section,
+		$A_0 \hat{=}$ reference cross-section,
+		$Q \hat{=}$ volumetric flow-rate,
+
+		$\beta \hat{=}$ elasticity coefficient,
+		$\rho \hat{=}$ blood density,
+		$\mu \hat{=}$ blood dynamic viscosity. 
+	\par}
+
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Tube Law}
+	\begin{align}
+		P(z;t) &:= P_{ext}(z;t) + \beta \left( \sqrt{\frac{A(z;t)}{A_0(z)}}-1 \right),      \label{eq:p_tot}\\
+		\beta(z) &:=  \frac{\sqrt{\pi} E h_0(z)}{(1-\nu^2) \sqrt{A_0(z)}},\  z \in \left[ 0,l \right], \ t > 0. 
+	\end{align}
+
+	\vfill
+
+	{\tiny \centering 
+		$P \hat{=}$ pressure,
+		$P_{ext} \hat{=}$ external pressure,
+
+		$l \hat{=}$ vessel length,
+		$A \hat{=}$ cross-section,
+		$A_0 \hat{=}$ reference cross-section,
+
+		$E \hat{=}$ Young's modulus,
+		$h_0 \hat{=}$ reference vessel wall thickness,
+		$\nu \hat{=}$ Poisson's ratio (elasticity parameter). 
+	\par}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Initial Conditions (IC)}
+	\begin{center}
+	\begin{minipage}{0.39\textwidth}
+		\begin{block}{Steady State}
+			Since good IC are not known trivial ones are set and the simulation is run until a steady state is reached.
+		\end{block}
+
+	\end{minipage}
+	\begin{minipage}{0.59\textwidth}
+	\includegraphics[width=\textwidth]{images/adan56_tibiofibular_trunk_L_P_steady_state.eps}
+	\end{minipage}
+	\hfill
+	\begin{align}
+		u(z;0) &\equiv 0, &z \in [0,l],\\
+		A(z;0) &= A_0(z), &z \in [0,l], \\
+		Q(z;0) &= u(z;0)A(z;0) \equiv 0, &z \in [0,l].
+	\end{align}
+	\end{center}
+\end{frame}
+\begin{frame}
+	\frametitle{Inlets, Junctions, Outlets}
+	\begin{block}{Inlets}
+		set $P$ or $Q$ from data 	
+	\end{block}
+	\begin{block}{Junctions}
+		solve linear system of equations consisting of:
+		\begin{itemize}
+			\item conservation of mass and
+			\item conservation of momentum.
+		\end{itemize}
+	\end{block}
+	\begin{block}{Outlets}
+		0D-/ lumped parameter model: three element Windkessel (RCR) model 
+	\end{block}
+\end{frame}
+
 
 \section{Implementation}
 
