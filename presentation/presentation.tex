@@ -719,7 +719,7 @@
 
 	\section{Results}
 	\begin{frame}
-		\frametitle{Validation}
+		\frametitle{Validation: Comparison of Solutions}
 		\begin{figure} [H]
 			\centering
 			\includegraphics[width=0.46\columnwidth]{images/0007_H_AO_H_right_subclavian_artery_P.eps}
@@ -731,7 +731,7 @@
 		\end{figure}
 	\end{frame}
 	\begin{frame}
-		\frametitle{Comparison}
+		\frametitle{Validation: Wall-clock Time Comparison}
 		\begin{figure} [H]
 			\centering
 			\includegraphics[width=0.94\columnwidth]{images/comparison.eps}
@@ -764,6 +764,39 @@
 	\begin{frame}
 		\frametitle{Model: ADAN56}
 		\includegraphics[width=\textwidth]{images/adan56.eps}
+	\end{frame}
+	\begin{frame}
+		\frametitle{1D Model Pipeline}
+		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/medical_imaging_0007.eps}}}$
+		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
+		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/3d_model_0007.eps}}}$
+		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
+		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/1d_model_0007.eps}}}$
+		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
+		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize medical imaging}}$
+		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize extract 3D geometry}}$
+		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize extract 1D geometry}}$
+		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+		\vfill
+		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/bifurcation.eps}}}$
+		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$ 
+		$\vcenter{	\hbox{\begin{varwidth}{0.21\textwidth} 
+					Solver: \begin{itemize} 
+						\item fluid 
+						\item structure 
+						\item fluid-structure
+					\end{itemize} 
+		\end{varwidth}}}$
+		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
+		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/adan56_tibiofibular_trunk_L_P.eps}}}$
+		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize set parameters}}$
+		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize solve}}$
+		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize biomarkers}}$
+		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
 	\end{frame}
 
 	\section{Future Work}
