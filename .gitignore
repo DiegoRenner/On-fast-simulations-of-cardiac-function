@@ -1,3 +1,4 @@
+
 *.aux
 *.bbl
 *.blg
@@ -21,4 +22,5 @@
 *.vrb
 *.synctex(busy)
 *.jpg
+presentation/images/snippets
 
