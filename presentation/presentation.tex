@@ -9,6 +9,8 @@
 \usepackage{varwidth}
 \usepackage{amsmath}
 \usepackage{tabularx}
+\usepackage{adjustbox}
+\usepackage{geometry}
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
@@ -55,7 +57,10 @@
 			\includegraphics[width=\textwidth]{images/approaches_current.eps}
 		\end{figure}
 	\end{minipage} 
-	\begin{minipage}[T][0.82\paperheight][T]{0.39\textwidth}
+	\begin{minipage}{0.39\textwidth}
+		\begin{minipage}[t][0.82\paperheight][t]{\textwidth}
+
+		\end{minipage}
 	\end{minipage}
 \end{frame}
 \begin{frame}
@@ -66,13 +71,13 @@
 		\end{figure}
 	\end{minipage} 
 	\begin{minipage}{0.39\textwidth}
-	\begin{minipage}[t][0.41\paperheight][t]{\textwidth}
-		\begin{block}{Personalised Medicine}
-			characterizing a patient and customizing their treatment according to which sub-population they fall into	
-		\end{block}
-	\end{minipage}
-	\begin{minipage}[t][0.41\paperheight][t]{\textwidth}
-	\end{minipage}
+		\begin{minipage}[t][0.41\paperheight][t]{\textwidth}
+			\begin{block}{Personalised Medicine}
+				characterizing a patient and customizing their treatment according to which sub-population they fall into	
+			\end{block}
+		\end{minipage}
+		\begin{minipage}[t][0.41\paperheight][t]{\textwidth}
+		\end{minipage}
 	\end{minipage}
 \end{frame}
 \begin{frame}
@@ -83,16 +88,16 @@
 		\end{figure}
 	\end{minipage} 
 	\begin{minipage}{0.39\textwidth}
-	\begin{minipage}[t][0.41\paperheight][t]{\textwidth}
-		\begin{block}{Personalised Medicine}
-			characterizing a patient and customizing their treatment according to which sub-population they fall into	
-		\end{block}
-	\end{minipage}
-	\begin{minipage}[t][0.41\paperheight][t]{\textwidth}
-		\begin{block}{Biomarkers}
-			measurable quantities that can aid in diagnosis and treatment of a disease
-		\end{block}
-	\end{minipage}
+		\begin{minipage}[t][0.41\paperheight][t]{\textwidth}
+			\begin{block}{Personalised Medicine}
+				characterizing a patient and customizing their treatment according to which sub-population they fall into	
+			\end{block}
+		\end{minipage}
+		\begin{minipage}[t][0.41\paperheight][t]{\textwidth}
+			\begin{block}{Biomarkers}
+				measurable quantities that can aid in diagnosis and treatment of a disease
+			\end{block}
+		\end{minipage}
 	\end{minipage}
 \end{frame}
 
@@ -114,13 +119,13 @@
 		\end{figure}
 	\end{minipage} \hfill
 	\begin{minipage}{0.39\textwidth}
-	\begin{minipage}[t][0.56\paperheight][t]{\textwidth}
-		\begin{block}{Model Based Approach}
-			use patient specific parameters to setup well-defined computational models that output biomarkers which are strongly and causally related to the occurrence or the outcome of a disease
-		\end{block}
-	\end{minipage}
-	\begin{minipage}[t][0.26\paperheight][t]{\textwidth}
-	\end{minipage}
+		\begin{minipage}[t][0.56\paperheight][t]{\textwidth}
+			\begin{block}{Model Based Approach}
+				use patient specific parameters to setup well-defined computational models that output biomarkers which are strongly and causally related to the occurrence or the outcome of a disease
+			\end{block}
+		\end{minipage}
+		\begin{minipage}[t][0.26\paperheight][t]{\textwidth}
+		\end{minipage}
 	\end{minipage}
 \end{frame}
 \begin{frame}
@@ -131,16 +136,16 @@
 		\end{figure}
 	\end{minipage} \hfill
 	\begin{minipage}{0.39\textwidth}
-	\begin{minipage}[t][0.56\paperheight][t]{\textwidth}
-		\begin{block}{Model Based Approach}
-			use patient specific parameters to setup well-defined computational models that output biomarkers which are strongly and causally related to the occurrence or the outcome of a disease
-		\end{block}
-	\end{minipage}
-	\begin{minipage}[t][0.26\paperheight][t]{\textwidth}
-		\begin{block}{Example}
-			$\hookrightarrow$
-		\end{block}
-	\end{minipage}
+		\begin{minipage}[t][0.56\paperheight][t]{\textwidth}
+			\begin{block}{Model Based Approach}
+				use patient specific parameters to setup well-defined computational models that output biomarkers which are strongly and causally related to the occurrence or the outcome of a disease
+			\end{block}
+		\end{minipage}
+		\begin{minipage}[t][0.26\paperheight][t]{\textwidth}
+			\begin{block}{Example}
+				$\hookrightarrow$
+			\end{block}
+		\end{minipage}
 	\end{minipage}
 \end{frame}
 \begin{frame}
@@ -162,73 +167,191 @@
 			$\Rightarrow$ accurately determining the absolute vascular pressure through a computational model would allow reliable diagnosis of HPD while avoiding the risk of an invasive procedure
 		\item problem: need patient specific parameters for model
 	\end{itemize}
-
 \end{frame}
+
 \section{Model Pipeline}
 \begin{frame}
 	\frametitle{3D Model Pipeline}
-	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/medical_imaging_0007.eps}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/3d_model_0007.eps}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {. . .}}$
-	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize medical imaging}}$
-	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize extract 3D geometry}}$
-	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/bifurcation.eps}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$ 
-	$\vcenter{	\hbox{\begin{varwidth}{0.21\textwidth} 
-				Solver: \begin{itemize} 
-					\item fluid 
-					\item structure 
-					\item fluid-structure
-				\end{itemize} 
-	\end{varwidth}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/3d_biomarkers_0007.eps}}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize set parameters}}$
-	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize solve}}$
-	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize biomarkers}}$
-	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+	\vspace{-16pt}
+	\begin{figure}[htbp]
+		\begin{minipage}[t][0.06\paperheight][t]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Medical Imaging}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny 3D Geometry}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+		\end{minipage}
+		\begin{minipage}[c][0.35\paperheight][c]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/medical_imaging_0007.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/3d_model_0007.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				{\huge \hfill .\hfill .\hfill . }
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+		\end{minipage}
+		\begin{minipage}[t][0.06\paperheight][t]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Parameters}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Solver}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Biomarkers}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+		\end{minipage}
+		\begin{minipage}[c][0.35\paperheight][c]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/bifurcation.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				{\footnotesize
+					\begin{itemize} 
+						\item fluid 
+						\item structure 
+						\item fluid-structure
+				\end{itemize}}
+		\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/3d_biomarkers_0007.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+		\end{minipage}
+	\end{figure}
 \end{frame}
+
 \begin{frame}
 	\frametitle{1D Model Pipeline}
-	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/medical_imaging_0007.eps}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/3d_model_0007.eps}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/1d_model_0007.eps}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize medical imaging}}$
-	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize extract 3D geometry}}$
-	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize extract 1D geometry}}$
-	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	\vfill
-	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/bifurcation.eps}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$ 
-	$\vcenter{	\hbox{\begin{varwidth}{0.21\textwidth} 
-				Solver: \begin{itemize} 
-					\item fluid 
-					\item structure 
-					\item fluid-structure
-				\end{itemize} 
-	\end{varwidth}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/adan56_tibiofibular_trunk_L_P.eps}}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize set parameters}}$
-	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize solve}}$
-	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize biomarkers}}$
-	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+	\vspace{-16pt}
+	\begin{figure}[htbp]
+		\begin{minipage}[t][0.06\paperheight][t]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Medical Imaging}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny 3D Geometry}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny 1D Geometry}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+		\end{minipage}
+		\begin{minipage}[c][0.35\paperheight][c]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/medical_imaging_0007.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/3d_model_0007.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/1d_model_0007.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+		\end{minipage}
+		\begin{minipage}[t][0.06\paperheight][t]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Parameters}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Solver}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Biomarkers}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+		\end{minipage}
+		\begin{minipage}[c][0.35\paperheight][c]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/bifurcation.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				{\footnotesize
+					\begin{itemize} 
+						\item fluid 
+						\item structure 
+						\item fluid-structure
+				\end{itemize}}
+		\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/adan56_tibiofibular_trunk_L_P.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+		\end{minipage}
+	\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -240,176 +363,237 @@
 
 \begin{frame}
 	\frametitle{1D Model Pipeline}
-	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/medical_imaging_0007.eps}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/3d_model_0007.eps}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/1d_model_0007.eps}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize medical imaging}}$
-	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize extract 3D geometry}}$
-	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize extract 1D geometry}}$
-	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	\vfill
-	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/bifurcation.eps}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$ 
-	$\vcenter{	\hbox{\begin{varwidth}{0.21\textwidth} 
-				Solver: \begin{itemize} 
-					\item fluid 
-					\item structure 
-					\item fluid-structure
-				\end{itemize} 
-	\end{varwidth}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-	$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/adan56_tibiofibular_trunk_L_P.eps}}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize set parameters}}$
-	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize solve}}$
-	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize biomarkers}}$
-	$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-\end{frame}
-\begin{frame}
-	\frametitle{Example: Bifurcation}
-	\begin{figure}
-		\begin{center}
-\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
-			\begin{minipage}{0.44\textwidth}
-				\includegraphics[width=\textwidth]{images/bifurcation.eps}
+	\vspace{-16pt}
+	\begin{figure}[htbp]
+		\begin{minipage}[t][0.06\paperheight][t]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Medical Imaging}
 			\end{minipage}
-			\hfill
-			\begin{minipage}{0.09\textwidth}
-				\includegraphics[width=\textwidth]{images/right_arrow.png}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
 			\end{minipage}
-			\hfill
-			\begin{minipage}{0.44\textwidth}
-				\includegraphics[width=\textwidth]{images/compare_output_params_P_P.eps}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny 3D Geometry}
 			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
 			\end{minipage}
-		\end{center}
-	\end{figure}
-\begin{minipage}[t][0.45\paperheight][t]{\textwidth}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny 1D Geometry}
 			\end{minipage}
-\end{frame}
-\begin{frame}
-	\frametitle{Example: Bifurcation}
-	\begin{figure}
-		\begin{center}
-\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
-			\begin{minipage}{0.44\textwidth}
-				\includegraphics[width=\textwidth]{images/bifurcation.eps}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
 			\end{minipage}
-			\hfill
-			\begin{minipage}{0.09\textwidth}
-				\includegraphics[width=\textwidth]{images/right_arrow.png}
-			\end{minipage}
-			\hfill
-			\begin{minipage}{0.44\textwidth}
-				\includegraphics[width=\textwidth]{images/compare_output_params_P_P.eps}
-			\end{minipage}
-			\end{minipage}
-\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
-			\begin{minipage}{0.44\textwidth}
-				\caption*{The bifurcation $\xi := \{u_H, \xi_1, \xi_2, \xi_3\}$ consists of a driving flow $u_H$ and three vessels: $\xi_1 := \{l^1, h_0^1, A_0^1, E^1\}$, $\xi_2 := \{l^2, h_0^2, A_0^2, E^2, R_1^2, C^2, R_2^2\}$, $\xi_3 := \{l^3, h_0^3, A_0^3, E^3, R_1^3, C^3, R_2^3\}.$}
-			\end{minipage}
-			\hfill
-			\begin{minipage}{0.44\textwidth}
-			\end{minipage}
-			\end{minipage}
-		\end{center}
-	\end{figure}
-\begin{minipage}[t][0.1\paperheight][t]{\textwidth}
-	{\tiny \centering 
-		$u_H \hat{=}$ flow from heart,
-
-		$l \hat{=}$ vessel length,
-		$h_0 \hat{=}$ reference vessel wall thickness,
-		$A_0 \hat{=}$ reference cross-section,
-
-		$E \hat{=}$ Young's modulus,
-		$R_1, C, R_2 \hat{=}$ Windkessel parameters.
-	\par}
-			\end{minipage}
-\end{frame}
-\begin{frame}
-	\frametitle{Example: Bifurcation}
-	\begin{figure}
-		\begin{center}
-\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
-			\begin{minipage}{0.44\textwidth}
-				\includegraphics[width=\textwidth]{images/bifurcation.eps}
-			\end{minipage}
-			\hfill
-			\begin{minipage}{0.09\textwidth}
-				\includegraphics[width=\textwidth]{images/right_arrow.png}
-			\end{minipage}
-			\hfill
-			\begin{minipage}{0.44\textwidth}
-				\includegraphics[width=\textwidth]{images/compare_output_params_P_P.eps}
-			\end{minipage}
-		
-			%\begin{minipage}{0.48\textwidth}
-			%	\captionof{figure}{test}
-			%\end{minipage}
-			%\hfill
-			%\begin{minipage}{0.48\textwidth}
-			%	\captionof{figure}{test}
-			%\end{minipage}
 		\end{minipage}
+		\begin{minipage}[c][0.35\paperheight][c]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/medical_imaging_0007.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/3d_model_0007.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/1d_model_0007.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+		\end{minipage}
+		\begin{minipage}[t][0.06\paperheight][t]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Parameters}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Solver}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Biomarkers}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+		\end{minipage}
+		\begin{minipage}[c][0.35\paperheight][c]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/bifurcation.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				{\footnotesize
+					\begin{itemize} 
+						\item fluid 
+						\item structure 
+						\item fluid-structure
+				\end{itemize}}
+		\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/adan56_tibiofibular_trunk_L_P.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+		\end{minipage}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Example: Bifurcation}
+	\begin{figure}
+		\begin{center}
+			\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
+				\begin{minipage}{0.44\textwidth}
+					\includegraphics[width=\textwidth]{images/bifurcation.eps}
+				\end{minipage}
+				\hfill
+				\begin{minipage}{0.09\textwidth}
+					\includegraphics[width=\textwidth]{images/right_arrow.png}
+				\end{minipage}
+				\hfill
+				\begin{minipage}{0.44\textwidth}
+					\includegraphics[width=\textwidth]{images/compare_output_params_P_P.eps}
+				\end{minipage}
+			\end{minipage}
+		\end{center}
+	\end{figure}
+	\begin{minipage}[t][0.44\paperheight][t]{\textwidth}
+	\end{minipage}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Example: Bifurcation}
+	\begin{figure}
+		\begin{center}
+			\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
+				\begin{minipage}{0.44\textwidth}
+					\includegraphics[width=\textwidth]{images/bifurcation.eps}
+				\end{minipage}
+				\hfill
+				\begin{minipage}{0.09\textwidth}
+					\includegraphics[width=\textwidth]{images/right_arrow.png}
+				\end{minipage}
+				\hfill
+				\begin{minipage}{0.44\textwidth}
+					\includegraphics[width=\textwidth]{images/compare_output_params_P_P.eps}
+				\end{minipage}
+			\end{minipage}
+			\begin{minipage}[t][0.34\paperheight][t]{\textwidth}
+				\begin{minipage}{0.44\textwidth}
+					\caption*{The bifurcation $\xi := \{u_H, \xi_1, \xi_2, \xi_3\}$ consists of a driving flow $u_H$ and three vessels: $\xi_1 := \{l^1, h_0^1, A_0^1, E^1\}$, $\xi_2 := \{l^2, h_0^2, A_0^2, E^2, R_1^2, C^2, R_2^2\}$, $\xi_3 := \{l^3, h_0^3, A_0^3, E^3, R_1^3, C^3, R_2^3\}.$}
+				\end{minipage}
+				\hfill
+				\begin{minipage}{0.44\textwidth}
+				\end{minipage}
+			\end{minipage}
+		\end{center}
+	\end{figure}
+	\begin{minipage}[t][0.1\paperheight][t]{\textwidth}
+		{\tiny \centering 
+			$u_H \hat{=}$ flow from heart,
+
+			$l \hat{=}$ vessel length,
+			$h_0 \hat{=}$ reference vessel wall thickness,
+			$A_0 \hat{=}$ reference cross-section,
+
+			$E \hat{=}$ Young's modulus,
+			$R_1, C, R_2 \hat{=}$ Windkessel parameters.
+		\par}
+	\end{minipage}
+\end{frame}
+\begin{frame}
+	\frametitle{Example: Bifurcation}
+	\begin{figure}
+		\begin{center}
+			\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
+				\begin{minipage}{0.44\textwidth}
+					\includegraphics[width=\textwidth]{images/bifurcation.eps}
+				\end{minipage}
+				\hfill
+				\begin{minipage}{0.09\textwidth}
+					\includegraphics[width=\textwidth]{images/right_arrow.png}
+				\end{minipage}
+				\hfill
+				\begin{minipage}{0.44\textwidth}
+					\includegraphics[width=\textwidth]{images/compare_output_params_P_P.eps}
+				\end{minipage}
+
+				%\begin{minipage}{0.48\textwidth}
+				%	\captionof{figure}{test}
+				%\end{minipage}
+				%\hfill
+				%\begin{minipage}{0.48\textwidth}
+				%	\captionof{figure}{test}
+				%\end{minipage}
+			\end{minipage}
+			\hfill
+			\begin{minipage}[t][0.34\paperheight][t]{\textwidth}
+				\begin{minipage}{0.44\textwidth}
+					\caption*{The bifurcation $\xi := \{u_H, \xi_1, \xi_2, \xi_3\}$ consists of a driving flow $u_H$ and three vessels: $\xi_1 := \{l^1, h_0^1, A_0^1, E^1\}$, $\xi_2 := \{l^2, h_0^2, A_0^2, E^2, R_1^2, C^2, R_2^2\}$, $\xi_3 := \{l^3, h_0^3, A_0^3, E^3, R_1^3, C^3, R_2^3\}.$}
+				\end{minipage}
+				\hfill
+				\begin{minipage}{0.44\textwidth}
+					\caption*{Altering the Windkessel parameters $(R_1,C,R_2)$ leads to vastly different pressure waves being simulated.}
+					\vfill
+				\end{minipage}
+			\end{minipage}
+		\end{center}
+	\end{figure}
 	\hfill
-\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
-			\begin{minipage}{0.44\textwidth}
-				\caption*{The bifurcation $\xi := \{u_H, \xi_1, \xi_2, \xi_3\}$ consists of a driving flow $u_H$ and three vessels: $\xi_1 := \{l^1, h_0^1, A_0^1, E^1\}$, $\xi_2 := \{l^2, h_0^2, A_0^2, E^2, R_1^2, C^2, R_2^2\}$, $\xi_3 := \{l^3, h_0^3, A_0^3, E^3, R_1^3, C^3, R_2^3\}.$}
-			\end{minipage}
-			\hfill
-			\begin{minipage}{0.44\textwidth}
-				\caption*{Altering the Windkessel parameters $(R_1,C,R_2)$ leads to vastly different pressure waves being simulated.}
-				\vfill
-			\end{minipage}
-\end{minipage}
-		\end{center}
-	\end{figure}
-	\hfill
-\begin{minipage}[t][0.1\paperheight][t]{\textwidth}
-	{\tiny \centering 
-		$u_H \hat{=}$ flow from heart,
+	\begin{minipage}[t][0.1\paperheight][t]{\textwidth}
+		{\tiny \centering 
+			$u_H \hat{=}$ flow from heart,
 
-		$l \hat{=}$ vessel length,
-		$h_0 \hat{=}$ reference vessel wall thickness,
-		$A_0 \hat{=}$ reference cross-section,
+			$l \hat{=}$ vessel length,
+			$h_0 \hat{=}$ reference vessel wall thickness,
+			$A_0 \hat{=}$ reference cross-section,
 
-		$E \hat{=}$ Young's modulus,
-		$R_1, C, R_2 \hat{=}$ Windkessel parameters.
-	\par}
-		\end{minipage}
+			$E \hat{=}$ Young's modulus,
+			$R_1, C, R_2 \hat{=}$ Windkessel parameters.
+		\par}
+	\end{minipage}
 \end{frame}
+
 \begin{frame}
 	\frametitle{Example: Bifurcation}
 	\begin{figure}
 		\begin{center}
-\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
-			\begin{minipage}{0.44\textwidth}
-				\includegraphics[width=\textwidth]{images/bifurcation.eps}
+			\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
+				\begin{minipage}{0.44\textwidth}
+					\includegraphics[width=\textwidth]{images/bifurcation.eps}
+				\end{minipage}
+				\hfill
+				\begin{minipage}{0.09\textwidth}
+					\includegraphics[width=\textwidth]{images/right_arrow.png}
+				\end{minipage}
+				\hfill
+				\begin{minipage}{0.44\textwidth}
+					\includegraphics[width=\textwidth]{images/compare_output_params_P_P.eps}
+				\end{minipage}
 			\end{minipage}
-			\hfill
-			\begin{minipage}{0.09\textwidth}
-				\includegraphics[width=\textwidth]{images/right_arrow.png}
-			\end{minipage}
-			\hfill
-			\begin{minipage}{0.44\textwidth}
-				\includegraphics[width=\textwidth]{images/compare_output_params_P_P.eps}
-			\end{minipage}
-		\end{minipage}
 		\end{center}
 	\end{figure}
-\begin{minipage}[t][0.45\paperheight][t]{\textwidth}
-	\hfill
-	\begin{block}{Conclusion}
-		The parameters are patient dependent and can heavily influence the simulation outcome. Therefore efficient methods of determining these parameters (solving the inverse problem) are necessary.
-	\end{block}
-		\end{minipage}
+	\begin{minipage}[t][0.44\paperheight][t]{\textwidth}
+		\hfill
+		\begin{block}{Conclusion}
+			The parameters are patient dependent and can heavily influence the simulation outcome. Therefore efficient methods of determining these parameters (solving the inverse problem) are necessary.
+		\end{block}
+	\end{minipage}
 \end{frame}
 
 \begin{frame}
@@ -428,425 +612,590 @@
 		\includegraphics[width=\textwidth]{images/right_arrow.png}
 	\end{minipage}
 	\begin{minipage}{0.25\textwidth}
-			\begin{figure}
-		\scalebox{.4}{\parbox{\linewidth}{%
-				\begin{align*}
-					P_{mean} &:= \frac{120 \text{mmHg}}{80 \frac{\text{ml}}{\text{s}}}, \  Q_{car} := 80 \frac{\text{ml}}{\text{s}}, \\
-					R_{tot} &:= \frac{P_{mean}}{Q_{car}}, \ C_{tot} := 10^{-3} \frac{\text{cm}^5}{\text{dyne}}, \\
-					\xi_i &:= \frac{\sum_{j \in I} A_{0,j}}{A_{0,i}}, \\
-					R_{tot,i} &:= \xi_i R_{tot}, \ C_{tot,i} := \frac{1}{\xi_i} C_{tot}, \\
-					R_{1,i} &:= \frac{9}{100} R_{tot,i}, \ R_{2,i} := \frac{91}{100} R_{tot,i}.
-		\end{align*}
-}}
-		\caption*{Windkessel parameters}
-				\includegraphics[width=\textwidth]{images/config2.png}
-				\caption*{vessel wall thickness}
-				\includegraphics[width=\textwidth]{images/config3.png}
-				\caption*{Young's modulus}
-			\end{figure}
+		\begin{figure}
+			\resizebox{\linewidth}{!}{\begin{minipage}{2.3\textwidth}
+					\begin{align*}
+						P_{mean} &:= \frac{120 \text{mmHg}}{80 \frac{\text{ml}}{\text{s}}}, \  Q_{car} := 80 \frac{\text{ml}}{\text{s}}, \\
+						R_{tot} &:= \frac{P_{mean}}{Q_{car}}, \ C_{tot} := 10^{-3} \frac{\text{cm}^5}{\text{dyne}}, \\
+						\xi_i &:= \frac{\sum_{j \in I} A_{0,j}}{A_{0,i}}, \\
+						R_{tot,i} &:= \xi_i R_{tot}, \ C_{tot,i} := \frac{1}{\xi_i} C_{tot}, \\
+						R_{1,i} &:= \frac{9}{100} R_{tot,i}, \ R_{2,i} := \frac{91}{100} R_{tot,i}.
+					\end{align*}
+			\end{minipage}}
+			\caption*{Windkessel parameters}
+			\includegraphics[width=\textwidth]{images/config2.png}
+			\caption*{vessel wall thickness}
+			\includegraphics[width=\textwidth]{images/config3.png}
+			\caption*{Young's modulus}
+		\end{figure}
+	\end{minipage}
+	\begin{minipage}{0.1\textwidth}
+		\includegraphics[width=\textwidth]{images/right_arrow.png}
+	\end{minipage}
+	\begin{minipage}{0.25\textwidth}
+		\begin{figure}
+			\includegraphics[width=\textwidth]{images/config4.png}
+			\caption*{YML configuration}
+		\end{figure}
+
+	\end{minipage}
+
+\end{frame}
+
+%\begin{frame}
+%	\frametitle{Solving the Inverse Problem}
+%\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
+%\begin{tabular}{| m{2cm} | m{2cm}| m{2cm} | m{2.4cm} | } 
+%	\hline
+%	approach & method & speed & interpretability\\ 
+%	\hline
+%	\hline
+%	"classical" numerical methods & stochastic & slower & high \\ 
+%	\hline
+%	deep learning & gradient based & faster & low \\ 
+%	\hline
+%\end{tabular}
+%\end{minipage}
+%\hfill
+%\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
+%\end{minipage}
+%\end{frame}
+%
+%\begin{frame}
+%	\frametitle{Solving the Inverse Problem}
+%\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
+%\begin{tabular}{| m{2cm} | m{2cm}| m{2cm} | m{2.4cm} | } 
+%	\hline
+%	approach & method & speed & interpretability\\ 
+%	\hline
+%	\hline
+%	"classical" numerical methods & stochastic & slower & high \\ 
+%	\hline
+%	deep learning & gradient based & faster & low \\ 
+%	\hline
+%\end{tabular}
+%\end{minipage}
+%\hfill
+%\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
+%	\begin{block}{Conclusion}
+%		When solving the inverse problem "classical" numerical methods are inefficient due to not having gradients available while deep learning approaches lack interpretability.
+%		A numerical solver that provides gradient information w.r.t. it's parameters would provide a fast a interpretable way of solving the inverse problem.
+%	\end{block}
+%\end{minipage}
+%
+%\end{frame}
+
+%\begin{frame}
+%	\frametitle{Introduction}
+%	\begin{block}{What is jaxFlowSim?}
+%		\begin{itemize}
+%			\item 1D-haemodynamics solver
+%			\item written in JAX
+%			\item differentiable
+%		\end{itemize}
+%	\end{block}
+%	\vspace{5mm}
+%\end{frame}
+
+%\begin{frame}
+%	\frametitle{Motivation}
+%	\begin{block}{Use and Novelty}
+%		\begin{itemize}
+%			\item towards personalised medicine
+%			\item parameter inference
+%			\item sensitivity analysis
+%		\end{itemize}
+%	\end{block}
+%	\vspace{5mm}
+%\end{frame}
+
+\begin{frame}
+	\frametitle{1D Model Pipeline}
+	\vspace{-16pt}
+	\begin{figure}[htbp]
+		\begin{minipage}[t][0.06\paperheight][t]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Medical Imaging}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny 3D Geometry}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny 1D Geometry}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
 		\end{minipage}
-		\begin{minipage}{0.1\textwidth}
-			\includegraphics[width=\textwidth]{images/right_arrow.png}
+		\begin{minipage}[c][0.35\paperheight][c]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/medical_imaging_0007.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/3d_model_0007.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/1d_model_0007.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
 		\end{minipage}
-		\begin{minipage}{0.25\textwidth}
-			\begin{figure}
-				\includegraphics[width=\textwidth]{images/config4.png}
-				\caption*{YML configuration}
-			\end{figure}
-
+		\begin{minipage}[t][0.06\paperheight][t]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Parameters}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Solver}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Biomarkers}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
 		\end{minipage}
-
-	\end{frame}
-
-	%\begin{frame}
-	%	\frametitle{Solving the Inverse Problem}
-	%\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
-	%\begin{tabular}{| m{2cm} | m{2cm}| m{2cm} | m{2.4cm} | } 
-	%	\hline
-	%	approach & method & speed & interpretability\\ 
-	%	\hline
-	%	\hline
-	%	"classical" numerical methods & stochastic & slower & high \\ 
-	%	\hline
-	%	deep learning & gradient based & faster & low \\ 
-	%	\hline
-	%\end{tabular}
-	%\end{minipage}
-	%\hfill
-	%\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
-	%\end{minipage}
-	%\end{frame}
-	%
-	%\begin{frame}
-	%	\frametitle{Solving the Inverse Problem}
-	%\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
-	%\begin{tabular}{| m{2cm} | m{2cm}| m{2cm} | m{2.4cm} | } 
-	%	\hline
-	%	approach & method & speed & interpretability\\ 
-	%	\hline
-	%	\hline
-	%	"classical" numerical methods & stochastic & slower & high \\ 
-	%	\hline
-	%	deep learning & gradient based & faster & low \\ 
-	%	\hline
-	%\end{tabular}
-	%\end{minipage}
-	%\hfill
-	%\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
-	%	\begin{block}{Conclusion}
-	%		When solving the inverse problem "classical" numerical methods are inefficient due to not having gradients available while deep learning approaches lack interpretability.
-	%		A numerical solver that provides gradient information w.r.t. it's parameters would provide a fast a interpretable way of solving the inverse problem.
-	%	\end{block}
-	%\end{minipage}
-	%
-	%\end{frame}
-
-	%\begin{frame}
-	%	\frametitle{Introduction}
-	%	\begin{block}{What is jaxFlowSim?}
-	%		\begin{itemize}
-	%			\item 1D-haemodynamics solver
-	%			\item written in JAX
-	%			\item differentiable
-	%		\end{itemize}
-	%	\end{block}
-	%	\vspace{5mm}
-	%\end{frame}
-
-	%\begin{frame}
-	%	\frametitle{Motivation}
-	%	\begin{block}{Use and Novelty}
-	%		\begin{itemize}
-	%			\item towards personalised medicine
-	%			\item parameter inference
-	%			\item sensitivity analysis
-	%		\end{itemize}
-	%	\end{block}
-	%	\vspace{5mm}
-	%\end{frame}
-
-	\begin{frame}
-		\frametitle{1D Model Pipeline}
-		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/medical_imaging_0007.eps}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/3d_model_0007.eps}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/1d_model_0007.eps}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize medical imaging}}$
-		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize extract 3D geometry}}$
-		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize extract 1D geometry}}$
-		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-		\vfill
-		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/bifurcation.eps}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$ 
-		$\vcenter{	\hbox{\begin{varwidth}{0.21\textwidth} 
-					Solver: \begin{itemize} 
+		\begin{minipage}[c][0.35\paperheight][c]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/bifurcation.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				{\footnotesize
+					\begin{itemize} 
 						\item fluid 
 						\item structure 
 						\item fluid-structure
-					\end{itemize} 
-		\end{varwidth}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/adan56_tibiofibular_trunk_L_P.eps}}}$
-		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize set parameters}}$
-		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize solve}}$
-		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize biomarkers}}$
-		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	\end{frame}
-	\begin{frame}
-		\frametitle{1D-Navier Stokes Equations}
-		\begin{equation}
-			\begin{aligned}
-				\frac{\partial \mathbf{U}}{\partial t} + \frac{\partial \mathbf{F} \left(
-				\mathbf{U} \right)}{\partial z} &= \mathbf{S} \left( \mathbf{U} \right), \ t>0, \
-				z \in \left[ 0,l \right], \\
-				\mathbf{U} \left( z;0 \right) &= \mathbf{U}_0 \left( z \right), \ z \in \left[ 0,l \right], \\
-				\mathbf{U} \left( 0;t \right) &= \mathbf{U}_L \left( t \right), \ t>0,\\
-				\mathbf{U} \left( l;t \right) &= \mathbf{U}_R \left( t \right), \ t>0,
-			\end{aligned} \label{eq:1deqs3}
-		\end{equation}
-		\begin{equation}
-			\mathbf{U} :=
-			\begin{bmatrix}
-				A \\
-				Q
-			\end{bmatrix}, \ 
-			\mathbf{F} \left( \mathbf{U} \right) :=
-			\begin{bmatrix}
-				Q \\
-				\frac{Q^2}{A} + \frac{\beta A^{\frac{3}{2}}}{3\rho\sqrt{A_0}}
-			\end{bmatrix}, \ 
-			\mathbf{S} \left( \mathbf{U} \right) :=
-			\begin{bmatrix}
-				0 \\
-				-22\frac{\mu}{\rho}\frac{Q}{A}
-			\end{bmatrix}.
-		\end{equation}
+				\end{itemize}}
+		\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/adan56_tibiofibular_trunk_L_P.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+		\end{minipage}
+	\end{figure}
+\end{frame}
 
-		\vfill
+\begin{frame}
+	\frametitle{1D-Navier Stokes Equations}
+	\begin{equation}
+		\begin{aligned}
+			\frac{\partial \mathbf{U}}{\partial t} + \frac{\partial \mathbf{F} \left(
+			\mathbf{U} \right)}{\partial z} &= \mathbf{S} \left( \mathbf{U} \right), \ t>0, \
+			z \in \left[ 0,l \right], \\
+			\mathbf{U} \left( z;0 \right) &= \mathbf{U}_0 \left( z \right), \ z \in \left[ 0,l \right], \\
+			\mathbf{U} \left( 0;t \right) &= \mathbf{U}_L \left( t \right), \ t>0,\\
+			\mathbf{U} \left( l;t \right) &= \mathbf{U}_R \left( t \right), \ t>0,
+		\end{aligned} \label{eq:1deqs3}
+	\end{equation}
+	\begin{equation}
+		\mathbf{U} :=
+		\begin{bmatrix}
+			A \\
+			Q
+		\end{bmatrix}, \ 
+		\mathbf{F} \left( \mathbf{U} \right) :=
+		\begin{bmatrix}
+			Q \\
+			\frac{Q^2}{A} + \frac{\beta A^{\frac{3}{2}}}{3\rho\sqrt{A_0}}
+		\end{bmatrix}, \ 
+		\mathbf{S} \left( \mathbf{U} \right) :=
+		\begin{bmatrix}
+			0 \\
+			-22\frac{\mu}{\rho}\frac{Q}{A}
+		\end{bmatrix}.
+	\end{equation}
 
-		{\tiny \centering 
-			$\mathbf{U_0} \hat{=}$ initial condition, 
-			$\mathbf{U_L} \hat{=}$ left boundary values,
-			$\mathbf{U_R} \hat{=}$ right boundary values,
+	\vfill
 
-			$l \hat{=}$ vessel length,
-			$A \hat{=}$ cross-section,
-			$A_0 \hat{=}$ reference cross-section,
-			$Q \hat{=}$ volumetric flow-rate,
+	{\tiny \centering 
+		$\mathbf{U_0} \hat{=}$ initial condition, 
+		$\mathbf{U_L} \hat{=}$ left boundary values,
+		$\mathbf{U_R} \hat{=}$ right boundary values,
 
-			$\beta \hat{=}$ elasticity coefficient,
-			$\rho \hat{=}$ blood density,
-			$\mu \hat{=}$ blood dynamic viscosity. 
-		\par}
+		$l \hat{=}$ vessel length,
+		$A \hat{=}$ cross-section,
+		$A_0 \hat{=}$ reference cross-section,
+		$Q \hat{=}$ volumetric flow-rate,
+
+		$\beta \hat{=}$ elasticity coefficient,
+		$\rho \hat{=}$ blood density,
+		$\mu \hat{=}$ blood dynamic viscosity. 
+	\par}
 
 
-	\end{frame}
+\end{frame}
 
-	\begin{frame}
-		\frametitle{Tube Law}
+\begin{frame}
+	\frametitle{Tube Law}
+	\begin{align}
+		P(z;t) &:= P_{ext}(z;t) + \beta \left( \sqrt{\frac{A(z;t)}{A_0(z)}}-1 \right),      \label{eq:p_tot}\\
+		\beta(z) &:=  \frac{\sqrt{\pi} E h_0(z)}{(1-\nu^2) \sqrt{A_0(z)}},\  z \in \left[ 0,l \right], \ t > 0. 
+	\end{align}
+
+	\vfill
+
+	{\tiny \centering 
+		$P \hat{=}$ pressure,
+		$P_{ext} \hat{=}$ external pressure,
+
+		$l \hat{=}$ vessel length,
+		$A \hat{=}$ cross-section,
+		$A_0 \hat{=}$ reference cross-section,
+
+		$E \hat{=}$ Young's modulus,
+		$h_0 \hat{=}$ reference vessel wall thickness,
+		$\nu \hat{=}$ Poisson's ratio (elasticity parameter). 
+	\par}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Initial Conditions (IC)}
+	\begin{center}
+		\begin{minipage}{0.39\textwidth}
+			\begin{block}{Steady State}
+				Since good IC are not known trivial ones are set and the simulation is run until a steady state is reached.
+			\end{block}
+
+		\end{minipage}
+		\begin{minipage}{0.59\textwidth}
+			\includegraphics[width=\textwidth]{images/adan56_tibiofibular_trunk_L_P_steady_state.eps}
+		\end{minipage}
+		\hfill
 		\begin{align}
-			P(z;t) &:= P_{ext}(z;t) + \beta \left( \sqrt{\frac{A(z;t)}{A_0(z)}}-1 \right),      \label{eq:p_tot}\\
-			\beta(z) &:=  \frac{\sqrt{\pi} E h_0(z)}{(1-\nu^2) \sqrt{A_0(z)}},\  z \in \left[ 0,l \right], \ t > 0. 
+			u(z;0) &\equiv 0, &z \in [0,l],\\
+			A(z;0) &= A_0(z), &z \in [0,l], \\
+			Q(z;0) &= u(z;0)A(z;0) \equiv 0, &z \in [0,l].
 		\end{align}
+	\end{center}
+\end{frame}
+\begin{frame}
+	\frametitle{Inlets, Junctions, Outlets}
+	\begin{block}{Inlets}
+		set $P$ or $Q$ from data 	
+	\end{block}
+	\begin{block}{Junctions}
+		solve linear system of equations consisting of:
+		\begin{itemize}
+			\item conservation of mass and
+			\item conservation of momentum.
+		\end{itemize}
+	\end{block}
+	\begin{block}{Outlets}
+		0D-/ lumped parameter model: three element Windkessel (RCR) model 
+	\end{block}
+\end{frame}
 
-		\vfill
+%\begin{frame} [fragile]
+%	\frametitle{Code Structure}
+%	\begin{lstlisting}[basicstyle=\fontsize{7}{7}\selectfont\ttfamily, language=Python, caption={$dt \hat{=}$timestep(CFL), setBoundaryValues$\hat{=}$inlet(from data), outlet(Windkessel),junctions(conservation laws), muscl$\hat{=}$Monotonic Upstream-centered Scheme for Conservation Laws(Finite Volume)}, label=lst:pc, escapechar=|] 
+%		def runSimulation(config_filename, J) 
+%			config = loadConfig(config_filename) |\label{ln:init_start}|
+%			simulation_data = buildArterialNetwork(config) |\label{ln:init_end}|
+%
+%			P_t = [0] |\label{ln:pt}|
+%
+%			converged = False |\label{ln:whout1}|
+%			while not converged: |\label{ln:whout2}|
+%				t = 0 |\label{ln:t0}|
+%				i = 0 |\label{ln:i0}|
+%				P_t_temp = P_t |\label{ln:cp}|
+%				while t < T:
+%					dt = computeDt(simulation_data) |\label{ln:cfl}|
+%					simulation_data = setBoundaryValues(simulation_data, dt) |\label{ln:bv    }|
+%					simulation_data = muscl(simulation_data, dt) |\label{ln:muscl}|
+%					P_t[i,:] = savePressure(simulation_data) |\label{ln:svp}|
+%					t = t + dt |\label{ln:updt}|
+%				i = i + 1 |\label{ln:updi}|
+%				if i >= J:
+%					break
+%				converged = checkConv(P_t, P_t_temp) |\label{ln:conv}|
+%\end{lstlisting}
+%\end{frame}
+\begin{frame}
+	\frametitle{Numerical Methods}
+	\begin{block}{1D-Model}
+		FV method: MUSCL scheme with Lax-Friedrichs Flux
+	\end{block}
+	\begin{block}{Junctions \& Outlets}
+		Newton method
+	\end{block}
+\end{frame}
+\begin{frame}
+	\frametitle{Padding}
+	without padding
+	\includegraphics[width=\textwidth]{images/padding1.eps}
+	with padding
+	\includegraphics[width=\textwidth]{images/padding2.eps}
+	\includegraphics[width=\textwidth]{images/legend.eps}
+\end{frame}
+\begin{frame}
+	\frametitle{Masking}
+	\includegraphics[width=\textwidth]{images/masking.eps}
+	\includegraphics[width=\textwidth]{images/legend.eps}
+\end{frame}
 
-		{\tiny \centering 
-			$P \hat{=}$ pressure,
-			$P_{ext} \hat{=}$ external pressure,
+\section{Results}
+\begin{frame}
+	\frametitle{Validation: Comparison of Solutions}
+	\begin{figure} [H]
+		\centering
+		\includegraphics[width=0.46\columnwidth]{images/0007_H_AO_H_right_subclavian_artery_P.eps}
+		\includegraphics[width=0.46\columnwidth]{images/0029_H_ABAO_H_celiac_branch_P.eps
+		}
+		\includegraphics[width=0.46\columnwidth]{images/0053_H_CERE_H_basilar_artery_IV_P.eps}
+		\includegraphics[width=0.46\columnwidth]{images/adan56_common_hepatic_P.eps}
+		\label{fig:val}
+	\end{figure}
+\end{frame}
 
-			$l \hat{=}$ vessel length,
-			$A \hat{=}$ cross-section,
-			$A_0 \hat{=}$ reference cross-section,
+\begin{frame}
+	\frametitle{Validation: Wall-clock Time Comparison}
+	\begin{figure} [H]
+		\centering
+		\includegraphics[width=0.94\columnwidth]{images/comparison.eps}
+		\label{fig:comparison}
+	\end{figure}
 
-			$E \hat{=}$ Young's modulus,
-			$h_0 \hat{=}$ reference vessel wall thickness,
-			$\nu \hat{=}$ Poisson's ratio (elasticity parameter). 
-		\par}
+\end{frame}
 
-	\end{frame}
+\begin{frame}
+	\frametitle{Model: Aorta (0007\_H\_AO\_H)}
+	\begin{figure} [H]
+		\centering
+		\includegraphics[width=\columnwidth]{images/0007.eps}
+		\label{fig:aorta}
+	\end{figure}
+\end{frame}
+\begin{frame}
+	\frametitle{Model: Abdominal Arteries (0029\_H\_ABAO\_H)}
+	\includegraphics[width=\columnwidth]{images/0029.eps}
+\end{frame}
+\begin{frame}
+	\frametitle{Model: Cerebellar Arteries (0053\_H\_CERE\_H)}
+	\includegraphics[width=\columnwidth]{images/0053.eps}
+\end{frame}
+\begin{frame}
+	\frametitle{Model: ADAN56}
+	\includegraphics[width=\textwidth]{images/adan56.eps}
+\end{frame}
 
-	\begin{frame}
-		\frametitle{Initial Conditions (IC)}
-		\begin{center}
-			\begin{minipage}{0.39\textwidth}
-				\begin{block}{Steady State}
-					Since good IC are not known trivial ones are set and the simulation is run until a steady state is reached.
-				\end{block}
-
+\begin{frame}
+	\frametitle{1D Model Pipeline}
+	\vspace{-16pt}
+	\begin{figure}[htbp]
+		\begin{minipage}[t][0.06\paperheight][t]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Medical Imaging}
 			\end{minipage}
-			\begin{minipage}{0.59\textwidth}
-				\includegraphics[width=\textwidth]{images/adan56_tibiofibular_trunk_L_P_steady_state.eps}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
 			\end{minipage}
-			\hfill
-			\begin{align}
-				u(z;0) &\equiv 0, &z \in [0,l],\\
-				A(z;0) &= A_0(z), &z \in [0,l], \\
-				Q(z;0) &= u(z;0)A(z;0) \equiv 0, &z \in [0,l].
-			\end{align}
-		\end{center}
-	\end{frame}
-	\begin{frame}
-		\frametitle{Inlets, Junctions, Outlets}
-		\begin{block}{Inlets}
-			set $P$ or $Q$ from data 	
-		\end{block}
-		\begin{block}{Junctions}
-			solve linear system of equations consisting of:
-			\begin{itemize}
-				\item conservation of mass and
-				\item conservation of momentum.
-			\end{itemize}
-		\end{block}
-		\begin{block}{Outlets}
-			0D-/ lumped parameter model: three element Windkessel (RCR) model 
-		\end{block}
-	\end{frame}
-
-	%\begin{frame} [fragile]
-	%	\frametitle{Code Structure}
-	%	\begin{lstlisting}[basicstyle=\fontsize{7}{7}\selectfont\ttfamily, language=Python, caption={$dt \hat{=}$timestep(CFL), setBoundaryValues$\hat{=}$inlet(from data), outlet(Windkessel),junctions(conservation laws), muscl$\hat{=}$Monotonic Upstream-centered Scheme for Conservation Laws(Finite Volume)}, label=lst:pc, escapechar=|] 
-	%		def runSimulation(config_filename, J) 
-	%			config = loadConfig(config_filename) |\label{ln:init_start}|
-	%			simulation_data = buildArterialNetwork(config) |\label{ln:init_end}|
-	%
-	%			P_t = [0] |\label{ln:pt}|
-	%
-	%			converged = False |\label{ln:whout1}|
-	%			while not converged: |\label{ln:whout2}|
-	%				t = 0 |\label{ln:t0}|
-	%				i = 0 |\label{ln:i0}|
-	%				P_t_temp = P_t |\label{ln:cp}|
-	%				while t < T:
-	%					dt = computeDt(simulation_data) |\label{ln:cfl}|
-	%					simulation_data = setBoundaryValues(simulation_data, dt) |\label{ln:bv    }|
-	%					simulation_data = muscl(simulation_data, dt) |\label{ln:muscl}|
-	%					P_t[i,:] = savePressure(simulation_data) |\label{ln:svp}|
-	%					t = t + dt |\label{ln:updt}|
-	%				i = i + 1 |\label{ln:updi}|
-	%				if i >= J:
-	%					break
-	%				converged = checkConv(P_t, P_t_temp) |\label{ln:conv}|
-	%\end{lstlisting}
-	%\end{frame}
-	\begin{frame}
-		\frametitle{Numerical Methods}
-		\begin{block}{1D-Model}
-			FV method: MUSCL scheme with Lax-Friedrichs Flux
-		\end{block}
-		\begin{block}{Junctions \& Outlets}
-			Newton method
-		\end{block}
-	\end{frame}
-	\begin{frame}
-		\frametitle{Padding}
-		without padding
-		\includegraphics[width=\textwidth]{images/padding1.eps}
-		with padding
-		\includegraphics[width=\textwidth]{images/padding2.eps}
-		\includegraphics[width=\textwidth]{images/legend.eps}
-	\end{frame}
-	\begin{frame}
-		\frametitle{Masking}
-		\includegraphics[width=\textwidth]{images/masking.eps}
-		\includegraphics[width=\textwidth]{images/legend.eps}
-	\end{frame}
-
-	\section{Results}
-	\begin{frame}
-		\frametitle{Validation: Comparison of Solutions}
-		\begin{figure} [H]
-			\centering
-			\includegraphics[width=0.46\columnwidth]{images/0007_H_AO_H_right_subclavian_artery_P.eps}
-			\includegraphics[width=0.46\columnwidth]{images/0029_H_ABAO_H_celiac_branch_P.eps
-			}
-			\includegraphics[width=0.46\columnwidth]{images/0053_H_CERE_H_basilar_artery_IV_P.eps}
-			\includegraphics[width=0.46\columnwidth]{images/adan56_common_hepatic_P.eps}
-			\label{fig:val}
-		\end{figure}
-	\end{frame}
-
-	\begin{frame}
-		\frametitle{Validation: Wall-clock Time Comparison}
-		\begin{figure} [H]
-			\centering
-			\includegraphics[width=0.94\columnwidth]{images/comparison.eps}
-			\label{fig:comparison}
-		\end{figure}
-
-	\end{frame}
-
-	\begin{frame}
-		\frametitle{Model: Aorta (0007\_H\_AO\_H)}
-		\begin{figure} [H]
-			\centering
-			\includegraphics[width=\columnwidth]{images/0007.eps}
-			\label{fig:aorta}
-		\end{figure}
-	\end{frame}
-	\begin{frame}
-		\frametitle{Model: Abdominal Arteries (0029\_H\_ABAO\_H)}
-		\includegraphics[width=\columnwidth]{images/0029.eps}
-	\end{frame}
-	\begin{frame}
-		\frametitle{Model: Cerebellar Arteries (0053\_H\_CERE\_H)}
-		\includegraphics[width=\columnwidth]{images/0053.eps}
-	\end{frame}
-	\begin{frame}
-		\frametitle{Model: ADAN56}
-		\includegraphics[width=\textwidth]{images/adan56.eps}
-	\end{frame}
-
-	\begin{frame}
-		\frametitle{1D Model Pipeline}
-		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/medical_imaging_0007.eps}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/3d_model_0007.eps}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/1d_model_0007.eps}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize medical imaging}}$
-		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize extract 3D geometry}}$
-		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize extract 1D geometry}}$
-		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-		\vfill
-		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/bifurcation.eps}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$ 
-		$\vcenter{	\hbox{\begin{varwidth}{0.21\textwidth} 
-					Solver: \begin{itemize} 
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny 3D Geometry}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny 1D Geometry}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+		\end{minipage}
+		\begin{minipage}[c][0.35\paperheight][c]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/medical_imaging_0007.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/3d_model_0007.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/1d_model_0007.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+		\end{minipage}
+		\begin{minipage}[t][0.06\paperheight][t]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Parameters}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Solver}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Biomarkers}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+		\end{minipage}
+		\begin{minipage}[c][0.35\paperheight][c]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/bifurcation.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				{\footnotesize
+					\begin{itemize} 
 						\item fluid 
 						\item structure 
 						\item fluid-structure
-					\end{itemize} 
-		\end{varwidth}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/adan56_tibiofibular_trunk_L_P.eps}}}$
-		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize set parameters}}$
-		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize solve}}$
-		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize biomarkers}}$
-		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	\end{frame}
-	
-	\begin{frame}
-		\frametitle{Parameter Inference Pipeline}
-		$\vcenter{\hbox{\includegraphics[angle=270,origin=c,width=0.1\textwidth]{images/left_turn_arrow.eps}}}$
-		$\vcenter{	\hbox{\begin{varwidth}{0.6\textwidth} 
-					Parameter Inference: \begin{itemize} 
-						\item MCMC \& gradient information $\rightarrow$ Hamiltionian Monte Carlo (HMC)
-						\item HMC \& adaptively setting path length $\rightarrow$ No-U-Turn Sampler (NUTS)
-						\item Provided by Numpyro
-					\end{itemize} 
-		\end{varwidth}}}$
-		$\vcenter{\hbox{\includegraphics[angle=180,origin=c,width=0.1\textwidth]{images/left_turn_arrow.eps}}}$
-		\vfill
-		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/bifurcation.eps}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$ 
-		$\vcenter{	\hbox{\begin{varwidth}{0.21\textwidth} 
-					Solver: \begin{itemize} 
+				\end{itemize}}
+		\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/adan56_tibiofibular_trunk_L_P.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+		\end{minipage}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{1D Model Pipeline}
+	\vspace{-16pt}
+	\begin{figure}[htbp]
+		\begin{minipage}[t][0.06\paperheight][t]{\linewidth}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.58\linewidth}
+				\caption*{\tiny Parameter Inference}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny }
+			\end{minipage}
+		\end{minipage}
+		\begin{minipage}[c][0.35\paperheight][c]{\linewidth}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[angle=270, width=\linewidth]{images/left_turn_arrow.eps}
+			\end{minipage}
+			\begin{minipage}{0.58\linewidth}
+				{\footnotesize \begin{itemize} 
+					\item MCMC \& gradient information $\rightarrow$ Hamiltionian Monte Carlo (HMC)
+					\item HMC \& adaptively setting path length $\rightarrow$ No-U-Turn Sampler (NUTS)
+					\item Provided by Numpyro
+			\end{itemize}}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[angle=180, width=\linewidth]{images/left_turn_arrow.eps}
+			\end{minipage}
+		\end{minipage}
+		\begin{minipage}[t][0.06\paperheight][t]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Parameters}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Solver}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\caption*{\tiny Biomarkers}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+		\end{minipage}
+		\begin{minipage}[c][0.35\paperheight][c]{\linewidth}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/bifurcation.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				{\footnotesize
+					\begin{itemize} 
 						\item fluid 
 						\item structure 
 						\item fluid-structure
-					\end{itemize} 
-		\end{varwidth}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
-		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/adan56_tibiofibular_trunk_L_P.eps}}}$
-		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize set parameters}}$
-		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize solve}}$
-		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize biomarkers}}$
-		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
-	\end{frame}
+				\end{itemize}}
+		\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/right_arrow.png}
+			\end{minipage}
+			\begin{minipage}{0.19\linewidth}
+				\includegraphics[width=\linewidth]{images/adan56_tibiofibular_trunk_L_P.eps}
+			\end{minipage}
+			\begin{minipage}{0.1\linewidth}
+				\caption*{\tiny}
+			\end{minipage}
+		\end{minipage}
+	\end{figure}
+\end{frame}
 
-	\section{Future Work}
-	\begin{frame}
-		\frametitle{Future Work}
-		\begin{block}{Main Points of Interest}
-			\begin{itemize}
-				\item improving performance (general \& GPU optimization)
-				\item automate geometry extraction
-				\item generalize code for junction involving $N$ vessels
-				\item stable parameter inference
-				\item gradient based sensitivity analysis 
-			\end{itemize}
-		\end{block}
-		\vspace{5mm}
-	\end{frame}
 
-	\section{Questions}
-	\begin{frame}
-		\frametitle{Questions?}
-		Thank you for your attention!
-	\end{frame}
+\section{Future Work}
+\begin{frame}
+	\frametitle{Future Work}
+	\begin{block}{Main Points of Interest}
+		\begin{itemize}
+			\item improving performance (general \& GPU optimization)
+			\item automate geometry extraction
+			\item generalize code for junction involving $N$ vessels
+			\item stable parameter inference
+			\item gradient based sensitivity analysis 
+		\end{itemize}
+	\end{block}
+	\vspace{5mm}
+\end{frame}
 
-	\end{document}
+\section{Questions}
+\begin{frame}
+	\frametitle{Questions?}
+	Thank you for your attention!
+\end{frame}
+
+\end{document}
