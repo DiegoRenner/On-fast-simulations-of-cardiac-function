@@ -8,6 +8,7 @@
 \usepackage{lmodern}
 \usepackage{varwidth}
 \usepackage{amsmath}
+\usepackage{tabularx}
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
@@ -147,7 +148,7 @@
 	\begin{itemize}
 		\item affect large parts of the population
 		\item heavily studied but currently no perfect solution 
-		\item \begin{tabular}{| p{4.4cm} | p{2.3cm}| p{2cm} |  } 
+		\item \begin{tabularx}{\linewidth}{| >{\centering\arraybackslash}m{0.4\linewidth} | >{\centering\arraybackslash}m{0.25\linewidth} | >{\centering\arraybackslash}X |} 
 				\hline
 				biomarker(s) & measurement & correlation \\ 
 				\hline
@@ -156,7 +157,7 @@
 				\hline
 				absolute vascular pressure & invasive & strong \\ 
 				\hline
-			\end{tabular}
+			\end{tabularx}
 		\item
 			$\Rightarrow$ accurately determining the absolute vascular pressure through a computational model would allow reliable diagnosis of HPD while avoiding the risk of an invasive procedure
 		\item problem: need patient specific parameters for model
