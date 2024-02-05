@@ -730,6 +730,7 @@
 			\label{fig:val}
 		\end{figure}
 	\end{frame}
+
 	\begin{frame}
 		\frametitle{Validation: Wall-clock Time Comparison}
 		\begin{figure} [H]
@@ -739,12 +740,7 @@
 		\end{figure}
 
 	\end{frame}
-	\begin{frame}
-		\frametitle{Inference}
-		\begin{block}{Demo}
-			inferring an outlet resistance parameter from precomputed data
-		\end{block}
-	\end{frame}
+
 	\begin{frame}
 		\frametitle{Model: Aorta (0007\_H\_AO\_H)}
 		\begin{figure} [H]
@@ -765,6 +761,7 @@
 		\frametitle{Model: ADAN56}
 		\includegraphics[width=\textwidth]{images/adan56.eps}
 	\end{frame}
+
 	\begin{frame}
 		\frametitle{1D Model Pipeline}
 		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/medical_imaging_0007.eps}}}$
@@ -779,6 +776,37 @@
 		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
 		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize extract 1D geometry}}$
 		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+		\vfill
+		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/bifurcation.eps}}}$
+		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$ 
+		$\vcenter{	\hbox{\begin{varwidth}{0.21\textwidth} 
+					Solver: \begin{itemize} 
+						\item fluid 
+						\item structure 
+						\item fluid-structure
+					\end{itemize} 
+		\end{varwidth}}}$
+		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$
+		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/adan56_tibiofibular_trunk_L_P.eps}}}$
+		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize set parameters}}$
+		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize solve}}$
+		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+		$\vcenter{\vfil \hbox to 0.2\textwidth {\footnotesize biomarkers}}$
+		$\vcenter{\vfil \hbox to 0.1\textwidth {}}$
+	\end{frame}
+	
+	\begin{frame}
+		\frametitle{Parameter Inference Pipeline}
+		$\vcenter{\hbox{\includegraphics[angle=270,origin=c,width=0.1\textwidth]{images/left_turn_arrow.eps}}}$
+		$\vcenter{	\hbox{\begin{varwidth}{0.6\textwidth} 
+					Parameter Inference: \begin{itemize} 
+						\item MCMC \& gradient information $\rightarrow$ Hamiltionian Monte Carlo (HMC)
+						\item HMC \& adaptively setting path length $\rightarrow$ No-U-Turn Sampler (NUTS)
+						\item Provided by Numpyro
+					\end{itemize} 
+		\end{varwidth}}}$
+		$\vcenter{\hbox{\includegraphics[angle=180,origin=c,width=0.1\textwidth]{images/left_turn_arrow.eps}}}$
 		\vfill
 		$\vcenter{\hbox{\includegraphics[width=0.2\textwidth]{images/bifurcation.eps}}}$
 		$\vcenter{\hbox{\includegraphics[width=0.1\textwidth]{images/right_arrow.png}}}$ 
