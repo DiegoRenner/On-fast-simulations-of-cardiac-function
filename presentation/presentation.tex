@@ -149,26 +149,31 @@
 		\end{minipage}
 	\end{minipage}
 \end{frame}
-\begin{frame}
-	\frametitle{Example: Hypertensive Pregnancy Disorders (HPD)}
+\begin{frame}<1>[label=ph]
+	\frametitle{Example: Pulmonary Hypertension (PH)}
 	\begin{itemize}
-		\item affect large parts of the population
-		\item heavily studied but currently no perfect solution 
-		\item \begin{tabularx}{\linewidth}{| >{\centering\arraybackslash}m{0.4\linewidth} | >{\centering\arraybackslash}m{0.25\linewidth} | >{\centering\arraybackslash}X |} 
+		\item<1-> affect large parts of the population
+		\item<2-> heavily studied but currently no perfect solution 
+		\item<3-> \begin{tabularx}{\linewidth}{| >{\centering\arraybackslash}m{0.4\linewidth} | >{\centering\arraybackslash}m{0.25\linewidth} | >{\centering\arraybackslash}X |} 
 				\hline
 				biomarker(s) & measurement & correlation \\ 
 				\hline
 				\hline
-				systolic, end diastolic, mean pressure wave velocity & ultrasound/ MRI & weak \\ 
-				\hline
 				absolute vascular pressure & invasive & strong \\ 
 				\hline
+				brain natriuretic peptide & blood sampling & weaker \\ 
+				\hline
 			\end{tabularx}
-		\item
-			$\Rightarrow$ accurately determining the absolute vascular pressure through a computational model would allow reliable diagnosis of HPD while avoiding the risk of an invasive procedure
-		\item problem: need patient specific parameters for model
+		\item<4->
+			$\Rightarrow$ accurately determining the absolute vascular pressure through a computational model would allow reliable prognosis of PH while avoiding the risk of an invasive procedure
+		\item<5-> problem: need patient specific parameters for model
 	\end{itemize}
 \end{frame}
+
+\againframe<2>{ph}
+\againframe<3>{ph}
+\againframe<4>{ph}
+\againframe<5>{ph}
 
 \section{Model Pipeline}
 \begin{frame}<1>[label=mp]
