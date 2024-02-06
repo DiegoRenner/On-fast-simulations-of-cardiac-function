@@ -561,7 +561,7 @@ A finite difference scheme was applied by \cite{smith2002anatomically,elad1991nu
 The finite volume and the finite element methods have become more prevalent in recent years.
 The advantage of the FV solver over the FD solver is that they can treat discontinuities \cite{toro2001shock}, i.e. they can deal with potential large gradients occurring in the solution \cite{shu1988efficient,harten1997uniformly}.
 In the case of our simulation, these might occur when assigning boundary values and therefore a FV method would be beneficial.
-The finite volume method was applied by \cite{melis2017gaussian,brook1999numerical,brook2002model} and the finite element method has been used in \cite{sherwin2003one,sherwin2003computational,formaggia2001coupling,wan2002one,porenta1986finite,rooz1982finite,bessems2008experimental}
+The finite volume method was applied by \cite{melis2017gaussian,brook1999numerical,brook2002model} and the finite element method has been used in \cite{sherwin2003one,sherwin2003computational,formaggia2001coupling,wan2002one,porenta1986finite,rooz1982finite,bessems2008experimental}.
 While higher accuracy and faster convergence can technically be achieved by a FE method, there are applications in venous systems where FE schemes do not converge.
 There is also increasing complexity involved when implementing models that are based on the method of characteristics all the way up to finite element methods.
 For this work we chose to implement the haemodynamics solver using a FV scheme, specifically using the MUSCL solver.
