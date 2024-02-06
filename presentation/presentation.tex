@@ -602,16 +602,16 @@
 
 \againframe<4>{mp}
 
-\begin{frame}
+\begin{frame}<1>[label=nse]
 	\frametitle{1D-Navier Stokes Equations}
 	\begin{equation}
 		\begin{aligned}
 			\frac{\partial \mathbf{U}}{\partial t} + \frac{\partial \mathbf{F} \left(
 			\mathbf{U} \right)}{\partial z} &= \mathbf{S} \left( \mathbf{U} \right), \ t>0, \
-			z \in \left[ 0,l \right], \\
+			z \in \left[ 0,l \right], \only<1>{\\
 			\mathbf{U} \left( z;0 \right) &= \mathbf{U}_0 \left( z \right), \ z \in \left[ 0,l \right], \\
 			\mathbf{U} \left( 0;t \right) &= \mathbf{U}_L \left( t \right), \ t>0,\\
-			\mathbf{U} \left( l;t \right) &= \mathbf{U}_R \left( t \right), \ t>0,
+		\mathbf{U} \left( l;t \right) &= \mathbf{U}_R \left( t \right), \ t>0,}
 		\end{aligned} \label{eq:1deqs3}
 	\end{equation}
 	\begin{equation}
@@ -635,9 +635,9 @@
 	\vfill
 
 	{\tiny \centering 
-		$\mathbf{U_0} \hat{=}$ initial condition, 
+		\only<1>{$\mathbf{U_0} \hat{=}$ initial condition, 
 		$\mathbf{U_L} \hat{=}$ left boundary values,
-		$\mathbf{U_R} \hat{=}$ right boundary values,
+	$\mathbf{U_R} \hat{=}$ right boundary values,}
 
 		$l \hat{=}$ vessel length,
 		$A \hat{=}$ cross-section,
@@ -649,8 +649,25 @@
 		$\mu \hat{=}$ blood dynamic viscosity. 
 	\par}
 
+	\only<2->{\vfill
+
+		\begin{block}{Conservative Form with Source Term}
+		\begin{itemize}
+			\onslide<3->{\item conservation of mass (continuity equation)}
+			\onslide<4->{\item conservation of momentum}
+			\onslide<5->{\item no energy equation (incompressible Newtonian fluid)}
+		\end{itemize}
+			
+\end{block}}
+
+
 
 \end{frame}
+
+\againframe<2>{nse}
+\againframe<3>{nse}
+\againframe<4>{nse}
+\againframe<5>{nse}
 
 \begin{frame}
 	\frametitle{Tube Law}
@@ -742,10 +759,17 @@
 \begin{frame}
 	\frametitle{Numerical Methods}
 	\begin{block}{1D-Model}
-		FV method: MUSCL scheme with Lax-Friedrichs Flux
+		\onslide<2->{Finite Volume (FV) method: monotonic upstream-centred scheme for conservation laws (MUSCL) scheme with Lax-Friedrichs (LF) flux.}
+		\begin{itemize}
+			\onslide<3->{\item FV: for discrete domains and conservative equations}
+			\onslide<4->{\item LF: for hyperbolic system}
+		\end{itemize}
 	\end{block}
 	\begin{block}{Junctions \& Outlets}
-		Newton method
+		\onslide<5->{Newton method}
+		\begin{itemize}
+			\onslide<6->{\item for solving non-linear root finding problems}
+		\end{itemize}
 	\end{block}
 \end{frame}
 \begin{frame}
