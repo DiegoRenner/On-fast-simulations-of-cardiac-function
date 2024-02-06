@@ -693,42 +693,49 @@
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}<1>[label=ic]
 	\frametitle{Initial Conditions (IC)}
-	\begin{center}
-		\begin{minipage}{0.39\textwidth}
+		\onslide<2->{\begin{minipage}{0.37\textwidth}
 			\begin{block}{Steady State}
 				Since good IC are not known trivial ones are set and the simulation is run until a steady state is reached.
 			\end{block}
 
-		\end{minipage}
-		\begin{minipage}{0.59\textwidth}
-			\includegraphics[width=\textwidth]{images/adan56_tibiofibular_trunk_L_P_steady_state.eps}
-		\end{minipage}
+	\end{minipage}}
 		\hfill
-		\begin{align}
+		\onslide<4->{\begin{minipage}{0.57\textwidth}
+			\includegraphics[width=\textwidth]{images/adan56_tibiofibular_trunk_L_P_steady_state.eps}
+	\end{minipage}}
+		\onslide<3->{\begin{align}
 			u(z;0) &\equiv 0, &z \in [0,l],\\
 			A(z;0) &= A_0(z), &z \in [0,l], \\
 			Q(z;0) &= u(z;0)A(z;0) \equiv 0, &z \in [0,l].
-		\end{align}
-	\end{center}
+	\end{align}}
 \end{frame}
-\begin{frame}
+
+\againframe<2>{ic}
+\againframe<3>{ic}
+\againframe<4>{ic}
+
+\begin{frame}<1>[label=ijo]
 	\frametitle{Inlets, Junctions, Outlets}
 	\begin{block}{Inlets}
-		set $P$ or $Q$ from data 	
+		\onslide<2->{set $P$ or $Q$ from data}
 	\end{block}
 	\begin{block}{Junctions}
-		solve linear system of equations consisting of:
+		\onslide<3->{solve linear system of equations consisting of:
 		\begin{itemize}
 			\item conservation of mass and
 			\item conservation of momentum.
-		\end{itemize}
+	\end{itemize}}
 	\end{block}
 	\begin{block}{Outlets}
-		0D-/ lumped parameter model: three element Windkessel (RCR) model 
-	\end{block}
+		\onslide<4->{0D-/ lumped parameter model: three element Windkessel (RCR) model}
+\end{block}
 \end{frame}
+
+\againframe<2>{ijo}
+\againframe<3>{ijo}
+\againframe<4>{ijo}
 
 %\begin{frame} [fragile]
 %	\frametitle{Code Structure}
