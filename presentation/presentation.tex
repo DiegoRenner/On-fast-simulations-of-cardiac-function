@@ -669,7 +669,7 @@
 \againframe<4>{nse}
 \againframe<5>{nse}
 
-\begin{frame}
+\begin{frame}<1>[label=tl]
 	\frametitle{Tube Law}
 	\begin{align}
 		P(z;t) &:= P_{ext}(z;t) + \beta \left( \sqrt{\frac{A(z;t)}{A_0(z)}}-1 \right),      \label{eq:p_tot}\\
@@ -690,8 +690,16 @@
 		$h_0 \hat{=}$ reference vessel wall thickness,
 		$\nu \hat{=}$ Poisson's ratio (elasticity parameter). 
 	\par}
-
+		\onslide<1->{\begin{block}{Fluid-Structure Interaction}
+			\begin{itemize}
+			\onslide<2->{\item $P(z;t)$ describes fluid structure interaction}
+			\onslide<3->{\item $\beta(z)$ quantifies structure}
+			\end{itemize}
+	\end{block}}
 \end{frame}
+
+\againframe<2>{tl}
+\againframe<3>{tl}
 
 \begin{frame}<1>[label=ic]
 	\frametitle{Initial Conditions (IC)}
