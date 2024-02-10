@@ -724,7 +724,7 @@
 \againframe<2>{ic}
 \againframe<3>{ic}
 
-\begin{frame}<1>[label=ijo]
+\begin{frame}
 	\frametitle{Inlets, Junctions, Outlets}
 	\begin{block}{Inlets}
 		\onslide<2->{set $P$ or $Q$ from data}
@@ -741,9 +741,6 @@
 \end{block}
 \end{frame}
 
-\againframe<2>{ijo}
-\againframe<3>{ijo}
-\againframe<4>{ijo}
 
 %\begin{frame} [fragile]
 %	\frametitle{Code Structure}
@@ -787,6 +784,24 @@
 		\end{itemize}
 	\end{block}
 \end{frame}
+
+\begin{frame}
+	\frametitle{JAX Caveats}
+	\begin{block}{What to look out for:}
+		\begin{itemize}
+			\item<2-> functional purity
+			\item<3-> efficient data structures
+			\item<4-> avoiding for loops (loops in general)
+				\begin{itemize}
+					\item<5-> Python for-loop: slow compilation
+					\item<6-> JAX for-loop: homogeneous mesh 
+					\item<7-> $\rightarrow$ avoid for-loops through vectorization
+					\item<8-> $\rightarrow$ requires padding and masking
+				\end{itemize}
+		\end{itemize}
+	\end{block}
+\end{frame}
+
 \begin{frame}
 	\frametitle{Padding}
 	without padding
