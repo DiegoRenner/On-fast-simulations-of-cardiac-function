@@ -179,7 +179,7 @@
 \section{Model Pipeline}
 \begin{frame}<1>[label=mp]
 	\only<1>{\frametitle{3D Model Pipeline}}
-	\only<2->{\frametitle{1D Model Pipeline}}
+	\only<3->{\frametitle{1D Model Pipeline}}
 	\vspace{-10pt}
 	\begin{figure}[htbp]
 		\only<-99>{\begin{minipage}[t][0.06\paperheight][t]{\linewidth}
@@ -199,10 +199,10 @@
 				\caption*{\tiny}
 			\end{minipage}
 			\hfill
-			\only<1>{\begin{minipage}{0.18\linewidth}
+			\only<1-2>{\begin{minipage}{0.18\linewidth}
 				\caption*{\tiny}
 		\end{minipage}}
-			\only<2->{\begin{minipage}{0.18\linewidth}
+			\only<3->{\begin{minipage}{0.18\linewidth}
 				\caption*{\tiny 1D Geometry}
 		\end{minipage}}
 			\hfill
@@ -227,10 +227,10 @@
 				\includegraphics[width=\linewidth]{images/right_arrow.png}
 			\end{minipage}
 			\hfill
-			\only<1>{\begin{minipage}{0.18\linewidth}
+			\only<1-2>{\begin{minipage}{0.18\linewidth}
 				{\huge \hfill .\hfill .\hfill .}
 		\end{minipage}}
-			\only<2->{\begin{minipage}{0.18\linewidth}
+			\only<3->{\begin{minipage}{0.18\linewidth}
 				\includegraphics[width=\linewidth]{images/1d_model_0007.eps}
 		\end{minipage}}
 			\hfill
@@ -288,7 +288,7 @@
 			\end{minipage}
 			\hfill
 			\begin{minipage}{0.18\linewidth}
-				\onslide<1->{\caption*{\tiny Biomarkers}}
+				\caption*{\tiny Biomarkers}
 			\end{minipage}
 			\hfill
 			\begin{minipage}{0.1\linewidth}
@@ -317,14 +317,18 @@
 				\includegraphics[width=\linewidth]{images/right_arrow.png}
 			\end{minipage}
 			\hfill
-			\only<1>{\begin{minipage}{0.18\linewidth}
+			\only<1-2>{\begin{minipage}{0.18\linewidth}
 				\includegraphics[width=\linewidth]{images/3d_biomarkers_0007.eps}
 		\end{minipage}}
-		\only<2->{\begin{minipage}{0.18\linewidth}
+		\only<3->{\begin{minipage}{0.18\linewidth}
 \includegraphics[width=\linewidth]{images/adan56_tibiofibular_trunk_L_P.eps}
 		\end{minipage}}
-			\hfill
-		\only<-99>{\begin{minipage}{0.1\linewidth}
+		\hfill
+			\only<2>{\begin{minipage}{0.1\linewidth}
+				\caption*{\color{red} too expensive!}
+		\end{minipage}}
+		\hfill
+		\only<3-99>{\begin{minipage}{0.1\linewidth}
 			\caption*{\tiny}
 	\end{minipage}}
 		\only<100>{\begin{minipage}{0.1\linewidth}
@@ -335,6 +339,7 @@
 \end{frame}
 
 \againframe<2>{mp}
+\againframe<3>{mp}
 
 \begin{frame}
 	\frametitle{1D Geometry Extraction: Slicer 3D + VMTK}
@@ -343,7 +348,7 @@
 	\end{center}
 \end{frame}
 
-\againframe<3>{mp}
+\againframe<4>{mp}
 
 \begin{frame}
 	\frametitle{Example: Bifurcation}
@@ -601,7 +606,7 @@
 %	\vspace{5mm}
 %\end{frame}
 
-\againframe<4>{mp}
+\againframe<5>{mp}
 
 \begin{frame}<1>[label=nse]
 	\frametitle{1D-Navier Stokes Equations}
@@ -861,7 +866,7 @@
 	\includegraphics[width=\textwidth]{images/adan56.eps}
 \end{frame}
 
-\againframe<5>{mp}
+\againframe<6>{mp}
 \againframe<100>{mp}
 
 \section{Future Work}
