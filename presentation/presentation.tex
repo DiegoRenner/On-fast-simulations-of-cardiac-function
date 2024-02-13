@@ -178,7 +178,7 @@
 
 \section{Model Pipeline}
 \begin{frame}<1>[label=mp]
-	\only<1>{\frametitle{3D Model Pipeline}}
+	\only<1-2>{\frametitle{3D Model Pipeline}}
 	\only<3->{\frametitle{1D Model Pipeline}}
 	\vspace{-10pt}
 	\begin{figure}[htbp]
@@ -341,12 +341,54 @@
 \againframe<2>{mp}
 \againframe<3>{mp}
 
-\begin{frame}
+\begin{frame}[label=1dge]
 	\frametitle{1D Geometry Extraction: Slicer 3D + VMTK}
-	\begin{center}
-		\includegraphics[width=\textwidth]{images/0053_extract.eps}
-	\end{center}
+		\begin{minipage}{\linewidth}
+			\onslide<1->{\begin{minipage}{0.25\linewidth}
+				\includegraphics[width=\linewidth]{images/0053_extract1.png}
+		\end{minipage}}
+			\onslide<3->{\begin{minipage}{0.1\linewidth}
+				\scalebox{-1}[1]{\includegraphics[width=\linewidth, angle=180]{images/left_turn_arrow.eps}}
+		\end{minipage}
+			\begin{minipage}{0.25\linewidth}
+				\includegraphics[width=\linewidth]{images/0053_extract3.png}
+		\end{minipage}}
+			\begin{minipage}{0.37\linewidth}
+				{\small \begin{enumerate}
+				\item<1-> load meshdata from \emph{vascularmodel.com} in Slicer 3D
+				\item<2-> use VMTK plugin to determine start/end points
+				\item<3-> extract 1D geometry
+				\item<4-> save extracted geometry in table
+		\end{enumerate}}
+			\end{minipage}
+	\end{minipage}
+		\begin{minipage}{\linewidth}
+			\begin{minipage}{0.075\linewidth}
+				{\ }
+			\end{minipage}
+			\onslide<2->{\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/left_turn_arrow.eps}
+			\end{minipage}
+			\begin{minipage}{0.25\linewidth}
+				\includegraphics[width=\linewidth]{images/0053_extract2.png}
+		\end{minipage}}
+			\onslide<4->{\begin{minipage}{0.1\linewidth}
+				\includegraphics[width=\linewidth]{images/left_turn_arrow.eps}
+		\end{minipage}
+			\begin{minipage}{0.25\linewidth}
+				\includegraphics[width=\linewidth]{images/0053_extract4.png}
+		\end{minipage}}
+			\begin{minipage}{0.195\linewidth}
+		\end{minipage}
+		\end{minipage}
 \end{frame}
+
+%\begin{frame}
+%	\frametitle{1D Geometry Extraction: Slicer 3D + VMTK}
+%	\begin{center}
+%		\includegraphics[width=\textwidth]{images/0053_extract.eps}
+%	\end{center}
+%\end{frame}
 
 \againframe<4>{mp}
 
