@@ -179,7 +179,8 @@
 \section{Model Pipeline}
 \begin{frame}<1>[label=mp]
 	\only<1-2>{\frametitle{3D Model Pipeline}}
-	\only<3->{\frametitle{1D Model Pipeline}}
+	\only<3-99>{\frametitle{1D Model Pipeline}}
+	\only<100->{\frametitle{Parameter Inference Pipeline}}
 	\vspace{-10pt}
 	\begin{figure}[htbp]
 		\only<-99>{\begin{minipage}[t][0.06\paperheight][t]{\linewidth}
@@ -537,7 +538,7 @@
 
 \begin{frame}
 	\frametitle{Setting Parameters: Python Script}
-	\begin{minipage}{0.25\textwidth}
+	\onslide<1->{\begin{minipage}{0.25\textwidth}
 		\begin{figure}
 			\includegraphics[width=\textwidth]{images/0053_extract4_cropped.png}
 			\caption*{dimensions and connectivity}
@@ -546,8 +547,8 @@
 			\includegraphics[width=\textwidth]{images/config1.png}
 			\caption*{simulation constants}
 		\end{figure}
-	\end{minipage}
-	\begin{minipage}{0.1\textwidth}
+\end{minipage}}
+	\onslide<2->{\begin{minipage}{0.1\textwidth}
 		\includegraphics[width=\textwidth]{images/right_arrow.png}
 	\end{minipage}
 	\begin{minipage}{0.25\textwidth}
@@ -567,8 +568,8 @@
 			\includegraphics[width=\textwidth]{images/config3.png}
 			\caption*{Young's modulus}
 		\end{figure}
-	\end{minipage}
-	\begin{minipage}{0.1\textwidth}
+\end{minipage}}
+	\onslide<3->{\begin{minipage}{0.1\textwidth}
 		\includegraphics[width=\textwidth]{images/right_arrow.png}
 	\end{minipage}
 	\begin{minipage}{0.25\textwidth}
@@ -577,8 +578,7 @@
 			\caption*{YML configuration}
 		\end{figure}
 
-	\end{minipage}
-
+\end{minipage}}
 \end{frame}
 
 %\begin{frame}
