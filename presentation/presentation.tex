@@ -1,4 +1,10 @@
-\documentclass{beamer}
+\documentclass[compress]{beamer}
+\useoutertheme[subsection=false]{miniframes}
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\slideentry}{\advance\beamer@xpos by1\relax}{}{}{}
+\def\beamer@subsectionentry#1#2#3#4#5{\advance\beamer@xpos by1\relax}%
+\makeatother
 \usepackage{listings}
 \usepackage[font=footnotesize]{caption}
 \usepackage[outdir=./images/]{epstopdf}
@@ -55,8 +61,8 @@
 \begin{document}
 
 \section{Introduction}
+\subsection{Towards Personalised Medicine}
 \maketitle
-
 \begin{frame}
 	\frametitle{Towards Personalised Medicine: Current Approaches}
 	\begin{minipage}{0.59\textwidth}
@@ -155,6 +161,7 @@
 		\end{minipage}
 	\end{minipage}
 \end{frame}
+\subsection{Example}
 \begin{frame}<1>[label=ph]
 	\frametitle{Example: Pulmonary Hypertension (PH)}
 	\begin{itemize}
@@ -182,6 +189,7 @@
 \againframe<5>{ph}
 
 \section{Model Pipeline}
+\subsection{3D-1D}
 \begin{frame}<1>[label=mp]
 	\only<1-2>{\frametitle{3D Model Pipeline}}
 	\only<3-99>{\frametitle{1D Model Pipeline}}
@@ -347,6 +355,7 @@
 \againframe<2>{mp}
 \againframe<3>{mp}
 
+\subsection{1D Geometry Extraction}
 \begin{frame}[label=1dge]
 	\frametitle{1D Geometry Extraction: Slicer 3D + VMTK}
 		\begin{minipage}{\linewidth}
@@ -398,6 +407,7 @@
 
 \againframe<4>{mp}
 
+\subsection{Setting Parameters}
 \begin{frame}
 	\frametitle{Example: Bifurcation}
 	\begin{figure}
@@ -653,6 +663,7 @@
 %	\vspace{5mm}
 %\end{frame}
 
+\subsection{Solver}
 \againframe<5>{mp}
 
 \begin{frame}<1>[label=nse]
@@ -869,6 +880,7 @@
 \end{frame}
 
 \section{Results}
+\subsection{Comparison}
 \begin{frame}
 	\frametitle{Validation: Comparison of Solutions}
 	\begin{figure} [H]
@@ -882,6 +894,7 @@
 	\end{figure}
 \end{frame}
 
+\subsection{Timing}
 \begin{frame}
 	\frametitle{Validation: Wall-clock Time Comparison}
 	\begin{figure} [H]
@@ -892,6 +905,7 @@
 
 \end{frame}
 
+\subsection{Case Studies}
 \begin{frame}
 	\frametitle{Model: Aorta (0007\_H\_AO\_H)}
 	\begin{figure} [H]
@@ -913,9 +927,11 @@
 	\includegraphics[width=\textwidth]{images/adan56.eps}
 \end{frame}
 
+\subsection{Parameter Inference}
 \againframe<6>{mp}
 \againframe<100>{mp}
 
+\subsection{Future Work}
 \section{Future Work}
 \begin{frame}<1>[label=fw]
 	\frametitle{Future Work}
@@ -937,6 +953,7 @@
 \againframe<5>{fw}
 \againframe<6>{fw}
 
+\subsection{Questions}
 \section{Questions}
 \begin{frame}
 	\frametitle{Questions?}
