@@ -294,7 +294,7 @@
   \begin{titlepage}%
 		\noindent
 		\includegraphics[viewport=8 8 185 55]{figures/eth_logo_black} \hfill
-		%\includegraphics[trim=0 0 2 0]{figures/disco-logo-col} \hspace{-6pt} \vspace{-6pt}
+		%\includegraphics[trim=0 0 2 0]{figures/SAM_logo_purple} \hspace{pt} \vspace{-6pt}
 
 		\vspace{3cm}
 
