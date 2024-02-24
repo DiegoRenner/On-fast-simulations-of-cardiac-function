@@ -456,7 +456,8 @@
 \againframe<4>{mp}
 
 \subsection{Setting Parameters}
-\begin{frame}
+
+\begin{frame}<1>[label=eb]
 	\frametitle{Example: Bifurcation}
 	\begin{figure}
 		\begin{center}
@@ -464,100 +465,31 @@
 				\begin{minipage}{0.44\textwidth}
 					\includegraphics[width=\textwidth]{images/bifurcation.eps}
 				\end{minipage}
-				\hfill
+				\onslide<2->{
 				\begin{minipage}{0.09\textwidth}
 					\includegraphics[width=\textwidth]{images/right_arrow.png}
 				\end{minipage}
-				\hfill
 				\begin{minipage}{0.44\textwidth}
 					\includegraphics[width=\textwidth]{images/compare_output_params_P_P.eps}
-				\end{minipage}
+			\end{minipage}}
 			\end{minipage}
 		\end{center}
 	\end{figure}
-	\begin{minipage}[t][0.44\paperheight][t]{\textwidth}
-	\end{minipage}
-\end{frame}
-
-\begin{frame}
-	\frametitle{Example: Bifurcation}
 	\begin{figure}
 		\begin{center}
-			\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
-				\begin{minipage}{0.44\textwidth}
-					\includegraphics[width=\textwidth]{images/bifurcation.eps}
-				\end{minipage}
-				\hfill
-				\begin{minipage}{0.09\textwidth}
-					\includegraphics[width=\textwidth]{images/right_arrow.png}
-				\end{minipage}
-				\hfill
-				\begin{minipage}{0.44\textwidth}
-					\includegraphics[width=\textwidth]{images/compare_output_params_P_P.eps}
-				\end{minipage}
-			\end{minipage}
-			\begin{minipage}[t][0.34\paperheight][t]{\textwidth}
+			\only<1-2>{\begin{minipage}[t][0.33\paperheight][t]{\textwidth}
 				\begin{minipage}{0.44\textwidth}
 					\caption*{The bifurcation $\xi := \{u_H, \xi_1, \xi_2, \xi_3\}$ consists of a driving flow $u_H$ and three vessels: $\xi_1 := \{l^1, h_0^1, A_0^1, E^1\}$, $\xi_2 := \{l^2, h_0^2, A_0^2, E^2, R_1^2, C^2, R_2^2\}$, $\xi_3 := \{l^3, h_0^3, A_0^3, E^3, R_1^3, C^3, R_2^3\}.$}
 				\end{minipage}
 				\hfill
-				\begin{minipage}{0.44\textwidth}
-				\end{minipage}
-			\end{minipage}
-		\end{center}
-	\end{figure}
-	\begin{minipage}[t][0.1\paperheight][t]{\textwidth}
-		{\tiny \centering 
-			$u_H \hat{=}$ flow from heart,
-
-			$l \hat{=}$ vessel length,
-			$h_0 \hat{=}$ reference vessel wall thickness,
-			$A_0 \hat{=}$ reference cross-section,
-
-			$E \hat{=}$ Young's modulus,
-			$R_1, C, R_2 \hat{=}$ Windkessel parameters.
-		\par}
-	\end{minipage}
-\end{frame}
-\begin{frame}
-	\frametitle{Example: Bifurcation}
-	\begin{figure}
-		\begin{center}
-			\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
-				\begin{minipage}{0.44\textwidth}
-					\includegraphics[width=\textwidth]{images/bifurcation.eps}
-				\end{minipage}
-				\hfill
-				\begin{minipage}{0.09\textwidth}
-					\includegraphics[width=\textwidth]{images/right_arrow.png}
-				\end{minipage}
-				\hfill
-				\begin{minipage}{0.44\textwidth}
-					\includegraphics[width=\textwidth]{images/compare_output_params_P_P.eps}
-				\end{minipage}
-
-				%\begin{minipage}{0.48\textwidth}
-				%	\captionof{figure}{test}
-				%\end{minipage}
-				%\hfill
-				%\begin{minipage}{0.48\textwidth}
-				%	\captionof{figure}{test}
-				%\end{minipage}
-			\end{minipage}
-			\hfill
-			\begin{minipage}[t][0.34\paperheight][t]{\textwidth}
-				\begin{minipage}{0.44\textwidth}
-					\caption*{The bifurcation $\xi := \{u_H, \xi_1, \xi_2, \xi_3\}$ consists of a driving flow $u_H$ and three vessels: $\xi_1 := \{l^1, h_0^1, A_0^1, E^1\}$, $\xi_2 := \{l^2, h_0^2, A_0^2, E^2, R_1^2, C^2, R_2^2\}$, $\xi_3 := \{l^3, h_0^3, A_0^3, E^3, R_1^3, C^3, R_2^3\}.$}
-				\end{minipage}
-				\hfill
-				\begin{minipage}{0.44\textwidth}
+				\only<2>{\begin{minipage}{0.44\textwidth}
 					\caption*{Altering the Windkessel parameters $(R_1,C,R_2)$ leads to vastly different pressure waves being simulated.}
-					\vfill
-				\end{minipage}
-			\end{minipage}
+			\end{minipage}}
+		\end{minipage}}
 		\end{center}
 	\end{figure}
-	\hfill
+	\vspace{-7pt}
+	\only<1-2>{
 	\begin{minipage}[t][0.1\paperheight][t]{\textwidth}
 		{\tiny \centering 
 			$u_H \hat{=}$ flow from heart,
@@ -569,35 +501,17 @@
 			$E \hat{=}$ Young's modulus,
 			$R_1, C, R_2 \hat{=}$ Windkessel parameters.
 		\par}
-	\end{minipage}
-\end{frame}
-
-\begin{frame}
-	\frametitle{Example: Bifurcation}
-	\begin{figure}
-		\begin{center}
-			\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
-				\begin{minipage}{0.44\textwidth}
-					\includegraphics[width=\textwidth]{images/bifurcation.eps}
-				\end{minipage}
-				\hfill
-				\begin{minipage}{0.09\textwidth}
-					\includegraphics[width=\textwidth]{images/right_arrow.png}
-				\end{minipage}
-				\hfill
-				\begin{minipage}{0.44\textwidth}
-					\includegraphics[width=\textwidth]{images/compare_output_params_P_P.eps}
-				\end{minipage}
-			\end{minipage}
-		\end{center}
-	\end{figure}
-	\begin{minipage}[t][0.44\paperheight][t]{\textwidth}
-		\hfill
+\end{minipage}}
+\only<3>{\vspace{-11pt}
+	\begin{minipage}[t][0.43\paperheight][t]{\textwidth}
 		\begin{block}{Conclusion}
 			The parameters are patient dependent and can heavily influence the simulation outcome. Therefore efficient methods of determining these parameters (solving the inverse problem) are necessary.
 		\end{block}
-	\end{minipage}
+\end{minipage}}
 \end{frame}
+
+\againframe<2>{eb}
+\againframe<3>{eb}
 
 \begin{frame}
 	\frametitle{Setting Parameters: Python Script}
