@@ -13,7 +13,6 @@
 *.pdf
 *.vtp
 *.psvm
-*.svg
 *.pvd
 *.xcf
 *.dvi
@@ -22,5 +21,6 @@
 *.vrb
 *.synctex(busy)
 presentation/images/*.jpg
+presentation/images/*.svg
 presentation/images/snippets
 
