@@ -21,6 +21,6 @@
 *.snm
 *.vrb
 *.synctex(busy)
-*.jpg
+presentation/images/*.jpg
 presentation/images/snippets
 
