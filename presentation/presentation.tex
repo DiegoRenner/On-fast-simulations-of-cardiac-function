@@ -207,8 +207,8 @@
 	\only<100->{\frametitle{Parameter Inference Pipeline}}
 	\vspace{-10pt}
 	\begin{figure}[]
-		\only<-99>{\begin{minipage}[t][0.06\paperheight][t]{\linewidth}
-				\begin{minipage}{0.18\linewidth}
+		\begin{minipage}[t][0.06\paperheight][t]{\linewidth}
+				\only<-99>{\begin{minipage}{0.18\linewidth}
 					\caption*{\tiny Medical Imaging}
 				\end{minipage}
 				\hfill
@@ -233,10 +233,22 @@
 				\hfill
 				\begin{minipage}{0.1\linewidth}
 					\caption*{\tiny}
+			\end{minipage}}
+		\only<100>{
+				\begin{minipage}{0.1\linewidth}
+					\caption*{\tiny}
 				\end{minipage}
+				\hfill
+				\begin{minipage}{0.58\linewidth}
+					\caption*{\tiny Parameter Inference}
+				\end{minipage}
+				\hfill
+				\begin{minipage}{0.1\linewidth}
+					\caption*{\tiny }
+			\end{minipage}}
 			\end{minipage}
 			\begin{minipage}[c][0.33\paperheight][c]{\linewidth}
-				\begin{minipage}{0.18\linewidth}
+				\only<-99>{\begin{minipage}{0.18\linewidth}
 					\includegraphics[width=\linewidth]{images/medical_imaging_0007.eps}
 				\end{minipage}
 				\hfill
@@ -261,23 +273,8 @@
 				\hfill
 				\begin{minipage}{0.1\linewidth}
 					\includegraphics[width=\linewidth]{images/right_arrow.png}
-				\end{minipage}
-		\end{minipage}}
+			\end{minipage}}
 		\only<100>{
-			\begin{minipage}[t][0.06\paperheight][t]{\linewidth}
-				\begin{minipage}{0.1\linewidth}
-					\caption*{\tiny}
-				\end{minipage}
-				\hfill
-				\begin{minipage}{0.58\linewidth}
-					\caption*{\tiny Parameter Inference}
-				\end{minipage}
-				\hfill
-				\begin{minipage}{0.1\linewidth}
-					\caption*{\tiny }
-				\end{minipage}
-			\end{minipage}
-			\begin{minipage}[c][0.33\paperheight][c]{\linewidth}
 				\begin{minipage}{0.1\linewidth}
 					\includegraphics[angle=270, width=\linewidth]{images/left_turn_arrow.eps}
 				\end{minipage}
@@ -292,8 +289,8 @@
 				\hfill
 				\begin{minipage}{0.1\linewidth}
 					\includegraphics[angle=180, width=\linewidth]{images/left_turn_arrow.eps}
-				\end{minipage}
-		\end{minipage}}
+			\end{minipage}}
+		\end{minipage}
 		\vfill
 		\begin{minipage}[t][0.06\paperheight][t]{\linewidth}
 			\begin{minipage}{0.18\linewidth}
@@ -917,6 +914,17 @@
 \subsection{Parameter Inference}
 \againframe<6>{mp}
 \againframe<100>{mp}
+
+\begin{frame}
+	\only<1>{\frametitle{Parameter Inference: Simulation Wrapper}}
+	\only<2>{\frametitle{Parameter Inference: Custom Log-Likelihood}}
+	\only<3>{\frametitle{Parameter Inference: Numpyro Model}}
+
+	\only<1>{\includegraphics[width=\textwidth]{images/inference1.png}}
+	\only<2>{\includegraphics[width=\textwidth]{images/inference2.png}}
+	\only<3>{\includegraphics[width=\textwidth]{images/inference3.png}}
+\end{frame}
+
 
 \section{Future Work}
 \subsection{Future Work}
