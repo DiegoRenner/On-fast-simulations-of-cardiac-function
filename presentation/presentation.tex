@@ -25,14 +25,6 @@
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
-%\setbeamertemplate{footline}[frame number]
-%
-% \setbeamertemplate{footline}{%
-%        \includegraphics[height=0.5cm]{../figures/SAM_logo_purple.jpg}
-%		\hspace{0.025cm} 
-%		\includesvg[height=0.5cm]{../figures/eth_logo_black_no_text.svg}
-%
-%	}
 
 
 \lstdefinestyle{mystyle}{
@@ -61,7 +53,6 @@
 
 \title{On differentiable simulations of \\ haemodynamic systems}
 
-%\author{\includegraphics[height=0.5cm]{../figures/SAM_logo_purple.jpg} \hspace{0.25cm} \includesvg[height=0.5cm]{../figures/eth_logo_black_no_text.svg}\\ Diego Renner}
 \author{Diego Renner}
 \titlegraphic{
 	\includegraphics[height=0.5cm]{../figures/SAM_logo_purple.jpg} 
@@ -377,48 +368,6 @@
 					\only<100->{\includegraphics[angle=90, width=\linewidth]{images/left_turn_arrow.eps}}
 				\end{minipage}
 			\end{minipage}
-			%\begin{minipage}[c][0.33\paperheight][c]{\linewidth}
-			%	\begin{minipage}{0.18\linewidth}
-			%		\includegraphics[width=\linewidth]{images/bifurcation.eps}
-			%	\end{minipage}
-			%	\hfill
-			%	\begin{minipage}{0.1\linewidth}
-			%		\includegraphics[width=\linewidth]{images/right_arrow.png}
-			%	\end{minipage}
-			%	\hfill
-			%	\begin{minipage}{0.18\linewidth}
-			%		{\tiny
-			%			\begin{itemize} 
-			%				\item fluid 
-			%				\item structure 
-			%				\item fluid-structure
-			%		\end{itemize}}
-			%	\end{minipage}
-			%	\hfill
-			%	\begin{minipage}{0.1\linewidth}
-			%		\includegraphics[width=\linewidth]{images/right_arrow.png}
-			%	\end{minipage}
-			%	\hfill
-			%	\only<1-2>{\begin{minipage}{0.18\linewidth}
-			%			\includegraphics[width=\linewidth]{images/3d_biomarkers_0007.eps}
-			%	\end{minipage}}
-			%	\only<3->{\begin{minipage}{0.18\linewidth}
-			%			\includegraphics[width=\linewidth]{images/adan56_tibiofibular_trunk_L_P.eps}
-			%	\end{minipage}}
-			%	\hfill
-			%	\only<1>{\begin{minipage}{0.1\linewidth}
-			%			\caption*{\tiny }
-			%	\end{minipage}}
-			%	\only<2>{\begin{minipage}{0.1\linewidth}
-			%			\caption*{\color{red} too expensive!}
-			%	\end{minipage}}
-			%	\only<3-99>{\begin{minipage}{0.1\linewidth}
-			%			\caption*{\tiny }
-			%	\end{minipage}}
-			%	\only<100>{\begin{minipage}{0.1\linewidth}
-			%			\includegraphics[angle=90, width=\linewidth]{images/left_turn_arrow.eps}
-			%	\end{minipage}}
-			%\end{minipage}
 		\end{figure}
 	\end{frame}
 
@@ -467,13 +416,6 @@
 			\end{minipage}
 		\end{minipage}
 	\end{frame}
-
-	%\begin{frame}
-	%	\frametitle{1D Geometry Extraction: Slicer 3D + VMTK}
-	%	\begin{center}
-	%		\includegraphics[width=\textwidth]{images/0053_extract.eps}
-	%	\end{center}
-	%\end{frame}
 
 	\againframe<4>{mp}
 
@@ -579,73 +521,6 @@
 
 		\end{minipage}}
 	\end{frame}
-
-	%\begin{frame}
-	%	\frametitle{Solving the Inverse Problem}
-	%\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
-	%\begin{tabular}{| m{2cm} | m{2cm}| m{2cm} | m{2.4cm} | } 
-	%	\hline
-	%	approach & method & speed & interpretability\\ 
-	%	\hline
-	%	\hline
-	%	"classical" numerical methods & stochastic & slower & high \\ 
-	%	\hline
-	%	deep learning & gradient based & faster & low \\ 
-	%	\hline
-	%\end{tabular}
-	%\end{minipage}
-	%\hfill
-	%\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
-	%\end{minipage}
-	%\end{frame}
-	%
-	%\begin{frame}
-	%	\frametitle{Solving the Inverse Problem}
-	%\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
-	%\begin{tabular}{| m{2cm} | m{2cm}| m{2cm} | m{2.4cm} | } 
-	%	\hline
-	%	approach & method & speed & interpretability\\ 
-	%	\hline
-	%	\hline
-	%	"classical" numerical methods & stochastic & slower & high \\ 
-	%	\hline
-	%	deep learning & gradient based & faster & low \\ 
-	%	\hline
-	%\end{tabular}
-	%\end{minipage}
-	%\hfill
-	%\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
-	%	\begin{block}{Conclusion}
-	%		When solving the inverse problem "classical" numerical methods are inefficient due to not having gradients available while deep learning approaches lack interpretability.
-	%		A numerical solver that provides gradient information w.r.t. it's parameters would provide a fast a interpretable way of solving the inverse problem.
-	%	\end{block}
-	%\end{minipage}
-	%
-	%\end{frame}
-
-	%\begin{frame}
-	%	\frametitle{Introduction}
-	%	\begin{block}{What is jaxFlowSim?}
-	%		\begin{itemize}
-	%			\item 1D-haemodynamics solver
-	%			\item written in JAX
-	%			\item differentiable
-	%		\end{itemize}
-	%	\end{block}
-	%	\vspace{5mm}
-	%\end{frame}
-
-	%\begin{frame}
-	%	\frametitle{Motivation}
-	%	\begin{block}{Use and Novelty}
-	%		\begin{itemize}
-	%			\item towards personalised medicine
-	%			\item parameter inference
-	%			\item sensitivity analysis
-	%		\end{itemize}
-	%	\end{block}
-	%	\vspace{5mm}
-	%\end{frame}
 
 	\subsection{Solver}
 	\againframe<5>{mp}
@@ -788,33 +663,6 @@
 	\end{block}
 \end{frame}
 
-
-%\begin{frame} [fragile]
-%	\frametitle{Code Structure}
-%	\begin{lstlisting}[basicstyle=\fontsize{7}{7}\selectfont\ttfamily, language=Python, caption={$dt \hat{=}$timestep(CFL), setBoundaryValues$\hat{=}$inlet(from data), outlet(Windkessel),junctions(conservation laws), muscl$\hat{=}$Monotonic Upstream-centered Scheme for Conservation Laws(Finite Volume)}, label=lst:pc, escapechar=|] 
-%		def runSimulation(config_filename, J) 
-%			config = loadConfig(config_filename) |\label{ln:init_start}|
-%			simulation_data = buildArterialNetwork(config) |\label{ln:init_end}|
-%
-%			P_t = [0] |\label{ln:pt}|
-%
-%			converged = False |\label{ln:whout1}|
-%			while not converged: |\label{ln:whout2}|
-%				t = 0 |\label{ln:t0}|
-%				i = 0 |\label{ln:i0}|
-%				P_t_temp = P_t |\label{ln:cp}|
-%				while t < T:
-%					dt = computeDt(simulation_data) |\label{ln:cfl}|
-%					simulation_data = setBoundaryValues(simulation_data, dt) |\label{ln:bv    }|
-%					simulation_data = muscl(simulation_data, dt) |\label{ln:muscl}|
-%					P_t[i,:] = savePressure(simulation_data) |\label{ln:svp}|
-%					t = t + dt |\label{ln:updt}|
-%				i = i + 1 |\label{ln:updi}|
-%				if i >= J:
-%					break
-%				converged = checkConv(P_t, P_t_temp) |\label{ln:conv}|
-%\end{lstlisting}
-%\end{frame}
 \begin{frame}
 	\frametitle{Numerical Methods}
 	\begin{block}{1D-Model}
