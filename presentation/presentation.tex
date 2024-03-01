@@ -196,19 +196,18 @@
 	\only<1-2>{\frametitle{3D Model Pipeline}}
 	\only<3-99>{\frametitle{1D Model Pipeline}}
 	\only<100->{\frametitle{Parameter Inference Pipeline}}
-	\vspace{-10pt}
 	\begin{figure}[]%
 		\begin{minipage}[t][0.06\paperheight][t]{\linewidth}%
 				\only<-99>{\begin{minipage}{0.18\linewidth}%
 					\caption*{\tiny Medical Imaging}%
 				\end{minipage}%
-				\begin{minipage}{0.1\linewidth}%
+				\begin{minipage}{0.153\linewidth}%
 					\caption*{\tiny}%
 				\end{minipage}%
 				\begin{minipage}{0.18\linewidth}%
 					\caption*{\tiny 3D Geometry}%
 				\end{minipage}%
-				\begin{minipage}{0.1\linewidth}%
+				\begin{minipage}{0.153\linewidth}%
 					\caption*{\tiny}%
 				\end{minipage}%
 				\only<1-2>{\begin{minipage}{0.18\linewidth}%
@@ -217,11 +216,11 @@
 				\only<3->{\begin{minipage}{0.18\linewidth}%
 						\caption*{\tiny 1D Geometry}%
 				\end{minipage}}%
-				\begin{minipage}{0.1\linewidth}%
+				\begin{minipage}{0.153\linewidth}%
 					\caption*{\tiny}%
 			\end{minipage}}%
 		\only<100-101>{
-				\begin{minipage}{0.1\linewidth}
+				\begin{minipage}{0.153\linewidth}
 					\caption*{\tiny}
 				\end{minipage}
 				\hfill
@@ -229,7 +228,7 @@
 					\caption*{\tiny Parameter Inference}
 				\end{minipage}
 				\hfill
-				\begin{minipage}{0.1\linewidth}
+				\begin{minipage}{0.153\linewidth}
 					\caption*{\tiny }
 			\end{minipage}}
 		\end{minipage}
@@ -239,8 +238,9 @@
 					\begin{minipage}{0.18\linewidth}%
 						\includegraphics[width=\linewidth]{images/medical_imaging_0007.eps}%
 				\end{minipage}%
-					\begin{minipage}{0.1\linewidth}%
-						\includegraphics[width=\linewidth]{images/right_arrow.png}%
+					\begin{minipage}{0.153\linewidth}%
+						\centering
+						\includegraphics[width=0.66\linewidth]{images/right_arrow.png}%
 				\end{minipage}}%
 				\only<1-3,6-99>{%
 					\begin{minipage}{0.18\linewidth}%
@@ -250,8 +250,9 @@
 							\begin{minipage}{0.18\linewidth}%
 								\includegraphics[width=\linewidth]{images/medical_imaging_0007.eps}%
 							\end{minipage}%
-							\begin{minipage}{0.1\linewidth}%
-								\includegraphics[width=\linewidth]{images/right_arrow.png}%
+							\begin{minipage}{0.153\linewidth}%
+								\centering
+								\includegraphics[width=0.66\linewidth]{images/right_arrow.png}%
 							\end{minipage}%
 							\begin{minipage}{0.18\linewidth}%
 								\includegraphics[width=\linewidth]{images/3d_model_0007.eps}%
@@ -260,8 +261,9 @@
 							\begin{minipage}{0.18\linewidth}%
 								\includegraphics[width=\linewidth]{images/3d_model_0007.eps}%
 				\end{minipage}%
-				\begin{minipage}{0.1\linewidth}%
-					\includegraphics[width=\linewidth]{images/right_arrow.png}%
+				\begin{minipage}{0.153\linewidth}%
+					\centering
+					\includegraphics[width=0.66\linewidth]{images/right_arrow.png}%
 				\end{minipage}%
 				\only<1-2>{\begin{minipage}{0.18\linewidth}%
 						{\huge .\hfill .\hfill .}%
@@ -271,8 +273,9 @@
 				\end{minipage}}%
 	}}}%
 				\only<1-4,6-99>{%
-				\begin{minipage}{0.1\linewidth}%
-					\includegraphics[width=\linewidth]{images/right_arrow.png}%
+				\begin{minipage}{0.153\linewidth}%
+					\centering
+					\includegraphics[width=0.66\linewidth]{images/right_arrow.png}%
 				\end{minipage}%
 				\only<1-2>{\begin{minipage}{0.18\linewidth}%
 						{\huge .\hfill .\hfill .}%
@@ -280,29 +283,35 @@
 				\only<3->{\begin{minipage}{0.18\linewidth}%
 						\includegraphics[width=\linewidth]{images/1d_model_0007.eps}%
 			\end{minipage}}}%
-				\begin{minipage}{0.1\linewidth}%
-					\includegraphics[width=\linewidth]{images/right_arrow.png}%
+				\begin{minipage}{0.153\linewidth}%
+					\centering
+					\includegraphics[width=0.66\linewidth]{images/right_arrow.png}%
 			\end{minipage}}%
 			\only<100-101>{%
-				\begin{minipage}{0.1\linewidth}%
-					\includegraphics[angle=270, width=\linewidth]{images/left_turn_arrow.eps}%
+				\begin{minipage}{0.027\linewidth}%
+					\caption*{\tiny}
 				\end{minipage}%
-				\only<100>{\begin{minipage}{0.58\linewidth}%
+				\begin{minipage}{0.153\linewidth}%
+					\centering
+					\includegraphics[angle=270, width=0.66\linewidth]{images/left_turn_arrow.eps}%
+				\end{minipage}%
+				\only<100>{\begin{minipage}{0.663\linewidth}%
 					{\footnotesize \begin{itemize} %
 							\item MCMC \& gradient information $\rightarrow$ Hamiltionian Monte Carlo (HMC)%
 							\item HMC \& adaptively setting path length $\rightarrow$ No-U-Turn Sampler (NUTS)%
 							\item Provided by Numpyro%
 					\end{itemize}}%
 			\end{minipage}}%
-				\only<101>{{\setlength{\fboxsep}{-0.4pt}\fcolorbox{red}{white}{\begin{minipage}{0.58\linewidth}%
+				\only<101>{{\setlength{\fboxsep}{-0.4pt}\fcolorbox{red}{white}{\begin{minipage}{0.663\linewidth}%
 					{\footnotesize \begin{itemize} %
 							\item MCMC \& gradient information $\rightarrow$ Hamiltionian Monte Carlo (HMC)%
 							\item HMC \& adaptively setting path length $\rightarrow$ No-U-Turn Sampler (NUTS)%
 							\item Provided by Numpyro%
 					\end{itemize}}%
 	\end{minipage}}}}%
-				\begin{minipage}{0.1\linewidth}%
-					\includegraphics[angle=180, width=\linewidth]{images/left_turn_arrow.eps}%
+				\begin{minipage}{0.153\linewidth}%
+					\centering
+					\includegraphics[angle=180, width=0.66\linewidth]{images/left_turn_arrow.eps}%
 			\end{minipage}}%
 		\end{minipage}%
 		\vfill%
@@ -310,19 +319,19 @@
 			\begin{minipage}{0.18\linewidth}%
 				\caption*{\tiny Parameters}%
 			\end{minipage}%
-			\begin{minipage}{0.1\linewidth}%
+			\begin{minipage}{0.153\linewidth}%
 				\caption*{\tiny}%
 			\end{minipage}%
 			\begin{minipage}{0.18\linewidth}%
 				\caption*{\tiny Solver}%
 			\end{minipage}%
-			\begin{minipage}{0.1\linewidth}%
+			\begin{minipage}{0.153\linewidth}%
 				\caption*{\tiny}%
 			\end{minipage}%
 			\begin{minipage}{0.18\linewidth}%
 				\caption*{\tiny Biomarkers}%
 			\end{minipage}%
-			\begin{minipage}{0.1\linewidth}%
+			\begin{minipage}{0.153\linewidth}%
 				\caption*{\tiny}%
 			\end{minipage}%
 		\end{minipage}
@@ -333,8 +342,9 @@
 				\only<6>{{\setlength{\fboxsep}{-0.4pt}\fcolorbox{red}{white}{%
 				\includegraphics[width=\linewidth]{images/bifurcation_1D.eps}}}}%
 			\end{minipage}%
-			\begin{minipage}{0.1\linewidth}%
-				\includegraphics[width=\linewidth]{images/right_arrow.png}%
+			\begin{minipage}{0.153\linewidth}%
+				\centering
+				\includegraphics[width=0.66\linewidth]{images/right_arrow.png}%
 			\end{minipage}%
 			\only<1-2>{\begin{minipage}{0.18\linewidth}%
 					\includegraphics[width=\linewidth]{images/solver_3D.eps}%
@@ -345,8 +355,9 @@
 			\only<7>{{\setlength{\fboxsep}{-0.4pt}\fcolorbox{red}{white}{\begin{minipage}{0.18\linewidth}%
 					\includegraphics[width=\linewidth]{images/solver_1D.eps}%
 	\end{minipage}}}}%
-			\begin{minipage}{0.1\linewidth}%
-				\includegraphics[width=\linewidth]{images/right_arrow.png}%
+			\begin{minipage}{0.153\linewidth}%
+				\centering
+				\includegraphics[width=0.66\linewidth]{images/right_arrow.png}%
 			\end{minipage}%
 			\only<1-2>{\begin{minipage}{0.18\linewidth}%
 					\includegraphics[width=\linewidth]{images/3d_biomarkers_0007.eps}%
@@ -357,11 +368,12 @@
 			\only<8>{{\setlength{\fboxsep}{-0.4pt}\fcolorbox{red}{white}{\begin{minipage}{0.18\linewidth}%
 					\includegraphics[width=\linewidth]{images/adan56_tibiofibular_trunk_L_P.eps}%
 	\end{minipage}}}}%
-			\begin{minipage}{0.1\linewidth}%
+			\begin{minipage}{0.153\linewidth}%
 				\only<1-99>{\caption*{\tiny }}%
 				\only<2>{\caption*{\tiny \color{red} too expensive!}}%
 				\only<3-99>{\caption*{\tiny }}%
-				\only<100->{\includegraphics[angle=90, width=\linewidth]{images/left_turn_arrow.eps}}%
+				\centering
+				\only<100->{\includegraphics[angle=90, width=0.66\linewidth]{images/left_turn_arrow.eps}}%
 			\end{minipage}%
 		\end{minipage}%
 	\end{figure}%
@@ -371,11 +383,6 @@
 \againframe<3>{mp}
 \againframe<4>{mp}
 \againframe<5>{mp}
-\againframe<6>{mp}
-\againframe<7>{mp}
-\againframe<8>{mp}
-\againframe<100>{mp}
-\againframe<101>{mp}
 
 \subsection{1D Geometry Extraction}
 \begin{frame}[label=1dge]
@@ -420,7 +427,7 @@
 	\end{minipage}
 \end{frame}
 
-\againframe<5>{mp}
+\againframe<6>{mp}
 
 \subsection{Setting Parameters}
 
@@ -428,7 +435,7 @@
 	\frametitle{Example: Bifurcation}
 	\begin{figure}
 		\begin{center}
-			\begin{minipage}[t][0.35\paperheight][t]{\textwidth}
+			\begin{minipage}[t][0.33\paperheight][t]{\textwidth}
 				\begin{minipage}{0.44\textwidth}
 					\includegraphics[width=\textwidth]{images/bifurcation_1D.eps}
 				\end{minipage}
@@ -526,7 +533,7 @@
 \end{frame}
 
 \subsection{Solver}
-\againframe<6>{mp}
+\againframe<7>{mp}
 
 \begin{frame}<1>[label=nse]
 	\frametitle{1D-Navier Stokes Equations}
@@ -716,6 +723,7 @@
 
 \section{Model Validation}
 \subsection{Comparison}
+\againframe<8>{mp}
 \begin{frame}
 	\frametitle{Validation: Comparison of Solutions}
 	\begin{figure} [H]
@@ -763,8 +771,9 @@
 \end{frame}
 
 \subsection{Parameter Inference}
-\againframe<7>{mp}
+\againframe<9>{mp}
 \againframe<100>{mp}
+\againframe<101>{mp}
 
 \begin{frame}
 	\only<1>{\frametitle{Parameter Inference: Simulation Wrapper}}
