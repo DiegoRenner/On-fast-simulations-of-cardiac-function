@@ -73,45 +73,15 @@
 		\end{figure}
 	\end{minipage} 
 	\begin{minipage}{0.39\textwidth}
-		\begin{minipage}[t][0.82\paperheight][t]{\textwidth}
-
-		\end{minipage}
-	\end{minipage}
-\end{frame}
-\begin{frame}
-	\frametitle{Towards Personalised Medicine: Current Approaches}
-	\begin{minipage}{0.59\textwidth}
-		\begin{figure}[H]
-			\includegraphics[width=\textwidth]{images/approaches_current.eps}
-		\end{figure}
-	\end{minipage} 
-	\begin{minipage}{0.39\textwidth}
 		\begin{minipage}[t][0.41\paperheight][t]{\textwidth}
 			\begin{block}{Personalised Medicine}
 				characterizing a patient and customizing their treatment according to which sub-population they fall into	
 			\end{block}
 		\end{minipage}
 		\begin{minipage}[t][0.41\paperheight][t]{\textwidth}
-		\end{minipage}
-	\end{minipage}
-\end{frame}
-\begin{frame}
-	\frametitle{Towards Personalised Medicine: Current Approaches}
-	\begin{minipage}{0.59\textwidth}
-		\begin{figure}[H]
-			\includegraphics[width=\textwidth]{images/approaches_current.eps}
-		\end{figure}
-	\end{minipage} 
-	\begin{minipage}{0.39\textwidth}
-		\begin{minipage}[t][0.41\paperheight][t]{\textwidth}
-			\begin{block}{Personalised Medicine}
-				characterizing a patient and customizing their treatment according to which sub-population they fall into	
-			\end{block}
-		\end{minipage}
-		\begin{minipage}[t][0.41\paperheight][t]{\textwidth}
-			\begin{block}{Biomarkers}
+			\onslide<2->{\begin{block}{Biomarkers}
 				measurable quantities that can aid in diagnosis and treatment of a disease
-			\end{block}
+		\end{block}}
 		\end{minipage}
 	\end{minipage}
 \end{frame}
@@ -123,16 +93,6 @@
 			\includegraphics[width=\textwidth]{images/approaches_future.eps}
 		\end{figure}
 	\end{minipage} \hfill
-	\begin{minipage}[T][0.82\paperheight][T]{0.39\textwidth}
-	\end{minipage}
-\end{frame}
-\begin{frame}
-	\frametitle{Towards Personalised Medicine: Future Approaches}
-	\begin{minipage}{0.59\textwidth}
-		\begin{figure}[H]
-			\includegraphics[width=\textwidth]{images/approaches_future.eps}
-		\end{figure}
-	\end{minipage} \hfill
 	\begin{minipage}{0.39\textwidth}
 		\begin{minipage}[t][0.56\paperheight][t]{\textwidth}
 			\begin{block}{Model Based Approach}
@@ -140,26 +100,9 @@
 			\end{block}
 		\end{minipage}
 		\begin{minipage}[t][0.26\paperheight][t]{\textwidth}
-		\end{minipage}
-	\end{minipage}
-\end{frame}
-\begin{frame}
-	\frametitle{Towards Personalised Medicine: Future Approaches}
-	\begin{minipage}{0.59\textwidth}
-		\begin{figure}[H]
-			\includegraphics[width=\textwidth]{images/approaches_future.eps}
-		\end{figure}
-	\end{minipage} \hfill
-	\begin{minipage}{0.39\textwidth}
-		\begin{minipage}[t][0.56\paperheight][t]{\textwidth}
-			\begin{block}{Model Based Approach}
-				use patient specific parameters to setup well-defined computational models that output biomarkers which are strongly and causally related to the occurrence or the outcome of a disease
-			\end{block}
-		\end{minipage}
-		\begin{minipage}[t][0.26\paperheight][t]{\textwidth}
-			\begin{block}{Example}
+			\onslide<2->{\begin{block}{Example}
 				$\hookrightarrow$
-			\end{block}
+		\end{block}}
 		\end{minipage}
 	\end{minipage}
 \end{frame}
@@ -167,7 +110,7 @@
 \begin{frame}<1>[label=ph]
 	\frametitle{Example: Pulmonary Hypertension (PH)}
 	\begin{itemize}
-		\item<1-> affect large parts of the population
+		\item<1-> affects large parts of the population
 		\item<2-> heavily studied but currently no perfect solution 
 		\item<3-> \begin{tabularx}{\linewidth}{| >{\centering\arraybackslash}m{0.4\linewidth} | >{\centering\arraybackslash}m{0.25\linewidth} | >{\centering\arraybackslash}X |} 
 				\hline
@@ -191,11 +134,18 @@
 \againframe<5>{ph}
 
 \section{Model Pipeline}
-\subsection{3D-1D}
+\subsection{3D Model Pipeline}
 \begin{frame}<1>[label=mp]
 	\only<1-2>{\frametitle{3D Model Pipeline}}
-	\only<3-99>{\frametitle{1D Model Pipeline}}
-	\only<100->{\frametitle{Parameter Inference Pipeline}}
+	\only<3>{\frametitle{1D Model Pipeline}}
+	\only<4>{\frametitle{3D Geometry Extraction}}
+	\only<5>{\frametitle{1D Geometry Extraction}}
+	\only<6>{\frametitle{Setting Parameters}}
+	\only<7>{\frametitle{Solver}}
+	\only<8>{\frametitle{Biomarkers}}
+	\only<9->{\frametitle{1D Model Pipeline Recall}}
+	\only<100>{\frametitle{Parameter Inference Pipeline}}
+	\only<101->{\frametitle{Parameter Inference}}
 	\begin{figure}[]%
 		\begin{minipage}[t][0.06\paperheight][t]{\linewidth}%
 				\only<-99>{\begin{minipage}{0.18\linewidth}%
@@ -380,8 +330,11 @@
 \end{frame}
 
 \againframe<2>{mp}
+\subsection{1D Model Pipeline}
 \againframe<3>{mp}
+\subsection{3D Geometry Extraction}
 \againframe<4>{mp}
+\subsection{1D Geometry Extraction}
 \againframe<5>{mp}
 
 \subsection{1D Geometry Extraction}
@@ -427,12 +380,11 @@
 	\end{minipage}
 \end{frame}
 
+\subsection{Setting Parameters}
 \againframe<6>{mp}
 
-\subsection{Setting Parameters}
-
 \begin{frame}<1>[label=eb]
-	\frametitle{Example: Bifurcation}
+	\frametitle{Setting Parameters: Bifurcation Example}
 	\begin{figure}
 		\begin{center}
 			\begin{minipage}[t][0.33\paperheight][t]{\textwidth}
@@ -535,8 +487,13 @@
 \subsection{Solver}
 \againframe<7>{mp}
 
+\begin{frame}
+	\frametitle{Solver: Single Vessel (SV)}
+	\includegraphics[width=\linewidth]{images/bifurcation_vessels.eps}
+\end{frame}
+
 \begin{frame}<1>[label=nse]
-	\frametitle{1D-Navier Stokes Equations}
+	\frametitle{Solver: 1D-Navier Stokes Equations (SV)}
 	\begin{equation}
 		\begin{aligned}
 			\frac{\partial \mathbf{U}}{\partial t} + \frac{\partial \mathbf{F} \left(
@@ -586,9 +543,9 @@
 
 	\begin{block}{Conservative Form with Source Term}
 		\begin{itemize}
-			\onslide<3->{\item conservation of mass (continuity equation)}
-			\onslide<4->{\item conservation of momentum}
-			\onslide<5->{\item no energy equation (incompressible Newtonian fluid)}
+			\onslide<2->{\item conservation of mass (continuity equation)}
+			\onslide<3->{\item conservation of momentum}
+			\onslide<4->{\item no energy equation (incompressible Newtonian fluid)}
 	\end{itemize}
 
 \end{block}}
@@ -600,10 +557,9 @@
 \againframe<2>{nse}
 \againframe<3>{nse}
 \againframe<4>{nse}
-\againframe<5>{nse}
 
 \begin{frame}<1>[label=tl]
-	\frametitle{Tube Law}
+	\frametitle{Solver: Tube Law (SV)}
 	\begin{align}
 		P(z;t) &:= P_{ext}(z;t) + \beta \left( \sqrt{\frac{A(z;t)}{A_0(z)}}-1 \right),      \label{eq:p_tot}\\
 		\beta(z) &:=  \frac{\sqrt{\pi} E h_0(z)}{(1-\nu^2) \sqrt{A_0(z)}},\  z \in \left[ 0,l \right], \ t > 0. 
@@ -625,17 +581,16 @@
 	\par}
 	\onslide<1->{\begin{block}{Fluid-Structure Interaction}
 			\begin{itemize}
-				\onslide<2->{\item $P(z;t)$ describes fluid structure interaction}
-				\onslide<3->{\item $\beta(z)$ quantifies structure}
+				\onslide<1->{\item $P(z;t)$ describes fluid structure interaction}
+				\onslide<2->{\item $\beta(z)$ quantifies structure}
 		\end{itemize}
 \end{block}}
 \end{frame}
 
 \againframe<2>{tl}
-\againframe<3>{tl}
 
 \begin{frame}<1>[label=ic]
-	\frametitle{Initial Conditions (IC)}
+	\frametitle{Solver: Initial Conditions (IC) (SV)}
 	\onslide<1->{\begin{minipage}{0.37\textwidth}
 			\begin{block}{Steady State}
 				Since good IC are not known trivial ones are set and the simulation is run until a steady state is reached.
@@ -657,58 +612,63 @@
 \againframe<3>{ic}
 
 \begin{frame}
-	\frametitle{Inlets, Junctions, Outlets}
+	\frametitle{Solver: Network (NW)}
+	\includegraphics[width=\linewidth]{images/bifurcation_network.eps}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Solver: Inlets, Junctions, Outlets (NW)}
 	\begin{block}{Inlets}
-		\onslide<2->{set $P$ or $Q$ from data}
+		\onslide<1->{set $P$ or $Q$ from data}
 	\end{block}
 	\begin{block}{Junctions}
-		\onslide<3->{solve linear system of equations consisting of:
+		\onslide<2->{solve linear system of equations consisting of:
 			\begin{itemize}
 				\item conservation of mass and
 				\item conservation of momentum.
 		\end{itemize}}
 	\end{block}
 	\begin{block}{Outlets}
-		\onslide<4->{0D-/ lumped parameter model: three element Windkessel (RCR) model}
+		\onslide<3->{0D-/ lumped parameter model: three element Windkessel (RCR) model}
 	\end{block}
 \end{frame}
 
 \begin{frame}
-	\frametitle{Numerical Methods}
+	\frametitle{Solver: Numerical Methods (SV)\&(NW)}
 	\begin{block}{1D-Model}
-		\onslide<2->{Finite Volume (FV) method: monotonic upstream-centred scheme for conservation laws (MUSCL) scheme with Lax-Friedrichs (LF) flux.}
+		\onslide<1->{Finite Volume (FV) method: monotonic upstream-centred scheme for conservation laws (MUSCL) scheme with Lax-Friedrichs (LF) flux.}
 		\begin{itemize}
-			\onslide<3->{\item FV: for discrete domains and conservative equations}
-			\onslide<4->{\item LF: for hyperbolic system}
+			\onslide<2->{\item FV: for discrete domains and conservative equations}
+			\onslide<3->{\item LF: for hyperbolic system}
 	\end{itemize}
 \end{block}
 \begin{block}{Junctions \& Outlets}
-	\onslide<5->{Newton method}
+	\onslide<4->{Newton method}
 	\begin{itemize}
-		\onslide<6->{\item for solving non-linear root finding problems}
+		\onslide<5->{\item for solving non-linear root finding problems}
 \end{itemize}
 \end{block}
 \end{frame}
 
 \begin{frame}
-	\frametitle{JAX Caveats}
+	\frametitle{Solver: JAX Caveats}
 	\begin{block}{What to look out for:}
 		\begin{itemize}
-			\item<2-> functional purity
-			\item<3-> efficient data structures
-			\item<4-> avoiding for loops (loops in general)
+			\item<1-> functional purity
+			\item<2-> efficient data structures
+			\item<3-> avoiding for loops (loops in general)
 				\begin{itemize}
-					\item<5-> Python for-loop: slow compilation
-					\item<6-> JAX for-loop: homogeneous mesh 
-					\item<7-> $\rightarrow$ avoid for-loops through vectorization
-					\item<8-> $\rightarrow$ requires padding and masking
+					\item<4-> Python for-loop: slow compilation
+					\item<5-> JAX for-loop: homogeneous mesh 
+					\item<6-> $\rightarrow$ avoid for-loops through vectorization
+					\item<7-> $\rightarrow$ requires padding and masking
 				\end{itemize}
 		\end{itemize}
 	\end{block}
 \end{frame}
 
 \begin{frame}
-	\frametitle{Padding}
+	\frametitle{Solver: Padding}
 	without padding
 	\includegraphics[width=\textwidth]{images/padding1.eps}
 	with padding
@@ -716,16 +676,16 @@
 	\includegraphics[width=\textwidth]{images/legend.eps}
 \end{frame}
 \begin{frame}
-	\frametitle{Masking}
+	\frametitle{Solver: Masking}
 	\includegraphics[width=\textwidth]{images/masking.eps}
 	\includegraphics[width=\textwidth]{images/legend.eps}
 \end{frame}
 
-\section{Model Validation}
+\section{Results}
 \subsection{Comparison}
 \againframe<8>{mp}
 \begin{frame}
-	\frametitle{Validation: Comparison of Solutions}
+	\frametitle{Comparison: Computed Biomarkers}
 	\begin{figure} [H]
 		\centering
 		\includegraphics[width=0.46\columnwidth]{../figures/0007_H_AO_H_right_subclavian_artery_P.eps}
@@ -739,7 +699,7 @@
 
 \subsection{Timing}
 \begin{frame}
-	\frametitle{Validation: Wall-clock Time Comparison}
+	\frametitle{Comparison: Wall-clock Time}
 	\begin{figure} [H]
 		\centering
 		\includegraphics[width=0.94\columnwidth]{../figures/timing_benchmark.eps}
@@ -750,7 +710,7 @@
 
 \subsection{Case Studies}
 \begin{frame}
-	\frametitle{Model: Aorta (0007\_H\_AO\_H)}
+	\frametitle{Case Studies: Aorta (0007\_H\_AO\_H)}
 	\begin{figure} [H]
 		\centering
 		\includegraphics[width=\columnwidth]{images/0007.eps}
@@ -758,21 +718,24 @@
 	\end{figure}
 \end{frame}
 \begin{frame}
-	\frametitle{Model: Abdominal Arteries (0029\_H\_ABAO\_H)}
+	\frametitle{Case Studies: Abdominal Arteries (0029\_H\_ABAO\_H)}
 	\includegraphics[width=\columnwidth]{images/0029.eps}
 \end{frame}
 \begin{frame}
-	\frametitle{Model: Cerebellar Arteries (0053\_H\_CERE\_H)}
+	\frametitle{Case Studies: Cerebellar Arteries (0053\_H\_CERE\_H)}
 	\includegraphics[width=\columnwidth]{images/0053.eps}
 \end{frame}
 \begin{frame}
-	\frametitle{Model: ADAN56}
+	\frametitle{Case Studies: ADAN56}
 	\includegraphics[width=\textwidth]{images/adan56.eps}
 \end{frame}
 
-\subsection{Parameter Inference}
+\section{Parameter Inference}
+\subsection{1D Model Pipeline Recall}
 \againframe<9>{mp}
+\subsection{Parameter Inference Pipeline}
 \againframe<100>{mp}
+\subsection{Parameter Inference}
 \againframe<101>{mp}
 
 \begin{frame}
@@ -788,25 +751,20 @@
 
 \section{Future Work}
 \subsection{Future Work}
-\begin{frame}<1>[label=fw]
+\begin{frame}
 	\frametitle{Future Work}
 	\begin{block}{Main Points of Interest}
 		\begin{itemize}
-			\item<2-> improving performance (general \& GPU optimization)
-			\item<3-> automate geometry extraction
-			\item<4-> generalize code for junctions involving $N$ vessels
-			\item<5-> stable parameter inference
-			\item<6-> sensitivity analysis (global and local)
+			\item<1-> improving performance (general \& GPU optimization)
+			\item<2-> automate geometry extraction
+			\item<3-> generalize code for junctions involving $N$ vessels
+			\item<4-> stable parameter inference
+			\item<5-> sensitivity analysis (global and local)
 		\end{itemize}
 	\end{block}
 	\vspace{5mm}
 \end{frame}
 
-\againframe<2>{fw}
-\againframe<3>{fw}
-\againframe<4>{fw}
-\againframe<5>{fw}
-\againframe<6>{fw}
 
 \section{Questions}
 \subsection{Questions}
