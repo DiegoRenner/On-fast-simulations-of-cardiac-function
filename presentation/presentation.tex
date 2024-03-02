@@ -106,8 +106,9 @@
 		\end{minipage}
 	\end{minipage}
 \end{frame}
+
 \subsection{Example}
-\begin{frame}<1>[label=ph]
+\begin{frame}
 	\frametitle{Example: Pulmonary Hypertension (PH)}
 	\begin{itemize}
 		\item<1-> affects large parts of the population
@@ -117,21 +118,17 @@
 				biomarker(s) & measurement & correlation \\ 
 				\hline
 				\hline
-				absolute vascular pressure & invasive & strong \\ 
+				absolute vascular pressure & \textcolor<4->{red}{invasive} & \textcolor<5->{green}{strong} \\ 
 				\hline
-				brain natriuretic peptide & blood sampling & weaker \\ 
+				brain natriuretic peptide & \textcolor<6->{green}{blood sampling} & \textcolor<7->{red}{weaker} \\ 
 				\hline
 			\end{tabularx}
-		\item<4->
-			$\Rightarrow$ accurately determining the absolute vascular pressure through a computational model would allow reliable prognosis of PH while avoiding the risk of an invasive procedure
-		\item<5-> problem: need patient specific parameters for model
+		\item<8->
+			$\Rightarrow$ accurately determining the absolute vascular pressure through a computational model would allow \textcolor<9->{green}{reliable prognosis} of PH while \textcolor<10->{green}{avoiding the risk} of an invasive procedure
+		\item<11-> problem: \textcolor<12->{red}{need patient specific parameters for model}
 	\end{itemize}
 \end{frame}
 
-\againframe<2>{ph}
-\againframe<3>{ph}
-\againframe<4>{ph}
-\againframe<5>{ph}
 
 \section{Model Pipeline}
 \subsection{3D Model Pipeline}
@@ -658,10 +655,10 @@
 			\item<2-> efficient data structures
 			\item<3-> avoiding for loops (loops in general)
 				\begin{itemize}
-					\item<4-> Python for-loop: slow compilation
-					\item<5-> JAX for-loop: homogeneous mesh 
-					\item<6-> $\rightarrow$ avoid for-loops through vectorization
-					\item<7-> $\rightarrow$ requires padding and masking
+					\item<4-> Python for-loop: \textcolor<5->{red}{slow compilation}
+					\item<5-> JAX for-loop: \textcolor<6->{red}{homogeneous mesh }
+					\item<7-> $\rightarrow$ \textcolor<8->{green}{ avoid for-loops through vectorization}
+					\item<9-> $\rightarrow$ \textcolor<10->{red}{requires padding and masking}
 				\end{itemize}
 		\end{itemize}
 	\end{block}
@@ -682,8 +679,9 @@
 \end{frame}
 
 \section{Results}
-\subsection{Comparison}
+\subsection{Biomarkers}
 \againframe<8>{mp}
+\subsection{Comparison}
 \begin{frame}
 	\frametitle{Comparison: Computed Biomarkers}
 	\begin{figure} [H]
@@ -697,7 +695,6 @@
 	\end{figure}
 \end{frame}
 
-\subsection{Timing}
 \begin{frame}
 	\frametitle{Comparison: Wall-clock Time}
 	\begin{figure} [H]
