@@ -65,74 +65,62 @@
 \section{Introduction}
 \subsection{Towards Personalised Medicine}
 \maketitle
-\begin{frame}
+\begin{frame}<1-4>[label=pm]
 	\frametitle{Towards Personalised Medicine: Current Approaches}
 	\begin{minipage}{0.59\textwidth}
 		\begin{figure}[H]
-			\includegraphics[width=\textwidth]{images/approaches_current.eps}
+			\only<1-2>{\includegraphics[width=\textwidth]{images/approaches_current.eps}}%
+			\only<3-4>{\includegraphics[width=\textwidth]{images/approaches_future.eps}}%
 		\end{figure}
 	\end{minipage} 
 	\begin{minipage}{0.39\textwidth}
-		\begin{minipage}[t][0.41\paperheight][t]{\textwidth}
-			\begin{block}{Personalised Medicine}
+		\only<1-2>{\begin{minipage}[t][0.41\paperheight][t]{\textwidth}
+			\onslide<1-2>{\begin{block}{Personalised Medicine}
 				characterizing a patient and customizing their treatment according to which sub-population they fall into	
-			\end{block}
+		\end{block}}%
 		\end{minipage}
 		\begin{minipage}[t][0.41\paperheight][t]{\textwidth}
-			\onslide<2->{\begin{block}{Biomarkers}
+			\onslide<2>{\begin{block}{Biomarkers}
 				measurable quantities that can aid in diagnosis and treatment of a disease
-		\end{block}}
-		\end{minipage}
-	\end{minipage}
-\end{frame}
-
-\begin{frame}
-	\frametitle{Towards Personalised Medicine: Future Approaches}
-	\begin{minipage}{0.59\textwidth}
-		\begin{figure}[H]
-			\includegraphics[width=\textwidth]{images/approaches_future.eps}
-		\end{figure}
-	\end{minipage} \hfill
-	\begin{minipage}{0.39\textwidth}
-		\begin{minipage}[t][0.56\paperheight][t]{\textwidth}
-			\begin{block}{Model Based Approach}
+		\end{block}}%
+\end{minipage}}%
+		\only<3-4>{\begin{minipage}[t][0.55\paperheight][t]{\textwidth}
+			\onslide<3-4>{\begin{block}{Model Based Approach}
 				use patient specific parameters to setup well-defined computational models that output biomarkers which are strongly and causally related to the occurrence or the outcome of a disease
-			\end{block}
+		\end{block}}%
 		\end{minipage}
-		\begin{minipage}[t][0.26\paperheight][t]{\textwidth}
-			\onslide<2->{\begin{block}{Example}
+		\begin{minipage}[t][0.27\paperheight][t]{\textwidth}
+			\onslide<4>{\begin{block}{Example}
 				$\hookrightarrow$
-		\end{block}}
-		\end{minipage}
+		\end{block}}%
+\end{minipage}}%
 	\end{minipage}
 \end{frame}
 
 \subsection{Example}
-\begin{frame}
+\begin{frame}<1-12>[label=ph]
 	\frametitle{Example: Pulmonary Hypertension (PH)}
 	\begin{itemize}
 		\item<1-> affects large parts of the population
-		\item<2-> heavily studied but currently no perfect solution 
+		\item<2-> heavily studied but currently no accurate predictive technique
 		\item<3-> \begin{tabularx}{\linewidth}{| >{\centering\arraybackslash}m{0.4\linewidth} | >{\centering\arraybackslash}m{0.25\linewidth} | >{\centering\arraybackslash}X |} 
 				\hline
 				biomarker(s) & measurement & correlation \\ 
 				\hline
 				\hline
-				absolute vascular pressure & \textcolor<4->{red}{invasive} & \textcolor<5->{green}{strong} \\ 
+				absolute vascular pressure & \textcolor<4->{red}{micro surgery} & \textcolor<5->{green}{strong} \\ 
 				\hline
 				brain natriuretic peptide & \textcolor<6->{green}{blood sampling} & \textcolor<7->{red}{weaker} \\ 
 				\hline
 			\end{tabularx}
 		\item<8->
 			$\Rightarrow$ accurately determining the absolute vascular pressure through a computational model would allow \textcolor<9->{green}{reliable prognosis} of PH while \textcolor<10->{green}{avoiding the risk} of an invasive procedure
-		\item<11-> problem: \textcolor<12->{red}{need patient specific parameters for model}
 	\end{itemize}
 \end{frame}
 
-
 \section{Model Pipeline}
 \subsection{3D Model Pipeline}
-\begin{frame}<1>[label=mp]
+\begin{frame}<1-2>[label=mp]
 	\only<1-2>{\frametitle{3D Model Pipeline}}
 	\only<3>{\frametitle{1D Model Pipeline}}
 	\only<4>{\frametitle{3D Geometry Extraction}}
@@ -326,7 +314,6 @@
 	\end{figure}%
 \end{frame}
 
-\againframe<2>{mp}
 \subsection{1D Model Pipeline}
 \againframe<3>{mp}
 \subsection{3D Geometry Extraction}
@@ -335,7 +322,7 @@
 \againframe<5>{mp}
 
 \subsection{1D Geometry Extraction}
-\begin{frame}[label=1dge]
+\begin{frame}<1-4>[label=1dge]
 	\frametitle{1D Geometry Extraction: Slicer 3D + VMTK}
 	\begin{minipage}{\linewidth}
 		\onslide<1->{\begin{minipage}{0.25\linewidth}
@@ -380,7 +367,7 @@
 \subsection{Setting Parameters}
 \againframe<6>{mp}
 
-\begin{frame}<1>[label=eb]
+\begin{frame}<1-3>[label=eb]
 	\frametitle{Setting Parameters: Bifurcation Example}
 	\begin{figure}
 		\begin{center}
@@ -433,10 +420,7 @@
 	\end{minipage}}
 \end{frame}
 
-\againframe<2>{eb}
-\againframe<3>{eb}
-
-\begin{frame}
+\begin{frame}<1-3>[label=ps]
 	\frametitle{Setting Parameters: Python Script}
 	\onslide<1->{\begin{minipage}{0.25\textwidth}
 			\begin{figure}
@@ -457,8 +441,8 @@
 						\begin{align*}
 							P_{mean} &:= \frac{120 \text{mmHg}}{80 \frac{\text{ml}}{\text{s}}}, \  Q_{car} := 80 \frac{\text{ml}}{\text{s}}, \\
 							R_{tot} &:= \frac{P_{mean}}{Q_{car}}, \ C_{tot} := 10^{-3} \frac{\text{cm}^5}{\text{dyne}}, \\
-							\xi_i &:= \frac{\sum_{j \in I} A_{0,j}}{A_{0,i}}, \\
-							R_{tot,i} &:= \xi_i R_{tot}, \ C_{tot,i} := \frac{1}{\xi_i} C_{tot}, \\
+							\gamma_i &:= \frac{\sum_{j \in I} A_{0,j}}{A_{0,i}}, \\
+							R_{tot,i} &:= \gamma_i R_{tot}, \ C_{tot,i} := \frac{1}{\gamma_i} C_{tot}, \\
 							R_{1,i} &:= \frac{9}{100} R_{tot,i}, \ R_{2,i} := \frac{91}{100} R_{tot,i}.
 						\end{align*}
 				\end{minipage}}
@@ -489,7 +473,7 @@
 	\includegraphics[width=\linewidth]{images/bifurcation_vessels.eps}
 \end{frame}
 
-\begin{frame}<1>[label=nse]
+\begin{frame}<1-4>[label=nse]
 	\frametitle{Solver: 1D-Navier Stokes Equations (SV)}
 	\begin{equation}
 		\begin{aligned}
@@ -551,11 +535,7 @@
 
 \end{frame}
 
-\againframe<2>{nse}
-\againframe<3>{nse}
-\againframe<4>{nse}
-
-\begin{frame}<1>[label=tl]
+\begin{frame}<1-2>[label=tl]
 	\frametitle{Solver: Tube Law (SV)}
 	\begin{align}
 		P(z;t) &:= P_{ext}(z;t) + \beta \left( \sqrt{\frac{A(z;t)}{A_0(z)}}-1 \right),      \label{eq:p_tot}\\
@@ -576,17 +556,15 @@
 		$h_0 \hat{=}$ reference vessel wall thickness,
 		$\nu \hat{=}$ Poisson's ratio (elasticity parameter). 
 	\par}
-	\onslide<1->{\begin{block}{Fluid-Structure Interaction}
+	\onslide<1->{\begin{block}{Closure Equation}
 			\begin{itemize}
-				\onslide<1->{\item $P(z;t)$ describes fluid structure interaction}
+				\onslide<1->{\item $P(z;t)$ describes pressure in relation to $A(z;t)$ }
 				\onslide<2->{\item $\beta(z)$ quantifies structure}
 		\end{itemize}
 \end{block}}
 \end{frame}
 
-\againframe<2>{tl}
-
-\begin{frame}<1>[label=ic]
+\begin{frame}<1-3>[label=ic]
 	\frametitle{Solver: Initial Conditions (IC) (SV)}
 	\onslide<1->{\begin{minipage}{0.37\textwidth}
 			\begin{block}{Steady State}
@@ -604,9 +582,6 @@
 			Q(z;0) &= u(z;0)A(z;0) \equiv 0, &z \in [0,l].
 	\end{align}}
 \end{frame}
-
-\againframe<2>{ic}
-\againframe<3>{ic}
 
 \begin{frame}
 	\frametitle{Solver: Network (NW)}
@@ -656,9 +631,9 @@
 			\item<3-> avoiding for loops (loops in general)
 				\begin{itemize}
 					\item<4-> Python for-loop: \textcolor<5->{red}{slow compilation}
-					\item<6-> JAX for-loop: \textcolor<7->{red}{homogeneous mesh }
-					\item<8-> $\rightarrow$ \textcolor<9->{green}{ avoid for-loops through vectorization}
-					\item<10-> $\rightarrow$ \textcolor<11->{red}{requires padding and masking}
+					\item<5-> JAX for-loop: \textcolor<6->{red}{homogeneous mesh }
+					\item<7-> $\rightarrow$ \textcolor<8->{green}{ avoid for-loops through vectorization}
+					\item<9-> $\rightarrow$ \textcolor<10->{red}{requires padding and masking}
 				\end{itemize}
 		\end{itemize}
 	\end{block}
@@ -672,6 +647,7 @@
 	\includegraphics[width=\textwidth]{images/padding2.eps}
 	\includegraphics[width=\textwidth]{images/legend.eps}
 \end{frame}
+
 \begin{frame}
 	\frametitle{Solver: Masking}
 	\includegraphics[width=\textwidth]{images/masking.eps}
@@ -742,7 +718,13 @@
 
 	\only<1>{\includegraphics[width=\textwidth]{images/inference1.png}}
 	\only<2>{\includegraphics[width=\textwidth]{images/inference2.png}}
-	\only<3>{\includegraphics[width=\textwidth]{images/inference3.png}}
+	\only<3->{\includegraphics[width=\textwidth]{images/inference3.png}
+		Real value: $R = 6.82 \times 10^7$
+		\begin{itemize} 
+			\item<4-> \# warmup steps: 10, \# sample steps: 100, $R_{init} = 10^8$ $\rightarrow$ estimated parameter: $7.67 \times 10^7$, relative error: $\sim 13\%$, wall-clock time: $\sim 22$ minutes
+			\item<5-> \# warmup steps: 10, \# sample steps: 200, $R_{init} = 10^8$ $\rightarrow$ estimated parameter: $6.96 \times 10^7$, relative error: $\sim 2\%$, wall-clock time: $\sim 38$ minutes
+		\end{itemize}
+	}
 \end{frame}
 
 
