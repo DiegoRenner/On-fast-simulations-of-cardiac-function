@@ -66,7 +66,8 @@
 \subsection{Towards Personalised Medicine}
 \maketitle
 \begin{frame}<1-4>[label=pm]
-	\frametitle{Towards Personalised Medicine: Current Approaches}
+	\only<1-2>{\frametitle{Towards Personalised Medicine: Current Approaches}}
+	\only<3-4>{\frametitle{Towards Personalised Medicine: New Approaches}}
 	\begin{minipage}{0.59\textwidth}
 		\begin{figure}[H]
 			\only<1-2>{\includegraphics[width=\textwidth]{images/approaches_current.eps}}%
@@ -98,7 +99,7 @@
 \end{frame}
 
 \subsection{Example}
-\begin{frame}<1-12>[label=ph]
+\begin{frame}<1-11>[label=ph]
 	\frametitle{Example: Pulmonary Hypertension (PH)}
 	\begin{itemize}
 		\item<1-> affects large parts of the population
@@ -631,9 +632,9 @@
 			\item<3-> avoiding for loops (loops in general)
 				\begin{itemize}
 					\item<4-> Python for-loop: \textcolor<5->{red}{slow compilation}
-					\item<5-> JAX for-loop: \textcolor<6->{red}{homogeneous mesh }
-					\item<7-> $\rightarrow$ \textcolor<8->{green}{ avoid for-loops through vectorization}
-					\item<9-> $\rightarrow$ \textcolor<10->{red}{requires padding and masking}
+					\item<6-> JAX for-loop: \textcolor<7->{red}{homogeneous mesh }
+					\item<8-> $\rightarrow$ \textcolor<9->{green}{ avoid for-loops through vectorization}
+					\item<10-> $\rightarrow$ \textcolor<11->{red}{requires padding and masking}
 				\end{itemize}
 		\end{itemize}
 	\end{block}
@@ -714,7 +715,7 @@
 \begin{frame}
 	\only<1>{\frametitle{Parameter Inference: Simulation Wrapper}}
 	\only<2>{\frametitle{Parameter Inference: Custom Log-Likelihood}}
-	\only<3>{\frametitle{Parameter Inference: Numpyro Model}}
+	\only<3->{\frametitle{Parameter Inference: Numpyro Model}}
 
 	\only<1>{\includegraphics[width=\textwidth]{images/inference1.png}}
 	\only<2>{\includegraphics[width=\textwidth]{images/inference2.png}}
